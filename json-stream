@@ -113,8 +113,7 @@ process.stdin
       try {
         res.push(parse(objStr))
       } catch (e) {
-        // TODO: Pipe errors to stderr
-        //console.error(e)
+        process.stderr.write(e + '\n')
       }
 
       txt = txt.slice(at+1, len)
@@ -129,12 +128,11 @@ process.stdin
     const obj = res[index]
 
     try {
-      const obj2 = f(obj)
+      const obj2 = typeof f === 'undefined' ? obj : f(obj)
       const jsonStr = JSON.stringify(obj2, replacer, spaces) + '\n'
       process.stdout.write(jsonStr)
     } catch (e) {
-      // TODO: Pipe errors to stderr
-      //console.error(e)
+      process.stderr.write(e + '\n')
     }
   }
 })
