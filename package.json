@@ -1,0 +1,16 @@
+{
+  "name": "json-stream",
+  "version": "0.1.0",
+  "description": "",
+  "main": "json-stream",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Philipp Wille <philipp.y.wille@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "event-stream": "4.0.1",
+    "highland": "2.13.5",
+    "yargs": "15.0.2"
+  }
+}
