@@ -129,7 +129,7 @@ process.stdin
     const obj = res[index]
 
     try {
-      const obj2 = f(obj)
+      const obj2 = typeof f === 'undefined' ? obj : f(obj)
       const jsonStr = JSON.stringify(obj2, replacer, spaces) + '\n'
       process.stdout.write(jsonStr)
     } catch (e) {
