@@ -1,0 +1,142 @@
+#!/usr/bin/env node
+
+const os = require('os')
+const path = require('path')
+
+try {
+  require(path.join(os.homedir(), '.fxrc')) // Should be required before config.js usage.
+} catch (err) {
+  if (err.code !== 'MODULE_NOT_FOUND') {
+    throw err
+  }
+}
+
+const argv = require('yargs')
+  .usage('Usage: $0 [options]')
+  
+  .alias('f', 'function')
+  .nargs('f', 1)
+  .describe(
+    'f',
+    'A JavaScript function on each parsed json "json => ..." that\n'+
+    '(1) drops the json if it returns undefined or throws an error,\n'+
+    '(2) returns each element as a line if it returns an array,\n'+
+    '(3) or returns one line if it returns any other value.'
+  )
+  .alias('r', 'replacer')
+  .nargs('r', 1)
+  .describe('r', 'A replacer as defined by the JSON.stringify function')
+  .alias('s', 'spaces')
+  .nargs('s', 1)
+  .describe('s', 'The number of spaces used to format json or 0 for one line')
+
+  .example('$0 -s 2', 'Pretty printing with 2 spaces')
+  .example('$0 -f "json => json"', 'Identity function on each json')
+  .example(
+    '$0 -f "json => json.foo"',
+    'If json == {"bar":"baz"}:\n'+
+    'Drops this line since "foo" is undefined\n'+
+    'If json == {"foo":["bar","baz"]}:\n'+
+    'Returns two lines: "bar" and "baz"\n'+
+    'If json == {"foo":"bar"}:\n'+
+    'Returns one line: "bar"'
+  )
+
+  .help('h')
+  .alias('h', 'help')
+  .epilog('copyright 2019')
+  .argv
+
+const f = argv.f && eval(argv.f)
+const spaces = argv.s || 0
+const replacer = eval(argv.r) || null
+
+process.stdin.setEncoding('utf8')
+process.stdin.resume()
+
+function parse (txt) {
+  return txt//JSON.parse(txt)
+}
+
+const lex = (acc, text) => {
+  let res      = []
+  let txt      = acc.txt + text
+  let len      = txt.length
+
+  let at       = -1
+  
+  let escaped  = false
+  let string   = false
+  let inObj    = false
+
+  let obj      = false
+  let brackets = 0
+
+  let done     = false
+  let from     = 0
+  let ch
+  
+  do {
+    at++
+    ch = txt.charAt(at)
+
+    if (string) {
+      if (escaped) escaped = false
+      else {
+        if (ch == '"') string = false
+        else if (ch == '\\') escaped = true
+      }
+    } else {
+      if (ch == '"') string = true
+      else if (ch == '{') {
+        if (brackets == 0) from = at
+        inObj = true
+        brackets++
+      } else if (inObj && ch == '}') {
+        brackets--
+        if (brackets == 0) {
+          inObj = false
+          obj = true
+        }
+      }
+    }
+
+    if (at == len) done = true
+
+    if (obj) {
+      obj = false
+      const objStr = txt.slice(from, at+1)
+
+      try {
+        res.push(parse(objStr))
+      } catch (e) {
+        // TODO: Pipe errors to stderr
+        //console.error(e)
+      }
+
+      txt = txt.slice(at+1, len)
+      len = txt.length
+      at = -1
+    }
+  } while (!done)
+
+  return {res, txt}
+}
+
+const _ = require("highland")
+
+_(process.stdin)
+.scan({res: [], txt: ''}, lex)
+.flatMap(a => _(a.res))
+.flatMap(obj => {
+  let res = undefined
+  try {
+    res = f(obj)
+  } catch (e) {
+    // TODO: Pipe errors to stderr
+    //console.error(e)
+  }
+  return _(typeof res === 'undefined' ? [] : [res].flat())
+})
+.map(obj => JSON.stringify(obj, replacer, spaces) + '\n')
+.pipe(process.stdout)
