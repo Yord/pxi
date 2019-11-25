@@ -55,12 +55,15 @@ process.stdin.setEncoding('utf8')
 process.stdin.resume()
 
 function parse (txt) {
-  return txt//JSON.parse(txt)
+  return JSON.parse(txt)
 }
 
-const lex = (acc, text) => {
+let acctxt = ''
+
+process.stdin
+.on('data', text => {
   let res      = []
-  let txt      = acc.txt + text
+  let txt      = acctxt + text
   let len      = txt.length
 
   let at       = -1
@@ -120,23 +123,18 @@ const lex = (acc, text) => {
     }
   } while (!done)
 
-  return {res, txt}
-}
+  acctxt = txt
 
-const _ = require("highland")
+  for(let index = 0; index < res.length; index++) {
+    const obj = res[index]
 
-_(process.stdin)
-.scan({res: [], txt: ''}, lex)
-.flatMap(a => _(a.res))
-.flatMap(obj => {
-  let res = undefined
-  try {
-    res = f(obj)
-  } catch (e) {
-    // TODO: Pipe errors to stderr
-    //console.error(e)
+    try {
+      const obj2 = f(obj)
+      const jsonStr = JSON.stringify(obj2, replacer, spaces) + '\n'
+      process.stdout.write(jsonStr)
+    } catch (e) {
+      // TODO: Pipe errors to stderr
+      //console.error(e)
+    }
   }
-  return _(typeof res === 'undefined' ? [] : [res].flat())
 })
-.map(obj => JSON.stringify(obj, replacer, spaces) + '\n')
-.pipe(process.stdout)
