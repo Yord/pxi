@@ -55,7 +55,7 @@ process.stdin.setEncoding('utf8')
 process.stdin.resume()
 
 function parse (txt) {
-  return txt//JSON.parse(txt)
+  return JSON.parse(txt)
 }
 
 const lex = (acc, text) => {
