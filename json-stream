@@ -18,54 +18,81 @@ const argv = require('yargs')
   .nargs('f', 1)
   .describe(
     'f',
-    'A JavaScript function on each parsed json "json => ..." that\n'+
-    '(1) drops the json if it returns undefined or throws an error,\n'+
-    '(2) returns each element as a line if it returns an array,\n'+
+    'A JavaScript function on each parsed json "json => ..." that\n' +
+    '(1) drops the json if it returns undefined or throws an error,\n' +
+    '(2) returns each element as a line if it returns an array,\n' +
     '(3) or returns one line if it returns any other value.'
   )
+  
   .alias('r', 'replacer')
   .nargs('r', 1)
-  .describe('r', 'A replacer as defined by the JSON.stringify function')
+  .describe(
+    'r',
+    'A replacer as defined by the JSON.stringify function'
+  )
+  
   .alias('s', 'spaces')
   .nargs('s', 1)
-  .describe('s', 'The number of spaces used to format json or 0 for one line')
+  .describe(
+    's',
+    'The number of spaces used to format json or 0 for one line'
+  )
+  
   .alias('b', 'bulk-parsing')
   .boolean('b')
   .describe(
     'b',
-    'Activates parsing bulks of json objects, which is faster, but fails '+
+    'Activates parsing bulks of json objects, which is faster, but fails ' +
     'the whole bulk instead of a single JSON object if an error is thrown'
   )
 
-  .example('$0 -s 2', 'Pretty printing with 2 spaces')
-  .example('$0 -f "json => json"', 'Identity function on each json')
   .example(
-    '$0 -f "json => json.foo"',
-    'If json == {"bar":"baz"}:\n'+
-    'Drops this line since "foo" is undefined\n'+
-    'If json == {"foo":["bar","baz"]}:\n'+
-    'Returns two lines: "bar" and "baz"\n'+
-    'If json == {"foo":"bar"}:\n'+
-    'Returns one line: "bar"'
+    'Pretty printing with 2 spaces:',
+    'echo \'{"foo":42}\' |\n' +
+    'json-stream -s 2\n\n' +
+    '> {\n' +
+    '>   "foo": 42\n' +
+    '> }\n'
+  )
+  
+  .example(
+    'Identity function on each json:',
+    'echo \'{"foo":42}\' |\n' +
+    'json-stream -f "json => json"\n\n' +
+    '> {"foo":42}\n'
+  )
+  
+  .example(
+    'Select the foo attribute:',
+    'echo \'{"bar":"baz"}\' |\n' +
+    'json-stream -f "json => json.foo"\n' +
+    '\n' +
+    'nothing is returned since f returns undefined\n' +
+    '\n' +
+    'echo \'{"foo":["bar","baz"]}\' |\n' +
+    'json-stream -f "json => json.foo"\n' +
+    '\n' +
+    '> bar\n' +
+    '> baz\n' +
+    '\n' +
+    'echo \'{"foo":"bar"}\' |\n' +
+    'json-stream -f "json => json.foo"\n' +
+    '\n' +
+    '> bar'
   )
 
   .help('h')
   .alias('h', 'help')
-  .epilog('copyright 2019')
+  .epilog('Copyright (c) Philipp Wille 2019')
   .argv
 
-const f = argv.f && eval(argv.f)
+const f = argv.f && eval(argv.f) || undefined
 const spaces = argv.s || 0
-const replacer = eval(argv.r) || null
-
+const replacer = argv.r && eval(argv.r) || null
 const bulkParsing = argv.b || false
 
 process.stdin.setEncoding('utf8')
 process.stdin.resume()
-
-function parse (txt) {
-  return JSON.parse(txt)
-}
 
 let acctxt = ''
 
@@ -95,29 +122,29 @@ process.stdin
     if (string) {
       if (escaped) escaped = false
       else {
-        if (ch == '"') string = false
-        else if (ch == '\\') escaped = true
+        if (ch === '"') string = false
+        else if (ch === '\\') escaped = true
       }
     } else {
-      if (ch == '"') string = true
-      else if (ch == '{') {
-        if (brackets == 0) from = at
+      if (ch === '"') string = true
+      else if (ch === '{') {
+        if (brackets === 0) from = at
         inObj = true
         brackets++
-      } else if (inObj && ch == '}') {
+      } else if (inObj && ch === '}') {
         brackets--
-        if (brackets == 0) {
+        if (brackets === 0) {
           inObj = false
           obj = true
         }
       }
     }
 
-    if (at == len) done = true
+    if (at === len) done = true
 
     if (obj) {
       obj = false
-      const objStr = txt.slice(from, at+1)
+      const objStr = txt.slice(from, at + 1)
 
       try {
         res.push(objStr)
@@ -125,7 +152,7 @@ process.stdin
         process.stderr.write(e + '\n')
       }
 
-      txt = txt.slice(at+1, len)
+      txt = txt.slice(at + 1, len)
       len = txt.length
       at = -1
     }
@@ -135,43 +162,54 @@ process.stdin
 
   let jsonStrs = ''
 
+  const appendJsonStrs = obj => {
+    const obj2 = typeof f === 'undefined' ? obj : f(obj)
+    if (typeof obj2 !== 'undefined') {
+      if (Array.isArray(obj2)) {
+        for (let j = 0; j < obj2.length; j++) {
+          const jsonStr = JSON.stringify(obj2[j], replacer, spaces)
+          jsonStrs += jsonStr + '\n'
+        }
+      } else {
+        const jsonStr = JSON.stringify(obj2, replacer, spaces)
+        jsonStrs += jsonStr + '\n'
+      }
+    }
+  }
+
   if (bulkParsing) {
     let jsonStr = '['
     const resLen = res.length
 
-    if (resLen == 0) jsonStr += ']'
-    else if (resLen == 1) jsonStr += res[0] + ']'
+    if (resLen === 0) jsonStr += ']'
+    else if (resLen === 1) jsonStr += res[0] + ']'
     else {
       jsonStr += res[0]
 
-      for(let index = 1; index < resLen; index++) {
-        const objStr = res[index]
-        jsonStr += ','+objStr
+      for(let i = 1; i < resLen; i++) {
+        const objStr = res[i]
+        jsonStr += ',' + objStr
       }
 
       jsonStr += ']'
     }
 
     try {
-      const objs = parse(jsonStr)
-      for(let index = 0; index < objs.length; index++) {
-        const obj = objs[index]
-        const obj2 = typeof f === 'undefined' ? obj : f(obj)
-        const jsonStr = JSON.stringify(obj2, replacer, spaces) + '\n'
-        jsonStrs += jsonStr
+      const objs = JSON.parse(jsonStr)
+      for(let i = 0; i < objs.length; i++) {
+        const obj = objs[i]
+        appendJsonStrs(obj)
       }
     } catch (e) {
       process.stderr.write(e + '\n')
     }
   } else {
-    for(let index = 0; index < res.length; index++) {
-      const objStr = res[index]
+    for(let i = 0; i < res.length; i++) {
+      const objStr = res[i]
   
       try {
-        const obj = parse(objStr)
-        const obj2 = typeof f === 'undefined' ? obj : f(obj)
-        const jsonStr = JSON.stringify(obj2, replacer, spaces) + '\n'
-        jsonStrs += jsonStr
+        const obj = JSON.parse(objStr)
+        appendJsonStrs(obj)
       } catch (e) {
         process.stderr.write(e + '\n')
       }
