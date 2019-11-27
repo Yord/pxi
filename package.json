@@ -1,14 +1,37 @@
 {
   "name": "json-stream",
   "version": "0.5.0",
-  "description": "",
-  "main": "json-stream",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+  "description": "Command line tool for manipulating and formatting JSON streams",
+  "keywords": ["json", "streaming", "json-stream"],
+  "homepage": "https://github.com/Yord/json-stream",
+  "bugs": {
+    "url": "https://github.com/Yord/json-stream/issues"
   },
-  "author": "Philipp Wille <philipp.y.wille@gmail.com>",
   "license": "MIT",
+  "author": "Philipp Wille <philipp.y.wille@gmail.com> (https://github.com/Yord)",
+  "contributors": [
+    "Philipp Wille <philipp.y.wille@gmail.com> (https://github.com/Yord)"
+  ],
+  "files": [
+    "./json-stream"
+  ],
+  "main": "./json-stream",
+  "bin": {
+    "json-stream": "./json-stream"
+  },
+  "man": "./man/json-stream.1",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Yord/json-stream.git"
+  },
+  "scripts": {
+    "start": "./json-stream"
+  },
   "dependencies": {
     "yargs": "15.0.2"
-  }
+  },
+  "engines": {
+    "node": ">=8.3.0"
+  },
+  "private": false
 }
