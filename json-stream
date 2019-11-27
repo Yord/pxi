@@ -156,8 +156,10 @@ process.stdin
       for(let index = 0; index < objs.length; index++) {
         const obj = objs[index]
         const obj2 = typeof f === 'undefined' ? obj : f(obj)
-        const jsonStr = JSON.stringify(obj2, replacer, spaces) + '\n'
-        jsonStrs += jsonStr
+        if (typeof obj2 !== 'undefined') {
+          const jsonStr = JSON.stringify(obj2, replacer, spaces) + '\n'
+          jsonStrs += jsonStr
+        }
       }
     } catch (e) {
       process.stderr.write(e + '\n')
@@ -169,8 +171,10 @@ process.stdin
       try {
         const obj = parse(objStr)
         const obj2 = typeof f === 'undefined' ? obj : f(obj)
-        const jsonStr = JSON.stringify(obj2, replacer, spaces) + '\n'
-        jsonStrs += jsonStr
+        if (typeof obj2 !== 'undefined') {
+          const jsonStr = JSON.stringify(obj2, replacer, spaces) + '\n'
+          jsonStrs += jsonStr
+        }
       } catch (e) {
         process.stderr.write(e + '\n')
       }
