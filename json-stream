@@ -23,12 +23,21 @@ const argv = require('yargs')
     '(2) returns each element as a line if it returns an array,\n'+
     '(3) or returns one line if it returns any other value.'
   )
+  
   .alias('r', 'replacer')
   .nargs('r', 1)
-  .describe('r', 'A replacer as defined by the JSON.stringify function')
+  .describe(
+    'r',
+    'A replacer as defined by the JSON.stringify function'
+  )
+  
   .alias('s', 'spaces')
   .nargs('s', 1)
-  .describe('s', 'The number of spaces used to format json or 0 for one line')
+  .describe(
+    's',
+    'The number of spaces used to format json or 0 for one line'
+  )
+  
   .alias('b', 'bulk-parsing')
   .boolean('b')
   .describe(
@@ -37,16 +46,39 @@ const argv = require('yargs')
     'the whole bulk instead of a single JSON object if an error is thrown'
   )
 
-  .example('$0 -s 2', 'Pretty printing with 2 spaces')
-  .example('$0 -f "json => json"', 'Identity function on each json')
   .example(
-    '$0 -f "json => json.foo"',
-    'If json == {"bar":"baz"}:\n'+
-    'Drops this line since "foo" is undefined\n'+
-    'If json == {"foo":["bar","baz"]}:\n'+
-    'Returns two lines: "bar" and "baz"\n'+
-    'If json == {"foo":"bar"}:\n'+
-    'Returns one line: "bar"'
+    'Pretty printing with 2 spaces:',
+    'echo \'{"foo":42}\' |\n'+
+    'json-stream -s 2\n\n'+
+    '|  {\n'+
+    '|    "foo": 42\n'+
+    '|  }\n'
+  )
+  
+  .example(
+    'Identity function on each json:',
+    'echo \'{"foo":42}\' |\n'+
+    'json-stream -f "json => json"\n\n'+
+    '|  {"foo":42}\n'
+  )
+  
+  .example(
+    'Selects the foo attribute:',
+    'echo \'{"bar":"baz"}\' |\n'+
+    'json-stream -f "json => json.foo"\n'+
+    '\n'+
+    'nothing is returned since f returns undefined\n'+
+    '\n'+
+    'echo \'{"foo":["bar","baz"]}\' |\n'+
+    'json-stream -f "json => json.foo"\n'+
+    '\n'+
+    '|  bar\n'+
+    '|  baz\n'+
+    '\n'+
+    'echo \'{"foo":"bar"}\' |\n'+
+    'json-stream -f "json => json.foo"\n'+
+    '\n'+
+    '|  bar'
   )
 
   .help('h')
