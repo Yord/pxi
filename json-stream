@@ -50,16 +50,16 @@ const argv = require('yargs')
     'Pretty printing with 2 spaces:',
     'echo \'{"foo":42}\' |\n'+
     'json-stream -s 2\n\n'+
-    '|  {\n'+
-    '|    "foo": 42\n'+
-    '|  }\n'
+    '> {\n'+
+    '>   "foo": 42\n'+
+    '> }\n'
   )
   
   .example(
     'Identity function on each json:',
     'echo \'{"foo":42}\' |\n'+
     'json-stream -f "json => json"\n\n'+
-    '|  {"foo":42}\n'
+    '> {"foo":42}\n'
   )
   
   .example(
@@ -72,13 +72,13 @@ const argv = require('yargs')
     'echo \'{"foo":["bar","baz"]}\' |\n'+
     'json-stream -f "json => json.foo"\n'+
     '\n'+
-    '|  bar\n'+
-    '|  baz\n'+
+    '> bar\n'+
+    '> baz\n'+
     '\n'+
     'echo \'{"foo":"bar"}\' |\n'+
     'json-stream -f "json => json.foo"\n'+
     '\n'+
-    '|  bar'
+    '> bar'
   )
 
   .help('h')
