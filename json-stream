@@ -51,7 +51,7 @@ const argv = require('yargs')
 
   .help('h')
   .alias('h', 'help')
-  .epilog('copyright 2019')
+  .epilog('(c) Philipp Wille 2019')
   .argv
 
 const f = argv.f && eval(argv.f) || undefined
