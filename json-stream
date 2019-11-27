@@ -18,9 +18,9 @@ const argv = require('yargs')
   .nargs('f', 1)
   .describe(
     'f',
-    'A JavaScript function on each parsed json "json => ..." that\n'+
-    '(1) drops the json if it returns undefined or throws an error,\n'+
-    '(2) returns each element as a line if it returns an array,\n'+
+    'A JavaScript function on each parsed json "json => ..." that\n' +
+    '(1) drops the json if it returns undefined or throws an error,\n' +
+    '(2) returns each element as a line if it returns an array,\n' +
     '(3) or returns one line if it returns any other value.'
   )
   
@@ -42,48 +42,48 @@ const argv = require('yargs')
   .boolean('b')
   .describe(
     'b',
-    'Activates parsing bulks of json objects, which is faster, but fails '+
+    'Activates parsing bulks of json objects, which is faster, but fails ' +
     'the whole bulk instead of a single JSON object if an error is thrown'
   )
 
   .example(
     'Pretty printing with 2 spaces:',
-    'echo \'{"foo":42}\' |\n'+
-    'json-stream -s 2\n\n'+
-    '> {\n'+
-    '>   "foo": 42\n'+
+    'echo \'{"foo":42}\' |\n' +
+    'json-stream -s 2\n\n' +
+    '> {\n' +
+    '>   "foo": 42\n' +
     '> }\n'
   )
   
   .example(
     'Identity function on each json:',
-    'echo \'{"foo":42}\' |\n'+
-    'json-stream -f "json => json"\n\n'+
+    'echo \'{"foo":42}\' |\n' +
+    'json-stream -f "json => json"\n\n' +
     '> {"foo":42}\n'
   )
   
   .example(
-    'Selects the foo attribute:',
-    'echo \'{"bar":"baz"}\' |\n'+
-    'json-stream -f "json => json.foo"\n'+
-    '\n'+
-    'nothing is returned since f returns undefined\n'+
-    '\n'+
-    'echo \'{"foo":["bar","baz"]}\' |\n'+
-    'json-stream -f "json => json.foo"\n'+
-    '\n'+
-    '> bar\n'+
-    '> baz\n'+
-    '\n'+
-    'echo \'{"foo":"bar"}\' |\n'+
-    'json-stream -f "json => json.foo"\n'+
-    '\n'+
+    'Select the foo attribute:',
+    'echo \'{"bar":"baz"}\' |\n' +
+    'json-stream -f "json => json.foo"\n' +
+    '\n' +
+    'nothing is returned since f returns undefined\n' +
+    '\n' +
+    'echo \'{"foo":["bar","baz"]}\' |\n' +
+    'json-stream -f "json => json.foo"\n' +
+    '\n' +
+    '> bar\n' +
+    '> baz\n' +
+    '\n' +
+    'echo \'{"foo":"bar"}\' |\n' +
+    'json-stream -f "json => json.foo"\n' +
+    '\n' +
     '> bar'
   )
 
   .help('h')
   .alias('h', 'help')
-  .epilog('(c) Philipp Wille 2019')
+  .epilog('Copyright (c) Philipp Wille 2019')
   .argv
 
 const f = argv.f && eval(argv.f) || undefined
@@ -126,29 +126,29 @@ process.stdin
     if (string) {
       if (escaped) escaped = false
       else {
-        if (ch == '"') string = false
-        else if (ch == '\\') escaped = true
+        if (ch === '"') string = false
+        else if (ch === '\\') escaped = true
       }
     } else {
-      if (ch == '"') string = true
-      else if (ch == '{') {
-        if (brackets == 0) from = at
+      if (ch === '"') string = true
+      else if (ch === '{') {
+        if (brackets === 0) from = at
         inObj = true
         brackets++
-      } else if (inObj && ch == '}') {
+      } else if (inObj && ch === '}') {
         brackets--
-        if (brackets == 0) {
+        if (brackets === 0) {
           inObj = false
           obj = true
         }
       }
     }
 
-    if (at == len) done = true
+    if (at === len) done = true
 
     if (obj) {
       obj = false
-      const objStr = txt.slice(from, at+1)
+      const objStr = txt.slice(from, at + 1)
 
       try {
         res.push(objStr)
@@ -156,7 +156,7 @@ process.stdin
         process.stderr.write(e + '\n')
       }
 
-      txt = txt.slice(at+1, len)
+      txt = txt.slice(at + 1, len)
       len = txt.length
       at = -1
     }
