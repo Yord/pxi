@@ -29,6 +29,13 @@ const argv = require('yargs')
   .alias('s', 'spaces')
   .nargs('s', 1)
   .describe('s', 'The number of spaces used to format json or 0 for one line')
+  .alias('b', 'bulk-parsing')
+  .boolean('b')
+  .describe(
+    'b',
+    'Activates parsing bulks of json objects, which is faster, but fails '+
+    'the whole bulk instead of a single JSON object if an error is thrown'
+  )
 
   .example('$0 -s 2', 'Pretty printing with 2 spaces')
   .example('$0 -f "json => json"', 'Identity function on each json')
@@ -50,6 +57,8 @@ const argv = require('yargs')
 const f = argv.f && eval(argv.f)
 const spaces = argv.s || 0
 const replacer = eval(argv.r) || null
+
+const bulkParsing = argv.b || false
 
 process.stdin.setEncoding('utf8')
 process.stdin.resume()
@@ -111,7 +120,7 @@ process.stdin
       const objStr = txt.slice(from, at+1)
 
       try {
-        res.push(parse(objStr))
+        res.push(objStr)
       } catch (e) {
         process.stderr.write(e + '\n')
       }
@@ -126,17 +135,48 @@ process.stdin
 
   let jsonStrs = ''
 
-  for(let index = 0; index < res.length; index++) {
-    const obj = res[index]
+  if (bulkParsing) {
+    let jsonStr = '['
+    const resLen = res.length
+
+    if (resLen == 0) jsonStr += ']'
+    else if (resLen == 1) jsonStr += res[0] + ']'
+    else {
+      jsonStr += res[0]
+
+      for(let index = 1; index < resLen; index++) {
+        const objStr = res[index]
+        jsonStr += ','+objStr
+      }
+
+      jsonStr += ']'
+    }
 
     try {
-      const obj2 = typeof f === 'undefined' ? obj : f(obj)
-      const jsonStr = JSON.stringify(obj2, replacer, spaces) + '\n'
-      jsonStrs += jsonStr
+      const objs = parse(jsonStr)
+      for(let index = 0; index < objs.length; index++) {
+        const obj = objs[index]
+        const obj2 = typeof f === 'undefined' ? obj : f(obj)
+        const jsonStr = JSON.stringify(obj2, replacer, spaces) + '\n'
+        jsonStrs += jsonStr
+      }
     } catch (e) {
       process.stderr.write(e + '\n')
     }
+  } else {
+    for(let index = 0; index < res.length; index++) {
+      const objStr = res[index]
+  
+      try {
+        const obj = parse(objStr)
+        const obj2 = typeof f === 'undefined' ? obj : f(obj)
+        const jsonStr = JSON.stringify(obj2, replacer, spaces) + '\n'
+        jsonStrs += jsonStr
+      } catch (e) {
+        process.stderr.write(e + '\n')
+      }
+    }
   }
-
+  
   process.stdout.write(jsonStrs)
 })
