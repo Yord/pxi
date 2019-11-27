@@ -124,15 +124,19 @@ process.stdin
 
   acctxt = txt
 
+  let jsonStrs = ''
+
   for(let index = 0; index < res.length; index++) {
     const obj = res[index]
 
     try {
       const obj2 = typeof f === 'undefined' ? obj : f(obj)
       const jsonStr = JSON.stringify(obj2, replacer, spaces) + '\n'
-      process.stdout.write(jsonStr)
+      jsonStrs += jsonStr
     } catch (e) {
       process.stderr.write(e + '\n')
     }
   }
+
+  process.stdout.write(jsonStrs)
 })
