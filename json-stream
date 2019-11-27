@@ -94,10 +94,6 @@ const bulkParsing = argv.b || false
 process.stdin.setEncoding('utf8')
 process.stdin.resume()
 
-function parse (txt) {
-  return JSON.parse(txt)
-}
-
 let acctxt = ''
 
 process.stdin
@@ -166,47 +162,54 @@ process.stdin
 
   let jsonStrs = ''
 
+  const appendJsonStrs = obj => {
+    const obj2 = typeof f === 'undefined' ? obj : f(obj)
+    if (typeof obj2 !== 'undefined') {
+      if (Array.isArray(obj2)) {
+        for (let j = 0; j < obj2.length; j++) {
+          const jsonStr = JSON.stringify(obj2[j], replacer, spaces)
+          jsonStrs += jsonStr + '\n'
+        }
+      } else {
+        const jsonStr = JSON.stringify(obj2, replacer, spaces)
+        jsonStrs += jsonStr + '\n'
+      }
+    }
+  }
+
   if (bulkParsing) {
     let jsonStr = '['
     const resLen = res.length
 
-    if (resLen == 0) jsonStr += ']'
-    else if (resLen == 1) jsonStr += res[0] + ']'
+    if (resLen === 0) jsonStr += ']'
+    else if (resLen === 1) jsonStr += res[0] + ']'
     else {
       jsonStr += res[0]
 
-      for(let index = 1; index < resLen; index++) {
-        const objStr = res[index]
-        jsonStr += ','+objStr
+      for(let i = 1; i < resLen; i++) {
+        const objStr = res[i]
+        jsonStr += ',' + objStr
       }
 
       jsonStr += ']'
     }
 
     try {
-      const objs = parse(jsonStr)
-      for(let index = 0; index < objs.length; index++) {
-        const obj = objs[index]
-        const obj2 = typeof f === 'undefined' ? obj : f(obj)
-        if (typeof obj2 !== 'undefined') {
-          const jsonStr = JSON.stringify(obj2, replacer, spaces) + '\n'
-          jsonStrs += jsonStr
-        }
+      const objs = JSON.parse(jsonStr)
+      for(let i = 0; i < objs.length; i++) {
+        const obj = objs[i]
+        appendJsonStrs(obj)
       }
     } catch (e) {
       process.stderr.write(e + '\n')
     }
   } else {
-    for(let index = 0; index < res.length; index++) {
-      const objStr = res[index]
+    for(let i = 0; i < res.length; i++) {
+      const objStr = res[i]
   
       try {
-        const obj = parse(objStr)
-        const obj2 = typeof f === 'undefined' ? obj : f(obj)
-        if (typeof obj2 !== 'undefined') {
-          const jsonStr = JSON.stringify(obj2, replacer, spaces) + '\n'
-          jsonStrs += jsonStr
-        }
+        const obj = JSON.parse(objStr)
+        appendJsonStrs(obj)
       } catch (e) {
         process.stderr.write(e + '\n')
       }
