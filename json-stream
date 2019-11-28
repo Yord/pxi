@@ -46,6 +46,12 @@ const argv = require('yargs')
     'the whole bulk instead of a single JSON object if an error is thrown'
   )
 
+  .boolean('fail-early')
+  .describe(
+    'fail-early',
+    'Do not stream errors, but fail after the first error with exit code 0'
+  )
+
   .example(
     'Pretty printing with 2 spaces:',
     'echo \'{"foo":42}\' |\n' +
@@ -90,6 +96,7 @@ const f = argv.f && eval(argv.f) || undefined
 const spaces = argv.s || 0
 const replacer = argv.r && eval(argv.r) || null
 const bulkParsing = argv.b || false
+const failEarly = argv.failEarly || false
 
 process.stdin.setEncoding('utf8')
 process.stdin.resume()
@@ -103,6 +110,7 @@ process.stdin
   let len      = txt.length
 
   let at       = -1
+  let line     = 0
   
   let escaped  = false
   let string   = false
@@ -118,6 +126,8 @@ process.stdin
   do {
     at++
     ch = txt.charAt(at)
+
+    if (ch === '\n') line++
 
     if (string) {
       if (escaped) escaped = false
@@ -201,7 +211,8 @@ process.stdin
         appendJsonStrs(obj)
       }
     } catch (e) {
-      process.stderr.write(e + '\n')
+      process.stderr.write('Line ' + line + ': ' + e + '\n')
+      if (failEarly) process.exit(0)
     }
   } else {
     for(let i = 0; i < res.length; i++) {
@@ -211,7 +222,8 @@ process.stdin
         const obj = JSON.parse(objStr)
         appendJsonStrs(obj)
       } catch (e) {
-        process.stderr.write(e + '\n')
+        process.stderr.write('Line ' + line + ': ' + e + '\n')
+        if (failEarly) process.exit(0)
       }
     }
   }
