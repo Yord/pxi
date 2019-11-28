@@ -120,7 +120,7 @@ process.stdin
   let len      = txt.length
 
   let at       = -1
-  let line     = 0
+  let line     = 1
   
   let escaped  = false
   let string   = false
@@ -165,7 +165,7 @@ process.stdin
     if (obj) {
       obj = false
       const objStr = txt.slice(from, at + 1)
-      res.push(objStr)
+      res.push({line, objStr})
 
       txt = txt.slice(at + 1, len)
       len = txt.length
@@ -195,17 +195,23 @@ process.stdin
     }
   }
 
+  const logErrors = (line, err) => {
+    process.stderr.write('Line ' + line + ': ' + err + '\n')
+    if (failEarly) process.exit(0)
+  }
+
   if (bulkParsing) {
     let jsonStr = '['
     const resLen = res.length
+    const firstLine = res[0] && res[0].line || -1
 
     if (resLen === 0) jsonStr += ']'
-    else if (resLen === 1) jsonStr += res[0] + ']'
+    else if (resLen === 1) jsonStr += (res[0] && res[0].objStr || '') + ']'
     else {
-      jsonStr += res[0]
+      jsonStr += (res[0] && res[0].objStr || '')
 
       for(let i = 1; i < resLen; i++) {
-        const objStr = res[i]
+        const objStr = (res[i] && res[i].objStr || '')
         jsonStr += ',' + objStr
       }
 
@@ -218,20 +224,20 @@ process.stdin
         const obj = objs[i]
         appendJsonStrs(obj)
       }
-    } catch (e) {
-      process.stderr.write('Line ' + line + ': ' + e + '\n')
-      if (failEarly) process.exit(0)
+    } catch (err) {
+      const line = firstLine
+      logErrors(line, err)
     }
   } else {
     for(let i = 0; i < res.length; i++) {
-      const objStr = res[i]
+      const objStr = (res[i] && res[i].objStr || '')
   
       try {
         const obj = JSON.parse(objStr)
         appendJsonStrs(obj)
-      } catch (e) {
-        process.stderr.write('Line ' + line + ': ' + e + '\n')
-        if (failEarly) process.exit(0)
+      } catch (err) {
+        const line = res[i] && res[i].line || -1
+        logErrors(line, err)
       }
     }
   }
