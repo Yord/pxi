@@ -61,6 +61,12 @@ const argv = require('yargs')
     'result per element'
   )
 
+  .boolean('v')
+  .describe(
+    'v',
+    'Add more verbose error logging'
+  )
+
   .example(
     'Pretty printing with 2 spaces:',
     'echo \'{"foo":42}\' |\n' +
@@ -107,6 +113,7 @@ const replacer = argv.r && eval(argv.r) || null
 const bulkParsing = argv.b || false
 const failEarly = argv.failEarly || false
 const mapSemantics = argv.map || false
+const verbose = argv.v || false
 
 process.stdin.setEncoding('utf8')
 process.stdin.resume()
@@ -115,7 +122,9 @@ let acctxt = ''
 
 process.stdin
 .on('data', text => {
-  let res      = []
+  const res    = []
+  const lines  = []
+
   let txt      = acctxt + text
   let len      = txt.length
 
@@ -137,7 +146,7 @@ process.stdin
     at++
     ch = txt.charAt(at)
 
-    if (ch === '\n') line++
+    if (verbose && ch === '\n') line++
 
     if (string) {
       if (escaped) escaped = false
@@ -165,7 +174,8 @@ process.stdin
     if (obj) {
       obj = false
       const objStr = txt.slice(from, at + 1)
-      res.push({line, objStr})
+      res.push(objStr)
+      if (verbose) lines.push(line)
 
       txt = txt.slice(at + 1, len)
       len = txt.length
@@ -196,22 +206,22 @@ process.stdin
   }
 
   const logErrors = (line, err) => {
-    process.stderr.write('Line ' + line + ': ' + err + '\n')
+    process.stderr.write((verbose ? 'Line ' + line + ': ' : '') + err + '\n')
     if (failEarly) process.exit(0)
   }
 
   if (bulkParsing) {
     let jsonStr = '['
     const resLen = res.length
-    const firstLine = res[0] && res[0].line || -1
+    const firstLine = verbose && lines[0] || -1
 
     if (resLen === 0) jsonStr += ']'
-    else if (resLen === 1) jsonStr += (res[0] && res[0].objStr || '') + ']'
+    else if (resLen === 1) jsonStr += res[0] + ']'
     else {
-      jsonStr += (res[0] && res[0].objStr || '')
+      jsonStr += res[0]
 
       for(let i = 1; i < resLen; i++) {
-        const objStr = (res[i] && res[i].objStr || '')
+        const objStr = res[i]
         jsonStr += ',' + objStr
       }
 
@@ -230,13 +240,13 @@ process.stdin
     }
   } else {
     for(let i = 0; i < res.length; i++) {
-      const objStr = (res[i] && res[i].objStr || '')
+      const objStr = res[i]
   
       try {
         const obj = JSON.parse(objStr)
         appendJsonStrs(obj)
       } catch (err) {
-        const line = res[i] && res[i].line || -1
+        const line = verbose && lines[i]
         logErrors(line, err)
       }
     }
