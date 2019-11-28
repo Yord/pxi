@@ -165,12 +165,7 @@ process.stdin
     if (obj) {
       obj = false
       const objStr = txt.slice(from, at + 1)
-
-      try {
-        res.push(objStr)
-      } catch (e) {
-        process.stderr.write(e + '\n')
-      }
+      res.push(objStr)
 
       txt = txt.slice(at + 1, len)
       len = txt.length
