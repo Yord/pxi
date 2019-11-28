@@ -52,6 +52,15 @@ const argv = require('yargs')
     'Do not stream errors, but fail after the first error with exit code 0'
   )
 
+  .alias('m', 'map')
+  .boolean('map')
+  .describe(
+    'map',
+    'Uses map instead of flatMap semantics, which returns undefined instead ' +
+    'of dropping the result and returns arrays as one result instead of one ' +
+    'result per element'
+  )
+
   .example(
     'Pretty printing with 2 spaces:',
     'echo \'{"foo":42}\' |\n' +
@@ -97,6 +106,7 @@ const spaces = argv.s || 0
 const replacer = argv.r && eval(argv.r) || null
 const bulkParsing = argv.b || false
 const failEarly = argv.failEarly || false
+const mapSemantics = argv.map || false
 
 process.stdin.setEncoding('utf8')
 process.stdin.resume()
@@ -174,7 +184,10 @@ process.stdin
 
   const appendJsonStrs = obj => {
     const obj2 = typeof f === 'undefined' ? obj : f(obj)
-    if (typeof obj2 !== 'undefined') {
+    if (mapSemantics) {
+      const jsonStr = JSON.stringify(obj2, replacer, spaces)
+      jsonStrs += jsonStr + '\n'
+    } else if (typeof obj2 !== 'undefined') {
       if (Array.isArray(obj2)) {
         for (let j = 0; j < obj2.length; j++) {
           const jsonStr = JSON.stringify(obj2[j], replacer, spaces)
