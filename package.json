@@ -13,7 +13,8 @@
     "Philipp Wille <philipp.y.wille@gmail.com> (https://github.com/Yord)"
   ],
   "files": [
-    "./index.js"
+    "./index.js",
+    "./src/**/*.js"
   ],
   "main": "./index.js",
   "bin": {
