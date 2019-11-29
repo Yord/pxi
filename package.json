@@ -1,6 +1,6 @@
 {
   "name": "json-stream",
-  "version": "0.6.0",
+  "version": "0.7.0",
   "description": "Command line tool for manipulating and formatting JSON streams",
   "keywords": ["json", "streaming", "json-stream"],
   "homepage": "https://github.com/Yord/json-stream",
