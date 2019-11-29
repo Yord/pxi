@@ -1,6 +1,6 @@
 {
   "name": "json-stream",
-  "version": "0.6.0",
+  "version": "0.7.0",
   "description": "Command line tool for manipulating and formatting JSON streams",
   "keywords": ["json", "streaming", "json-stream"],
   "homepage": "https://github.com/Yord/json-stream",
@@ -13,11 +13,12 @@
     "Philipp Wille <philipp.y.wille@gmail.com> (https://github.com/Yord)"
   ],
   "files": [
-    "./json-stream"
+    "./index.js",
+    "./src/**/*.js"
   ],
-  "main": "./json-stream",
+  "main": "./index.js",
   "bin": {
-    "json-stream": "./json-stream"
+    "json-stream": "./index.js"
   },
   "man": "./man/json-stream.1",
   "repository": {
@@ -25,7 +26,8 @@
     "url": "https://github.com/Yord/json-stream.git"
   },
   "scripts": {
-    "start": "./json-stream"
+    "start": "./index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
     "yargs": "15.0.2"
