@@ -15,7 +15,7 @@ function concatTokens (tokens) {
   else if (tokensLen === 1) str += tokens[0] + ']'
   else {
     str += tokens[0]
-    for(let i = 1; i < tokensLen; i++) str += ',' + tokens[i]
+    for(let index = 1; index < tokensLen; index++) str += ',' + tokens[index]
     str += ']'
   }
 
