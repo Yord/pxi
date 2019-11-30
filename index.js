@@ -18,7 +18,7 @@ const _run                    = require('./src/run')
 const _failEarly              = _argv.e || false
 const _functionString         = _argv.f || 'json => json'
 const _lexer                  = _argv.l || 'line'
-const _marshaller             = _argv.l || 'stringify'
+const _marshaller             = _argv.m || 'stringify'
 const _parser                 = _argv.p || 'bulk'
 const _updater                = _argv.u || 'map'
 const _verbose                = _argv.v || false
@@ -29,19 +29,19 @@ let _lex = _catchUndefined('lexer', _lexer, lexer =>
   lexer === 'streamObject' ? _streamObject :
   lexer === 'line'         ? _line
                            : eval(lexer)
-)(_verbose)
+)(_verbose, _failEarly, _argv)
 
 let _parse = _catchUndefined('parser', _parser, parser =>
   parser === 'bulk'   ? _bulk :
   parser === 'single' ? _single
                       : eval(parser)
-)(_verbose, _failEarly)
+)(_verbose, _failEarly, _argv)
 
 let _update = _catchUndefined('updater', _updater, updater =>
   updater === 'map'     ? _map :
   updater === 'flatMap' ? _flatMap
                         : eval(updater)
-)(_verbose, _failEarly, _f)
+)(_verbose, _failEarly, _f, _argv)
 
 let _marshal = _catchUndefined('marshaller', _marshaller, marshaller =>
   marshaller === 'stringify' ? _stringify

@@ -1,4 +1,4 @@
-module.exports = (verbose, failEarly) => (tokens, lines) => {
+module.exports = (verbose, failEarly, argv) => (tokens, lines) => {
   const parseToken = tokenParser(verbose, failEarly)
   
   const firstLine = lines[0] || -1
@@ -15,7 +15,7 @@ function concatTokens (tokens) {
   else if (tokensLen === 1) str += tokens[0] + ']'
   else {
     str += tokens[0]
-    for(let i = 1; i < tokensLen; i++) str += ',' + tokens[i]
+    for(let index = 1; index < tokensLen; index++) str += ',' + tokens[index]
     str += ']'
   }
 

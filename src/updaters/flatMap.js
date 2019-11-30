@@ -1,4 +1,4 @@
-module.exports = (verbose, failEarly, f) => (jsons, lines) => {
+module.exports = (verbose, failEarly, f, argv) => (jsons, lines) => {
   let err = ''
   let jsons2 = []
 
@@ -8,7 +8,10 @@ module.exports = (verbose, failEarly, f) => (jsons, lines) => {
       const obj2 = typeof f === 'undefined' ? obj : f(obj)
       if (typeof obj2 !== 'undefined') {
         if (Array.isArray(obj2)) {
-          for (const obj3 in obj2) jsons2.push(obj3)
+          for (let index = 0; index < obj2.length; index++) {
+            const obj3 = obj2[index]
+            jsons2.push(obj3)
+          }
         } else jsons2.push(obj2)
       }
     } catch(e) {

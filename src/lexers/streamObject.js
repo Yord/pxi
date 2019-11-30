@@ -1,4 +1,4 @@
-module.exports = verbose => data => {
+module.exports = (verbose, failEarly, argv) => data => {
   const tokens = []
   const lines  = []
 
