@@ -26,40 +26,33 @@ const _verbose                = _argv.v || false
 const _f                      = eval(_functionString)
 const _replacer               = eval(_replacerString)
 
-let _lex = undefined
-try {
-  _lex = (
-    _lexer === 'streamObject' ? _streamObject(_verbose) :
-    _lexer === 'line'         ? _line(_verbose)
-                              : eval(_lexer)(_verbose)
-  )
-} catch(err) {
-  _process.stderr.write('No lexer defined with name ' + _lexer + '!\n')
-  _process.exit(1)
-}
+let _lex = _catchUndefined('lexer', _lexer, lexer =>
+  lexer === 'streamObject' ? _streamObject(_verbose) :
+  lexer === 'line'         ? _line(_verbose)
+                           : eval(lexer)(_verbose)
+)
 
-let _update = undefined
-try {
-  _update = (
-    _updater === 'map'     ? _map(_f, _replacer, _spaces) :
-    _updater === 'flatMap' ? _flatMap(_f, _replacer, _spaces)
-                           : eval(_updater)(_f, _replacer, _spaces)
-  )
-} catch(err) {
-  _process.stderr.write('No updater defined with name ' + _updater + '!\n')
-  _process.exit(1)
-}
+let _parse = _catchUndefined('parser', _parser, parser =>
+  parser === 'bulk'   ? _bulk(_verbose, _failEarly) :
+  parser === 'single' ? _single(_verbose, _failEarly)
+                      : eval(parser)(_verbose, _failEarly)
+)
 
-let _parse = undefined
-try {
-  _parse = (
-    _parser === 'bulk'   ? _bulk(_verbose, _failEarly, _update) :
-    _parser === 'single' ? _single(_verbose, _failEarly, _update)
-                         : eval(_parser)(_verbose, _failEarly, _update)
-  )
-} catch(err) {
-  _process.stderr.write('No parser defined with name ' + _parser + '!\n')
-  _process.exit(1)
-}
+let _update = _catchUndefined('updater', _updater, updater =>
+  updater === 'map'     ? _map(_verbose, _failEarly, _f, _replacer, _spaces) :
+  updater === 'flatMap' ? _flatMap(_verbose, _failEarly, _f, _replacer, _spaces)
+                        : eval(updater)(_verbose, _failEarly, _f, _replacer, _spaces)
+)
 
-_run(_lex, _parse)
+_run(_lex, _parse, _update)
+
+function _catchUndefined (type, field, choose) {
+  let func
+  try {
+    func = choose(field)
+  } catch(err) {
+    _process.stderr.write('No ' + type + ' defined with name ' + field + '!\n')
+    _process.exit(1)
+  }
+  return func
+}

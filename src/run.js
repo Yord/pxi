@@ -1,4 +1,4 @@
-module.exports = (lex, parse) => {
+module.exports = (lex, parse, update) => {
   process.stdin.setEncoding('utf8')
 
   let data = ''
@@ -9,9 +9,12 @@ module.exports = (lex, parse) => {
 
     data = rest
 
-    const {err, out} = parse(tokens, lines)
+    const {parseErr, jsons} = parse(tokens, lines)
 
-    process.stderr.write(err)
+    const {updateErr, out} = update(jsons, lines)
+
+    process.stderr.write(parseErr)
+    process.stderr.write(updateErr)
     process.stdout.write(out)
   })
   .on('end', () => process.exit(0))

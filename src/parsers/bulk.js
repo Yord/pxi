@@ -1,5 +1,5 @@
-module.exports = (verbose, failEarly, update) => (tokens, lines) => {
-  const parseToken = tokenParser(verbose, failEarly, update)
+module.exports = (verbose, failEarly) => (tokens, lines) => {
+  const parseToken = tokenParser(verbose, failEarly)
   
   const firstLine = lines[0] || -1
   const token = concatTokens(tokens)
@@ -22,23 +22,23 @@ function concatTokens (tokens) {
   return str
 }
 
-function tokenParser (verbose, failEarly, update) {
+function tokenParser (verbose, failEarly) {
   return (token, firstLine) => {
-    let err = ''
-    let out = ''
+    let parseErr = ''
+    let jsons = []
 
     try {
       const objs = JSON.parse(token)
-      for(const obj of objs) out = update(out, obj)
+      jsons = jsons.concat(objs)
     } catch (e) {
       const line = verbose ? 'Line ' + firstLine + ': ' : ''
-      err += line + e + '\n'
+      parseErr += line + e + '\n'
       if (failEarly) {
-        process.stderr.write(err)
+        process.stderr.write(parseErr)
         process.exit(1)
       }
     }
 
-    return {out, err}
+    return {parseErr, jsons}
   }
 }
