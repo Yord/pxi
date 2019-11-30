@@ -1,4 +1,4 @@
-module.exports = (verbose, failEarly, f) => (jsons, lines) => {
+module.exports = (verbose, failEarly, f, argv) => (jsons, lines) => {
   let err = ''
   let jsons2 = []
 

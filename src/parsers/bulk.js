@@ -1,4 +1,4 @@
-module.exports = (verbose, failEarly) => (tokens, lines) => {
+module.exports = (verbose, failEarly, argv) => (tokens, lines) => {
   const parseToken = tokenParser(verbose, failEarly)
   
   const firstLine = lines[0] || -1

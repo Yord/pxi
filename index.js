@@ -29,19 +29,19 @@ let _lex = _catchUndefined('lexer', _lexer, lexer =>
   lexer === 'streamObject' ? _streamObject :
   lexer === 'line'         ? _line
                            : eval(lexer)
-)(_verbose)
+)(_verbose, _failEarly, _argv)
 
 let _parse = _catchUndefined('parser', _parser, parser =>
   parser === 'bulk'   ? _bulk :
   parser === 'single' ? _single
                       : eval(parser)
-)(_verbose, _failEarly)
+)(_verbose, _failEarly, _argv)
 
 let _update = _catchUndefined('updater', _updater, updater =>
   updater === 'map'     ? _map :
   updater === 'flatMap' ? _flatMap
                         : eval(updater)
-)(_verbose, _failEarly, _f)
+)(_verbose, _failEarly, _f, _argv)
 
 let _marshal = _catchUndefined('marshaller', _marshaller, marshaller =>
   marshaller === 'stringify' ? _stringify
