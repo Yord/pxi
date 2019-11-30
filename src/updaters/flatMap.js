@@ -1,5 +1,5 @@
 module.exports = (verbose, failEarly, f, replacer, spaces) => (jsons, lines) => {
-  let updateErr = ''
+  let err = ''
   let out = ''
 
   for (let index = 0; index < jsons.length; index++) {
@@ -13,13 +13,13 @@ module.exports = (verbose, failEarly, f, replacer, spaces) => (jsons, lines) => 
       }
     } catch(e) {
       const line = verbose ? 'Line ' + lines[index] + ': ' : ''
-      updateErr += line + e + '\n'
+      err += line + e + '\n'
       if (failEarly) {
-        process.stderr.write(updateErr)
+        process.stderr.write(err)
         process.exit(1)
       }
     }
   }
 
-  return {updateErr, out}
+  return {err, out}
 }

@@ -1,5 +1,5 @@
 module.exports = (verbose, failEarly) => (tokens, lines) => {
-  let parseErr = ''
+  let err = ''
   let jsons = []
 
   for(let i = 0; i < tokens.length; i++) {
@@ -10,13 +10,13 @@ module.exports = (verbose, failEarly) => (tokens, lines) => {
       jsons.push(obj)
     } catch (e) {
       const line = verbose && lines[i]
-      parseErr += (verbose ? 'Line ' + line + ': ' : '') + e + ' while parsing ' + str + '\n'
+      err += (verbose ? 'Line ' + line + ': ' : '') + e + ' while parsing ' + str + '\n'
       if (failEarly) {
-        process.stderr.write(parseErr)
+        process.stderr.write(err)
         process.exit(1)
       }
     }
   }
 
-  return {parseErr, jsons}
+  return {err, jsons}
 }

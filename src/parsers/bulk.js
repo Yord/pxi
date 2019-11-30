@@ -24,7 +24,7 @@ function concatTokens (tokens) {
 
 function tokenParser (verbose, failEarly) {
   return (token, firstLine) => {
-    let parseErr = ''
+    let err = ''
     let jsons = []
 
     try {
@@ -32,13 +32,13 @@ function tokenParser (verbose, failEarly) {
       jsons = jsons.concat(objs)
     } catch (e) {
       const line = verbose ? 'Line ' + firstLine + ': ' : ''
-      parseErr += line + e + '\n'
+      err += line + e + '\n'
       if (failEarly) {
-        process.stderr.write(parseErr)
+        process.stderr.write(err)
         process.exit(1)
       }
     }
 
-    return {parseErr, jsons}
+    return {err, jsons}
   }
 }
