@@ -2,41 +2,41 @@
 
 require('./src/fxrc')
 
-const mapUpdater            = require('./src/updaters/map')
-const flatMapUpdater        = require('./src/updaters/flatMap')
-const bulkParser            = require('./src/parsers/bulk')
-const singleParser          = require('./src/parsers/single')
-const lineLexer             = require('./src/lexers/line')
-const streamObjectLexer     = require('./src/lexers/stream/object')
+const _mapUpdater            = require('./src/updaters/map')
+const _flatMapUpdater        = require('./src/updaters/flatMap')
+const _bulkParser            = require('./src/parsers/bulk')
+const _singleParser          = require('./src/parsers/single')
+const _lineLexer             = require('./src/lexers/line')
+const _streamObjectLexer     = require('./src/lexers/stream/object')
 
-const argv                  = require('./src/args')
-const run                   = require('./src/run')
+const _argv                  = require('./src/args')
+const _run                   = require('./src/run')
 
-const functionString        = argv.f || 'json => json'
-const spaces                = argv.s || 0
-const replacerString        = argv.r || null
-const singleParsing         = argv.p || false
-const failEarly             = argv.e || false
-const flatMapSemantics      = argv.m || false
-const verbose               = argv.v || false
-const lexer                 = argv.l || 'line'
+const _functionString        = _argv.f || 'json => json'
+const _spaces                = _argv.s || 0
+const _replacerString        = _argv.r || null
+const _singleParsing         = _argv.p || false
+const _failEarly             = _argv.e || false
+const _flatMapSemantics      = _argv.m || false
+const _verbose               = _argv.v || false
+const _lexer                 = _argv.l || 'line'
 
-const f                     = eval(functionString)
-const replacer              = eval(replacerString)
+const _f                     = eval(_functionString)
+const _replacer              = eval(_replacerString)
 
-const lex = (
-  lexer === 'stream-object' ? streamObjectLexer(verbose)
-                            : lineLexer(verbose)
+const _lex = (
+  _lexer === 'stream-object' ? _streamObjectLexer(_verbose)
+                             : _lineLexer(_verbose)
 )
 
-const concatJsonStrs = (
-  flatMapSemantics          ? flatMapUpdater(f, replacer, spaces)
-                            : mapUpdater(f, replacer, spaces)
+const _concatJsonStrs = (
+  _flatMapSemantics          ? _flatMapUpdater(_f, _replacer, _spaces)
+                             : _mapUpdater(_f, _replacer, _spaces)
 )
 
-const parse = (
-  singleParsing             ? singleParser(verbose, failEarly, concatJsonStrs)
-                            : bulkParser(verbose, failEarly, concatJsonStrs)
+const _parse = (
+  _singleParsing             ? _singleParser(_verbose, _failEarly, _concatJsonStrs)
+                             : _bulkParser(_verbose, _failEarly, _concatJsonStrs)
 )
 
-run(lex, parse)
+_run(_lex, _parse)
