@@ -1,13 +1,13 @@
-module.exports = (verbose, failEarly, update) => (tokens, lines) => {
+module.exports = (verbose, failEarly) => (tokens, lines) => {
   let err = ''
-  let out = ''
+  let jsons = []
 
   for(let i = 0; i < tokens.length; i++) {
     const str = tokens[i]
 
     try {
       const obj = JSON.parse(str)
-      out = update(out, obj)
+      jsons.push(obj)
     } catch (e) {
       const line = verbose && lines[i]
       err += (verbose ? 'Line ' + line + ': ' : '') + e + ' while parsing ' + str + '\n'
@@ -18,5 +18,5 @@ module.exports = (verbose, failEarly, update) => (tokens, lines) => {
     }
   }
 
-  return {out, err}
+  return {err, jsons}
 }
