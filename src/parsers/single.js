@@ -2,14 +2,14 @@ module.exports = (verbose, failEarly, argv) => (tokens, lines) => {
   let err = ''
   let jsons = []
 
-  for(let i = 0; i < tokens.length; i++) {
-    const str = tokens[i]
+  for (let index = 0; index < tokens.length; index++) {
+    const str = tokens[index]
 
     try {
       const obj = JSON.parse(str)
       jsons.push(obj)
     } catch (e) {
-      const line = verbose && lines[i]
+      const line = verbose && lines[index]
       err += (verbose ? 'Line ' + line + ': ' : '') + e + ' while parsing ' + str + '\n'
       if (failEarly) {
         process.stderr.write(err)
