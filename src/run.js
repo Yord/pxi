@@ -1,26 +1,29 @@
-module.exports = function (functionString, spaces, replacerString, bulkParsing, failEarly, mapSemantics, verbose) {
-  const mapUpdater     = require('./updaters/map')
-  const flatMapUpdater = require('./updaters/flatMap')
-  const bulkParser     = require('./parsers/bulk')
-  const singleParser   = require('./parsers/single')
-  const objectLexer    = require('./lexers/object')
+module.exports = function (functionString, spaces, replacerString, singleParsing, failEarly, flatMapSemantics, verbose, lexer) {
+  const mapUpdater        = require('./updaters/map')
+  const flatMapUpdater    = require('./updaters/flatMap')
+  const bulkParser        = require('./parsers/bulk')
+  const singleParser      = require('./parsers/single')
+  const lineLexer         = require('./lexers/line')
+  const streamObjectLexer = require('./lexers/stream/object')
 
   const f = eval(functionString)
   const replacer = eval(replacerString)
   
   const concatJsonStrs = (
-    mapSemantics
-    ? mapUpdater(f, replacer, spaces)
-    : flatMapUpdater(f, replacer, spaces)
+    flatMapSemantics ? flatMapUpdater(f, replacer, spaces)
+                     : mapUpdater(f, replacer, spaces)
   )
 
   const parse = (
-    bulkParsing
-    ? bulkParser(verbose, failEarly, concatJsonStrs)
-    : singleParser(verbose, failEarly, concatJsonStrs)
+    singleParsing ? singleParser(verbose, failEarly, concatJsonStrs)
+                  : bulkParser(verbose, failEarly, concatJsonStrs)
   )
 
-  const lex = objectLexer(verbose)
+  const lex = (
+    lexer === 'stream-object' ? streamObjectLexer(verbose) :
+    lexer === 'line'          ? lineLexer(verbose)
+                              : lineLexer(verbose)
+  )
 
   process.stdin.setEncoding('utf8')
 
@@ -28,9 +31,7 @@ module.exports = function (functionString, spaces, replacerString, bulkParsing, 
 
   process.stdin
   .on('data', chunk => {
-    data += chunk
-
-    const {tokens, lines, rest} = lex(data)
+    const {tokens, lines, rest} = lex(data + chunk)
 
     data = rest
 

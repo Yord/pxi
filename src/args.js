@@ -26,12 +26,19 @@ module.exports = (
     'The number of spaces used to format json or 0 for one line'
   )
   
-  .alias('b', 'bulk-parsing')
-  .boolean('bulk-parsing')
+  .alias('p', 'single-parsing')
+  .boolean('single-parsing')
   .describe(
-    'bulk-parsing',
-    'Activates parsing bulks of json objects, which is faster, but fails ' +
-    'the whole bulk instead of a single JSON object if an error is thrown'
+    'single-parsing',
+    'Parses single JSON objects instead of bulks. Bulk parsing is faster, but fails ' +
+    'the whole bulk instead of just the single JSON object if an error is thrown'
+  )
+
+  .alias('l', 'lexer')
+  .nargs('lexer', 1)
+  .describe(
+    'lexer',
+    'Defines which lexer is used: line or stream-object'
   )
 
   .alias('e', 'fail-early')
@@ -41,13 +48,12 @@ module.exports = (
     'Do not stream errors, but fail after the first error with exit code 1'
   )
 
-  .alias('m', 'map')
-  .boolean('map')
+  .alias('F', 'flat-map')
+  .boolean('flat-map')
   .describe(
-    'map',
-    'Uses map instead of flatMap semantics, which returns undefined instead ' +
-    'of dropping the result and returns arrays as one result instead of one ' +
-    'result per element'
+    'flat-map',
+    'Uses flatMap instead of map semantics, which drops the result if f ' +
+    'returns undefined and returns each element of an arrays as a result'
   )
 
   .boolean('v')
