@@ -1,4 +1,4 @@
-module.exports = (verbose, failEarly, concatJsonStrs) => (tokens, lines) => {
+module.exports = (verbose, failEarly, update) => (tokens, lines) => {
   let err = ''
   let out = ''
 
@@ -7,7 +7,7 @@ module.exports = (verbose, failEarly, concatJsonStrs) => (tokens, lines) => {
 
     try {
       const obj = JSON.parse(str)
-      out = concatJsonStrs(out, obj)
+      out = update(out, obj)
     } catch (e) {
       const line = verbose && lines[i]
       err += (verbose ? 'Line ' + line + ': ' : '') + e + ' while parsing ' + str + '\n'
