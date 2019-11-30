@@ -27,22 +27,22 @@ const _f                      = eval(_functionString)
 const _replacer               = eval(_replacerString)
 
 let _lex = _catchUndefined('lexer', _lexer, lexer =>
-  lexer === 'streamObject' ? _streamObject(_verbose) :
-  lexer === 'line'         ? _line(_verbose)
-                           : eval(lexer)(_verbose)
-)
+  lexer === 'streamObject' ? _streamObject :
+  lexer === 'line'         ? _line
+                           : eval(lexer)
+)(_verbose)
 
 let _parse = _catchUndefined('parser', _parser, parser =>
-  parser === 'bulk'   ? _bulk(_verbose, _failEarly) :
-  parser === 'single' ? _single(_verbose, _failEarly)
-                      : eval(parser)(_verbose, _failEarly)
-)
+  parser === 'bulk'   ? _bulk :
+  parser === 'single' ? _single
+                      : eval(parser)
+)(_verbose, _failEarly)
 
 let _update = _catchUndefined('updater', _updater, updater =>
-  updater === 'map'     ? _map(_verbose, _failEarly, _f, _replacer, _spaces) :
-  updater === 'flatMap' ? _flatMap(_verbose, _failEarly, _f, _replacer, _spaces)
-                        : eval(updater)(_verbose, _failEarly, _f, _replacer, _spaces)
-)
+  updater === 'map'     ? _map :
+  updater === 'flatMap' ? _flatMap
+                        : eval(updater)
+)(_verbose, _failEarly, _f, _replacer, _spaces)
 
 _run(_lex, _parse, _update)
 
