@@ -4,12 +4,13 @@ require('./src/fxrc')
 
 const _process                = require('process')
 
-const _map                    = require('./src/updaters/map')
-const _flatMap                = require('./src/updaters/flatMap')
-const _bulk                   = require('./src/parsers/bulk')
-const _single                 = require('./src/parsers/single')
 const _line                   = require('./src/lexers/line')
 const _streamObject           = require('./src/lexers/streamObject')
+const _bulk                   = require('./src/parsers/bulk')
+const _single                 = require('./src/parsers/single')
+const _map                    = require('./src/updaters/map')
+const _flatMap                = require('./src/updaters/flatMap')
+const _stringify              = require('./src/marshallers/stringify')
 
 const _argv                   = require('./src/args')
 const _run                    = require('./src/run')
@@ -17,14 +18,12 @@ const _run                    = require('./src/run')
 const _failEarly              = _argv.e || false
 const _functionString         = _argv.f || 'json => json'
 const _lexer                  = _argv.l || 'line'
+const _marshaller             = _argv.l || 'stringify'
 const _parser                 = _argv.p || 'bulk'
-const _replacerString         = _argv.r || null
-const _spaces                 = _argv.s || 0
 const _updater                = _argv.u || 'map'
 const _verbose                = _argv.v || false
 
 const _f                      = eval(_functionString)
-const _replacer               = eval(_replacerString)
 
 let _lex = _catchUndefined('lexer', _lexer, lexer =>
   lexer === 'streamObject' ? _streamObject :
@@ -42,9 +41,14 @@ let _update = _catchUndefined('updater', _updater, updater =>
   updater === 'map'     ? _map :
   updater === 'flatMap' ? _flatMap
                         : eval(updater)
-)(_verbose, _failEarly, _f, _replacer, _spaces)
+)(_verbose, _failEarly, _f)
 
-_run(_lex, _parse, _update)
+let _marshal = _catchUndefined('marshaller', _marshaller, marshaller =>
+  marshaller === 'stringify' ? _stringify
+                             : eval(marshaller)
+)(_verbose, _failEarly, _argv)
+
+_run(_lex, _parse, _update, _marshal)
 
 function _catchUndefined (type, field, choose) {
   let func

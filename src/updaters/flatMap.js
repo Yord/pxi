@@ -1,6 +1,6 @@
-module.exports = (verbose, failEarly, f, replacer, spaces) => (jsons, lines) => {
+module.exports = (verbose, failEarly, f) => (jsons, lines) => {
   let err = ''
-  let out = ''
+  let jsons2 = []
 
   for (let index = 0; index < jsons.length; index++) {
     try {
@@ -8,8 +8,8 @@ module.exports = (verbose, failEarly, f, replacer, spaces) => (jsons, lines) => 
       const obj2 = typeof f === 'undefined' ? obj : f(obj)
       if (typeof obj2 !== 'undefined') {
         if (Array.isArray(obj2)) {
-          for (const obj3 in obj2) str += JSON.stringify(obj3, replacer, spaces) + '\n'
-        } else out += JSON.stringify(obj2, replacer, spaces) + '\n'
+          for (const obj3 in obj2) jsons2.push(obj3)
+        } else jsons2.push(obj2)
       }
     } catch(e) {
       const line = verbose ? 'Line ' + lines[index] + ': ' : ''
@@ -21,5 +21,5 @@ module.exports = (verbose, failEarly, f, replacer, spaces) => (jsons, lines) => 
     }
   }
 
-  return {err, out}
+  return {err, jsons: jsons2}
 }
