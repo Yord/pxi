@@ -18,7 +18,7 @@ const _run                    = require('./src/run')
 const _failEarly              = _argv.e || false
 const _functionString         = _argv.f || 'json => json'
 const _lexer                  = _argv.l || 'line'
-const _marshaller             = _argv.l || 'stringify'
+const _marshaller             = _argv.m || 'stringify'
 const _parser                 = _argv.p || 'bulk'
 const _updater                = _argv.u || 'map'
 const _verbose                = _argv.v || false
