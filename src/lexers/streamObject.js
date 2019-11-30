@@ -60,5 +60,5 @@ module.exports = verbose => data => {
     }
   } while (!done)
 
-  return {tokens, lines, rest: text}
+  return {err: '', tokens, lines, rest: text}
 }
