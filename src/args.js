@@ -2,99 +2,93 @@ module.exports = (
   require('yargs')
   .usage('Usage: $0 [options]')
   
+  .alias('e', 'fail-early')
+  .boolean('fail-early')
+  .describe(
+    'fail-early',
+    'Usually, each error is caught and written to stderr. But if  ' +
+    'this flag is set, only the first error is printed and the    ' +
+    'process exits with exit code 1.'
+  )
+
   .alias('f', 'function')
   .nargs('function', 1)
   .describe(
     'function',
-    'A JavaScript function on each parsed json "json => ..." that\n' +
-    '(1) drops the json if it returns undefined or throws an error,\n' +
-    '(2) returns each element as a line if it returns an array,\n' +
-    '(3) or returns one line if it returns any other value.'
+    'A string containing a JavaScript function "json => ..." that ' +
+    'is applied to each parsed JSON element. If the JSON element  ' +
+    'is replaced depends on which "updater" is used. Read the     ' +
+    'updater description to learn more. All imported libraries    ' +
+    'and defined identifiers can be used by the function,         ' +
+    'including those added in ".fxrc". If you would like to use   ' +
+    'libraries like lodash or ramda, read the documentation on    ' +
+    '".fxrc" on the github page.'
   )
   
+  .alias('l', 'lexer')
+  .nargs('lexer', 1)
+  .describe(
+    'lexer',
+    'Defines which lexer is used: "line" (default) or             ' +
+    '"streamObject". Line treats each line as one token.          ' +
+    'StreamObject parses streams of JSON objects (not arrays!)    ' +
+    'regardless of delimiter. If this setting gets any other      ' +
+    'value, it treats an identifier with this name as a lexer or  ' +
+    'fails, if no identifier is found.'
+  )
+
+  .alias('p', 'parser')
+  .nargs('parser', 1)
+  .describe(
+    'parser',
+    'Defines which parser is used: "bulk" (default) or "single".  ' +
+    'Single parses each JSON object instead of bulks. Bulk        ' +
+    'parsing is faster, but fails the whole bulk instead of just  ' +
+    'a single JSON object if an error is thrown. If this setting  ' +
+    'gets any other value, it treats an identifier with this name ' +
+    'as a parser or fails, if no identifier is found.'
+  )
+
   .alias('r', 'replacer')
   .nargs('replacer', 1)
   .describe(
     'replacer',
-    'A replacer as defined by the JSON.stringify function'
+    'JSON.stringify is used to pretty print JSON. The replacer is ' +
+    'passed to stringify and determines which JSON fields are     ' +
+    'printed or left out. If it is set to null (default), all     ' +
+    'fields are printed. See the documentation of JSON.stringify  ' +
+    'to find out more.'
   )
   
   .alias('s', 'spaces')
   .nargs('spaces', 1)
   .describe(
     'spaces',
-    'The number of spaces used to format json or 0 for one line'
-  )
-  
-  .alias('p', 'single-parsing')
-  .boolean('single-parsing')
-  .describe(
-    'single-parsing',
-    'Parses single JSON objects instead of bulks. Bulk parsing is faster, but fails ' +
-    'the whole bulk instead of just the single JSON object if an error is thrown'
+    'JSON.stringify is used to pretty print JSON. This is the     ' +
+    'number of spaces used to format JSON. If it is set to 0      ' +
+    '(default), the JSON is printed in a single line.'
   )
 
-  .alias('l', 'lexer')
-  .nargs('lexer', 1)
+  .alias('u', 'updater')
+  .nargs('updater', 1)
   .describe(
-    'lexer',
-    'Defines which lexer is used: line or stream-object'
+    'updater',
+    'Defines which updater is used: "map" (default) or "flatMap". ' +
+    'Map applies function f to each parsed JSON elements and      ' +
+    'replaces it with f\'s result. FlatMap also applies f to each ' +
+    'element, but acts differently depending on f\'s result: On   ' +
+    'undefined, it drops the JSON element. In case of an array,   ' +
+    'it prints every array item in its own line. For any other    ' +
+    'element, it acts like map. If this setting gets any other    ' +
+    'value, it treats an identifier with this name as an updater  ' +
+    'or fails, if no identifier is found.'
   )
 
-  .alias('e', 'fail-early')
-  .boolean('fail-early')
+  .alias('v', 'verbose')
+  .boolean('verbose')
   .describe(
-    'fail-early',
-    'Do not stream errors, but fail after the first error with exit code 1'
-  )
-
-  .alias('F', 'flat-map')
-  .boolean('flat-map')
-  .describe(
-    'flat-map',
-    'Uses flatMap instead of map semantics, which drops the result if f ' +
-    'returns undefined and returns each element of an arrays as a result'
-  )
-
-  .boolean('v')
-  .describe(
-    'v',
+    'verbose',
     'More verbose errors'
-  )
-
-  .example(
-    'Pretty printing with 2 spaces:',
-    'echo \'{"foo":42}\' |\n' +
-    'json-stream -s 2\n\n' +
-    '> {\n' +
-    '>   "foo": 42\n' +
-    '> }\n'
-  )
-  
-  .example(
-    'Identity function on each json:',
-    'echo \'{"foo":42}\' |\n' +
-    'json-stream -f "json => json"\n\n' +
-    '> {"foo":42}\n'
-  )
-  
-  .example(
-    'Select the foo attribute:',
-    'echo \'{"bar":"baz"}\' |\n' +
-    'json-stream -f "json => json.foo"\n' +
-    '\n' +
-    'nothing is returned since f returns undefined\n' +
-    '\n' +
-    'echo \'{"foo":["bar","baz"]}\' |\n' +
-    'json-stream -f "json => json.foo"\n' +
-    '\n' +
-    '> bar\n' +
-    '> baz\n' +
-    '\n' +
-    'echo \'{"foo":"bar"}\' |\n' +
-    'json-stream -f "json => json.foo"\n' +
-    '\n' +
-    '> bar'
   )
 
   .help('h')
