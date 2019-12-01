@@ -10,7 +10,7 @@ module.exports = (verbose, failEarly, argv) => {
       try {
         const obj = jsons[index]
         str += JSON.stringify(obj, replacer, spaces) + '\n'
-      } catch(e) {
+      } catch (e) {
         err += e + '\n'
         if (failEarly) {
           process.stderr.write(err)

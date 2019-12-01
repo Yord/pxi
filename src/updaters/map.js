@@ -7,7 +7,7 @@ module.exports = (verbose, failEarly, f, argv) => (jsons, lines) => {
       const obj = jsons[index]
       const obj2 = typeof f === 'undefined' ? obj : f(obj)
       jsons2.push(obj2)
-    } catch(e) {
+    } catch (e) {
       const line = verbose ? 'Line ' + lines[index] + ': ' : ''
       err += line + e + '\n'
       if (failEarly) {

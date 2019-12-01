@@ -54,7 +54,7 @@ function _catchUndefined (type, field, choose) {
   let func
   try {
     func = choose(field)
-  } catch(err) {
+  } catch (e) {
     _process.stderr.write('No ' + type + ' defined with name ' + field + '!\n')
     _process.exit(1)
   }

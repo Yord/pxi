@@ -15,7 +15,7 @@ function concatTokens (tokens) {
   else if (tokensLen === 1) str += tokens[0] + ']'
   else {
     str += tokens[0]
-    for(let index = 1; index < tokensLen; index++) str += ',' + tokens[index]
+    for (let index = 1; index < tokensLen; index++) str += ',' + tokens[index]
     str += ']'
   }
 
@@ -28,8 +28,7 @@ function tokenParser (verbose, failEarly) {
     let jsons = []
 
     try {
-      const objs = JSON.parse(token)
-      jsons = jsons.concat(objs)
+      jsons = JSON.parse(token)
     } catch (e) {
       const line = verbose ? 'Line ' + firstLine + ': ' : ''
       err += line + e + '\n'
