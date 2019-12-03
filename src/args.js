@@ -1,4 +1,4 @@
-module.exports = (
+module.exports = (parserDefault, parsers) => (
   require('yargs')
   .usage('Usage: $0 [options]')
   
@@ -20,7 +20,9 @@ module.exports = (
   .nargs('parser', 1)
   .describe(
     'parser',
-    'Defines how tokens are parsed into JSON: "single" parses each token individually. "bulk" (default) parses all tokens in one go, which is faster, but fails the whole bulk instead of just a single token if an error is thrown. If --parser gets any other string, the global scope is searched for a matching variable or function.'
+    'Defines how tokens are parsed into JSON: ' +
+    parsers.map(p => '"' + p.name + '"' + (p.name === parserDefault ? ' (default) ' : ' ') + p.desc).join(' ') +
+    ' If --parser gets any other string, the global scope is searched for a matching variable or function.'
   )
 
   .alias('f', 'function')

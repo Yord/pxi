@@ -1,9 +1,13 @@
-module.exports = (verbose, failEarly, argv) => (tokens, lines) => {
-  const parseToken = tokenParser(verbose, failEarly)
-  
-  const firstLine = lines[0] || -1
-  const token = concatTokens(tokens)
-  return parseToken(token, firstLine)
+module.exports = {
+  name: 'bulk',
+  desc: 'parses all tokens in one go, which is faster, but fails the whole bulk instead of just a single token if an error is thrown.',
+  func: (verbose, failEarly, argv) => (tokens, lines) => {
+    const parseToken = tokenParser(verbose, failEarly)
+    
+    const firstLine = lines[0] || -1
+    const token = concatTokens(tokens)
+    return parseToken(token, firstLine)
+  }
 }
 
 function concatTokens (tokens) {

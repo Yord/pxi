@@ -4,6 +4,8 @@ require('./src/fxrc')
 
 const _process        = require('process')
 
+const pf              = global.pf || {}
+
 const _line           = require('./src/lexers/line')
 const _jsonStream     = require('./src/lexers/json/stream')
 const _bulk           = require('./src/parsers/json/bulk')
@@ -13,14 +15,17 @@ const _flatMap        = require('./src/updaters/flatMap')
 const _filter         = require('./src/updaters/filter')
 const _stringify      = require('./src/marshallers/stringify')
 
-const _argv           = require('./src/args')
+const _parsers        = [_single, _bulk].concat(pf.parsers || [])
+const _parserDefault  = _bulk
+
+const _argv           = require('./src/args')(_parserDefault.name, _parsers)
 const _run            = require('./src/run')
 
 const _failEarly      = typeof _argv.e !== 'undefined' ? _argv.e : false
 const _functionString = _argv.f || 'json => json'
 const _lexer          = _argv.l || 'line'
 const _marshaller     = _argv.m || 'stringify'
-const _parser         = _argv.p || 'bulk'
+const _parser         = _argv.p || _parserDefault.name
 const _updater        = _argv.u || 'map'
 const _verbose        = typeof _argv.v !== 'undefined' ? _argv.v : false
 
@@ -32,11 +37,7 @@ let _lex = _catchUndefined('lexer', _lexer, lexer =>
                          : global[lexer]
 )(_verbose, _failEarly, _argv)
 
-let _parse = _catchUndefined('parser', _parser, parser =>
-  parser === 'bulk'   ? _bulk :
-  parser === 'single' ? _single
-                      : global[parser]
-)(_verbose, _failEarly, _argv)
+let _parse = _selectPlugin('parser', _parser, _parsers)(_verbose, _failEarly, _argv)
 
 let _update = _catchUndefined('updater', _updater, updater =>
   updater === 'map'     ? _map :
@@ -61,4 +62,15 @@ function _catchUndefined (type, field, choose) {
     _process.exit(1)
   }
   return func
+}
+
+function _selectPlugin (type, name, plugins) {
+  const p = plugins.find(p => p.name === name)
+  if (typeof p === 'undefined') {
+    _process.stderr.write('No ' + type + ' defined with name ' + name + '!\n')
+    _process.exit(1)
+    return () => {}
+  } else {
+    return p.func ? p.func : () => {}
+  }
 }
