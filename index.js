@@ -15,13 +15,13 @@ const _stringify              = require('./src/marshallers/stringify')
 const _argv                   = require('./src/args')
 const _run                    = require('./src/run')
 
-const _failEarly              = _argv.e || false
+const _failEarly              = typeof _argv.e !== 'undefined' ? _argv.e : false
 const _functionString         = _argv.f || 'json => json'
 const _lexer                  = _argv.l || 'line'
 const _marshaller             = _argv.m || 'stringify'
 const _parser                 = _argv.p || 'bulk'
 const _updater                = _argv.u || 'map'
-const _verbose                = _argv.v || false
+const _verbose                = typeof _argv.v !== 'undefined' ? _argv.v : false
 
 const _f                      = eval(_functionString)
 
