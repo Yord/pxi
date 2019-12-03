@@ -1,4 +1,4 @@
-module.exports = (lexers, parsers) => (lexerDefault, parserDefault) => (
+module.exports = (lexers, parsers, updaters) => (lexerDefault, parserDefault, updaterDefault) => (
   require('yargs')
   .usage('Usage: $0 [options]')
   
@@ -38,7 +38,9 @@ module.exports = (lexers, parsers) => (lexerDefault, parserDefault) => (
   .nargs('updater', 1)
   .describe(
     'updater',
-    'Defines how the function f is applied to JSON: "map" (default) applies f to each parsed JSON element and replaces it with f\'s result. "flatMap" applies f to each element, but acts differently depending on f\'s result: On undefined return nothing. On [...] return every array item individually or nothing for empty arrays. Otherwise act like map. "filter" expects f to be a predicate and keeps all JSON elements for which f yields true. If --updater gets any other string, the global scope is searched for a matching variable or function.'
+    'Defines how the function f is applied to JSON: ' +
+    describePlugin(updaters, updaterDefault) +
+    ' If --updater gets any other string, the global scope is searched for a matching variable or function.'
   )
 
   .alias('m', 'marshaller')

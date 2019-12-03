@@ -17,37 +17,28 @@ const _stringify      = require('./src/marshallers/stringify')
 
 const _lexers         = [_line, _jsonStream].concat(pf.lexers || [])
 const _parsers        = [_single, _bulk].concat(pf.parsers || [])
+const _updaters       = [_map, _flatMap, _filter].concat(pf.updaters || [])
 
-const _lexerDefault   = _line
-const _parserDefault  = _bulk
+const _lexerDefault   = _line.name
+const _parserDefault  = _bulk.name
+const _updaterDefault = _map.name
 
-const _argv           = require('./src/args')(_lexers, _parsers)(_lexerDefault.name, _parserDefault.name)
+const _argv           = require('./src/args')(_lexers, _parsers, _updaters)(_lexerDefault, _parserDefault, _updaterDefault)
 const _run            = require('./src/run')
 
 const _failEarly      = typeof _argv.e !== 'undefined' ? _argv.e : false
 const _functionString = _argv.f || 'json => json'
-const _lexer          = _argv.l || _lexerDefault.name
+const _lexer          = _argv.l || _lexerDefault
 const _marshaller     = _argv.m || 'stringify'
-const _parser         = _argv.p || _parserDefault.name
-const _updater        = _argv.u || 'map'
+const _parser         = _argv.p || _parserDefault
+const _updater        = _argv.u || _updaterDefault
 const _verbose        = typeof _argv.v !== 'undefined' ? _argv.v : false
 
 const _f              = eval(_functionString)
 
-let _lex = _catchUndefined('lexer', _lexer, lexer =>
-  lexer === 'jsonStream' ? _jsonStream :
-  lexer === 'line'       ? _line
-                         : global[lexer]
-)(_verbose, _failEarly, _argv)
-
-let _parse = _selectPlugin('parser', _parser, _parsers)(_verbose, _failEarly, _argv)
-
-let _update = _catchUndefined('updater', _updater, updater =>
-  updater === 'map'     ? _map :
-  updater === 'flatMap' ? _flatMap :
-  updater === 'filter'  ? _filter
-                        : global[updater]
-)(_verbose, _failEarly, _f, _argv)
+let _lex              = _selectPlugin('lexer', _lexer, _lexers)(_verbose, _failEarly, _argv)
+let _parse            = _selectPlugin('parser', _parser, _parsers)(_verbose, _failEarly, _argv)
+let _update           = _selectPlugin('updater', _updater, _updaters)(_verbose, _failEarly, _f, _argv)
 
 let _marshal = _catchUndefined('marshaller', _marshaller, marshaller =>
   marshaller === 'stringify' ? _stringify
