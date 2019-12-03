@@ -2,29 +2,29 @@
 
 require('./src/fxrc')
 
-const _process                = require('process')
+const _process        = require('process')
 
-const _line                   = require('./src/lexers/line')
-const _jsonStream             = require('./src/lexers/jsonStream')
-const _bulk                   = require('./src/parsers/bulk')
-const _single                 = require('./src/parsers/single')
-const _map                    = require('./src/updaters/map')
-const _flatMap                = require('./src/updaters/flatMap')
-const _filter                 = require('./src/updaters/filter')
-const _stringify              = require('./src/marshallers/stringify')
+const _line           = require('./src/lexers/line')
+const _jsonStream     = require('./src/lexers/jsonStream')
+const _bulk           = require('./src/parsers/bulk')
+const _single         = require('./src/parsers/single')
+const _map            = require('./src/updaters/map')
+const _flatMap        = require('./src/updaters/flatMap')
+const _filter         = require('./src/updaters/filter')
+const _stringify      = require('./src/marshallers/stringify')
 
-const _argv                   = require('./src/args')
-const _run                    = require('./src/run')
+const _argv           = require('./src/args')
+const _run            = require('./src/run')
 
-const _failEarly              = typeof _argv.e !== 'undefined' ? _argv.e : false
-const _functionString         = _argv.f || 'json => json'
-const _lexer                  = _argv.l || 'line'
-const _marshaller             = _argv.m || 'stringify'
-const _parser                 = _argv.p || 'bulk'
-const _updater                = _argv.u || 'map'
-const _verbose                = typeof _argv.v !== 'undefined' ? _argv.v : false
+const _failEarly      = typeof _argv.e !== 'undefined' ? _argv.e : false
+const _functionString = _argv.f || 'json => json'
+const _lexer          = _argv.l || 'line'
+const _marshaller     = _argv.m || 'stringify'
+const _parser         = _argv.p || 'bulk'
+const _updater        = _argv.u || 'map'
+const _verbose        = typeof _argv.v !== 'undefined' ? _argv.v : false
 
-const _f                      = eval(_functionString)
+const _f              = eval(_functionString)
 
 let _lex = _catchUndefined('lexer', _lexer, lexer =>
   lexer === 'jsonStream' ? _jsonStream :
