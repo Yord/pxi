@@ -225,11 +225,9 @@ $ fx "json => (json.iso = new Date(json.time * 1000).toISOString(), json)" < 201
 
 Selecting all entries from May the 4th from the same file (602MB) takes 14sec:
 
-```bash
-$ pf -u filter -f "({time}) => time >= 1556928000 && time <= 1557014399" < 2019.jsonl > out.jsonl
-```
-
 ```json
+$ pf -u filter -f "({time}) => time >= 1556928000 && time <= 1557014399" < 2019.jsonl > out.jsonl
+
 {"time":1556928000}
 {"time":1556928001}
 ...
