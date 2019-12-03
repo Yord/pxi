@@ -15,15 +15,18 @@ const _flatMap        = require('./src/updaters/flatMap')
 const _filter         = require('./src/updaters/filter')
 const _stringify      = require('./src/marshallers/stringify')
 
+const _lexers         = [_line, _jsonStream].concat(pf.lexers || [])
 const _parsers        = [_single, _bulk].concat(pf.parsers || [])
+
+const _lexerDefault   = _line
 const _parserDefault  = _bulk
 
-const _argv           = require('./src/args')(_parserDefault.name, _parsers)
+const _argv           = require('./src/args')(_lexers, _parsers)(_lexerDefault.name, _parserDefault.name)
 const _run            = require('./src/run')
 
 const _failEarly      = typeof _argv.e !== 'undefined' ? _argv.e : false
 const _functionString = _argv.f || 'json => json'
-const _lexer          = _argv.l || 'line'
+const _lexer          = _argv.l || _lexerDefault.name
 const _marshaller     = _argv.m || 'stringify'
 const _parser         = _argv.p || _parserDefault.name
 const _updater        = _argv.u || 'map'

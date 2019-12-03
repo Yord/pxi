@@ -1,4 +1,4 @@
-module.exports = (parserDefault, parsers) => (
+module.exports = (lexers, parsers) => (lexerDefault, parserDefault) => (
   require('yargs')
   .usage('Usage: $0 [options]')
   
@@ -13,7 +13,9 @@ module.exports = (parserDefault, parsers) => (
   .nargs('lexer', 1)
   .describe(
     'lexer',
-    'Defines how the input is tokenized: "line" (default) treats lines as tokens. "jsonStream" parses streams of JSON objects (not arrays!) and drops all characters in between. If --lexer gets any other string, the global scope is searched for a matching variable or function.'
+    'Defines how the input is tokenized: ' +
+    describePlugin(lexers, lexerDefault) +
+    ' If --lexer gets any other string, the global scope is searched for a matching variable or function.'
   )
 
   .alias('p', 'parser')
@@ -21,7 +23,7 @@ module.exports = (parserDefault, parsers) => (
   .describe(
     'parser',
     'Defines how tokens are parsed into JSON: ' +
-    parsers.map(p => '"' + p.name + '"' + (p.name === parserDefault ? ' (default) ' : ' ') + p.desc).join(' ') +
+    describePlugin(parsers, parserDefault) +
     ' If --parser gets any other string, the global scope is searched for a matching variable or function.'
   )
 
@@ -65,3 +67,7 @@ module.exports = (parserDefault, parsers) => (
   .epilog('Copyright (c) Philipp Wille 2019')
   .argv
 )
+
+function describePlugin (plugins, defaultName) {
+  return plugins.map(p => '"' + p.name + '"' + (p.name === defaultName ? ' (default) ' : ' ') + p.desc).join(' ')
+}
