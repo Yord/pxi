@@ -5,11 +5,12 @@ require('./src/fxrc')
 const _process                = require('process')
 
 const _line                   = require('./src/lexers/line')
-const _streamObject           = require('./src/lexers/streamObject')
+const _jsonStream             = require('./src/lexers/jsonStream')
 const _bulk                   = require('./src/parsers/bulk')
 const _single                 = require('./src/parsers/single')
 const _map                    = require('./src/updaters/map')
 const _flatMap                = require('./src/updaters/flatMap')
+const _filter                 = require('./src/updaters/filter')
 const _stringify              = require('./src/marshallers/stringify')
 
 const _argv                   = require('./src/args')
@@ -26,26 +27,27 @@ const _verbose                = typeof _argv.v !== 'undefined' ? _argv.v : false
 const _f                      = eval(_functionString)
 
 let _lex = _catchUndefined('lexer', _lexer, lexer =>
-  lexer === 'streamObject' ? _streamObject :
-  lexer === 'line'         ? _line
-                           : eval(lexer)
+  lexer === 'jsonStream' ? _jsonStream :
+  lexer === 'line'       ? _line
+                         : global[lexer]
 )(_verbose, _failEarly, _argv)
 
 let _parse = _catchUndefined('parser', _parser, parser =>
   parser === 'bulk'   ? _bulk :
   parser === 'single' ? _single
-                      : eval(parser)
+                      : global[parser]
 )(_verbose, _failEarly, _argv)
 
 let _update = _catchUndefined('updater', _updater, updater =>
   updater === 'map'     ? _map :
-  updater === 'flatMap' ? _flatMap
-                        : eval(updater)
+  updater === 'flatMap' ? _flatMap :
+  updater === 'filter'  ? _filter
+                        : global[updater]
 )(_verbose, _failEarly, _f, _argv)
 
 let _marshal = _catchUndefined('marshaller', _marshaller, marshaller =>
   marshaller === 'stringify' ? _stringify
-                             : eval(marshaller)
+                             : global[marshaller]
 )(_verbose, _failEarly, _argv)
 
 _run(_lex, _parse, _update, _marshal)
