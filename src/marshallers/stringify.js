@@ -1,6 +1,7 @@
 module.exports = (verbose, failEarly, argv) => {
-  const replacer = argv.r || argv.replacer || null
-  const spaces   = argv.s || argv.spaces   || 0
+  const spaces      = argv.s || argv.spaces   || 0
+  const replacerStr = argv.r || argv.replacer || null
+  const replacer    = eval(replacerStr)       || null
 
   return jsons => {
     let err = ''
