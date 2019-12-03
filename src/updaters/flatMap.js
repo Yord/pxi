@@ -14,7 +14,7 @@ module.exports = (verbose, failEarly, f, argv) => (jsons, lines) => {
           }
         } else jsons2.push(obj2)
       }
-    } catch(e) {
+    } catch (e) {
       const line = verbose ? 'Line ' + lines[index] + ': ' : ''
       err += line + e + '\n'
       if (failEarly) {

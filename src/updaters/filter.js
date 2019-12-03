@@ -1,12 +1,11 @@
-module.exports = (verbose, failEarly, f, argv) => (jsons, lines) => {
+module.exports = (verbose, failEarly, p, argv) => (jsons, lines) => {
   let err = ''
   let jsons2 = []
 
   for (let index = 0; index < jsons.length; index++) {
     try {
       const obj = jsons[index]
-      const obj2 = typeof f === 'undefined' ? obj : f(obj)
-      jsons2.push(obj2)
+      if (typeof p === 'undefined' || p(obj) === true) jsons2.push(obj)
     } catch (e) {
       const line = verbose ? 'Line ' + lines[index] + ': ' : ''
       err += line + e + '\n'
