@@ -1,6 +1,6 @@
 module.exports = {
-  name: "single",
-  desc: "parses each token individually.",
+  name: 'jsonSingle',
+  desc: 'parses each token individually.',
   func: (verbose, failEarly, argv) => (tokens, lines) => {
     let err = ''
     let jsons = []
