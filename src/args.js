@@ -1,4 +1,4 @@
-module.exports = (lexers, parsers, updaters) => (lexerDefault, parserDefault, updaterDefault) => (
+module.exports = (lexers, parsers, updaters, marshallers) => (lexerDefault, parserDefault, updaterDefault, marshallerDefault) => (
   require('yargs')
   .usage('Usage: $0 [options]')
   
@@ -47,7 +47,9 @@ module.exports = (lexers, parsers, updaters) => (lexerDefault, parserDefault, up
   .nargs('marshaller', 1)
   .describe(
     'marshaller',
-    'Defines how the updated JSON is transformed back to a string: "stringify" (default) uses JSON.stringify and has the following additional options:\n\n-s, --spaces\nThe number of spaces used to format JSON. If it is set to 0 (default), the JSON is printed in a single line.\n\n-r, --replacer\nDetermines which JSON fields are kept. If it is set to null (default), all fields remain. See the documentation of JSON.stringify for details.\n\nIf --marshaller gets any other string, the global scope is searched for a matching variable or function.'
+    'Defines how the updated JSON is transformed back to a string: ' +
+    describePlugin(marshallers, marshallerDefault) +
+    ' If --marshaller gets any other string, the global scope is searched for a matching variable or function.'
   )
 
   .alias('e', 'fail-early')
