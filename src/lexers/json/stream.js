@@ -58,8 +58,8 @@ module.exports = {
         if (verbose) lines.push(line)
   
         text = text.slice(at + 1, len)
-        len = text.length
-        at = -1
+        len  = text.length
+        at   = -1
       }
     } while (!done)
   
