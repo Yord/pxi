@@ -73,13 +73,16 @@ module.exports = (lexers, parsers, transformers, marshallers) => (lexerDefault, 
 )
 
 function describePlugins (plugins, defaultName) {
-  return plugins.map(describePlugin(defaultName)).join(' ')
+  return plugins.flatMap(describePlugin(defaultName)).join(' ')
 }
 
 function describePlugin (defaultName) {
-  return plugin => (
-    '"' + plugin.name + '"' +
-    (plugin.name === defaultName ? ' (default) ' : ' ') +
-    plugin.desc
-  )
+  return plugin => {
+    if (typeof plugin.name === 'undefined') return []
+    else return [
+      '"' + plugin.name + '"' +
+      (plugin.name === defaultName ? ' (default) ' : ' ') +
+      plugin.desc
+    ]
+  }
 }
