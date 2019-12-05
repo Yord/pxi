@@ -15,12 +15,13 @@ const _single             = require('./src/parsers/json/single')
 const _map                = require('./src/transformers/map')
 const _flatMap            = require('./src/transformers/flatMap')
 const _filter             = require('./src/transformers/filter')
-const _stringify          = require('./src/marshallers/stringify')
+const _toString           = require('./src/marshallers/toString')
+const _stringify          = require('./src/marshallers/json/stringify')
 
 const _lexers             = [_line, _jsonStream].concat(_PF.lexers || [])
 const _parsers            = [_id, _single, _bulk].concat(_PF.parsers || [])
 const _transformers       = [_map, _flatMap, _filter].concat(_PF.transformers || [])
-const _marshallers        = [_stringify].concat(_PF.marshallers || [])
+const _marshallers        = [_toString, _stringify].concat(_PF.marshallers || [])
 
 const _lexerDefault       = _defaults.lexer       || _line.name
 const _parserDefault      = _defaults.parser      || _bulk.name
