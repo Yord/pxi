@@ -4,8 +4,8 @@ require('./src/pfrc')
 
 const _process            = require('process')
 
-const pf                  = global.pf || {}
-const _defaults           = pf.defaults || {}
+const _PF                 = global.PF    || {}
+const _defaults           = _PF.defaults || {}
 
 const _line               = require('./src/lexers/line')
 const _jsonStream         = require('./src/lexers/json/stream')
@@ -16,10 +16,10 @@ const _flatMap            = require('./src/transformers/flatMap')
 const _filter             = require('./src/transformers/filter')
 const _stringify          = require('./src/marshallers/stringify')
 
-const _lexers             = [_line, _jsonStream].concat(pf.lexers || [])
-const _parsers            = [_single, _bulk].concat(pf.parsers || [])
-const _transformers       = [_map, _flatMap, _filter].concat(pf.transformers || [])
-const _marshallers        = [_stringify].concat(pf.marshallers || [])
+const _lexers             = [_line, _jsonStream].concat(_PF.lexers || [])
+const _parsers            = [_single, _bulk].concat(_PF.parsers || [])
+const _transformers       = [_map, _flatMap, _filter].concat(_PF.transformers || [])
+const _marshallers        = [_stringify].concat(_PF.marshallers || [])
 
 const _lexerDefault       = _defaults.lexer       || _line.name
 const _parserDefault      = _defaults.parser      || _bulk.name
