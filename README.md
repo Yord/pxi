@@ -45,7 +45,7 @@ Printing the episode ids and names of all Star Wars movies:
 
 ```json
 $ curl -s https://swapi.co/api/films/ |
-  pf -l jsonStream -u flatMap -f "json => json.results" -r "['episode_id','title']" |
+  pf -l jsonStream -t flatMap -f "json => json.results" -r "['episode_id','title']" |
   sort
 
 {"episode_id":1,"title":"The Phantom Menace"}
@@ -103,7 +103,7 @@ The following command line options are most common. See `pf --help` for all opti
     </ul>
     <p>If you would like to use libraries like lodash or ramda, read the documentation on <code>.pfrc</code> below.</p>
   </dd>
-  <dt><code>pf [-u|--updater] STRING</code></dt>
+  <dt><code>pf [-t|--transformer] STRING</code></dt>
   <dd>
     <p>Defines how the the function f is applied to JSON:</p>
     <ul>
@@ -122,11 +122,11 @@ The following command line options are most common. See `pf --help` for all opti
         <code>filter</code> expects f to be a predicate and keeps all JSON elements for which f yields true.
       </li>
     </ul>
-    <p>If <code>--updater</code> gets any other string, the global scope is searched for a matching variable or function.</p>
+    <p>If <code>--transformer</code> gets any other string, the global scope is searched for a matching variable or function.</p>
   </dd>
   <dt><code>pf [-m|--marshaller] STRING</code></dt>
   <dd>
-    <p>Defines how the updated JSON is transformed back to a string:</p>
+    <p>Defines how the transformed JSON is Brought back to a string:</p>
     <ul>
       <li>
         <code>stringify</code> (<b>default</b>) uses <code>JSON.stringify</code> and has the following additional options:
@@ -148,7 +148,7 @@ Select the name, height, and mass of the first ten Star Wars characters:
 
 ```json
 $ curl -s https://swapi.co/api/people/ |
-  pf -l jsonStream -u flatMap -f "json => json.results" -r "['name','height','mass']"
+  pf -l jsonStream -t flatMap -f "json => json.results" -r "['name','height','mass']"
 
 {"name":"Luke Skywalker","height":"172","mass":"77"}
 {"name":"C-3PO","height":"167","mass":"75"}
@@ -166,7 +166,7 @@ Compute all character's [BMI][BMI]:
 
 ```json
 $ curl -s https://swapi.co/api/people/ |
-  pf -l jsonStream -u flatMap -f "json => json.results" -r "['name','height','mass']" |
+  pf -l jsonStream -t flatMap -f "json => json.results" -r "['name','height','mass']" |
   pf -f "ch => (ch.bmi = ch.mass / (ch.height / 100) ** 2, ch)" -r "['name','bmi']"
 
 {"name":"Luke Skywalker","bmi":26.027582477014604}
@@ -185,9 +185,9 @@ Select only obese Star Wars characters:
 
 ```json
 $ curl -s https://swapi.co/api/people/ |
-  pf -l jsonStream -u flatMap -f "json => json.results" -r "['name','height','mass']" |
+  pf -l jsonStream -t flatMap -f "json => json.results" -r "['name','height','mass']" |
   pf -f "ch => (ch.bmi = ch.mass / (ch.height / 100) ** 2, ch)" -r "['name','bmi']" |
-  pf -u filter -f "ch => ch.bmi >= 30" -r "['name']"
+  pf -t filter -f "ch => ch.bmi >= 30" -r "['name']"
 
 {"name":"R2-D2"}
 {"name":"Darth Vader"}
@@ -226,7 +226,7 @@ $ fx "json => (json.iso = new Date(json.time * 1000).toISOString(), json)" < 201
 Selecting all entries from May the 4th from the same file (602MB) takes 14sec:
 
 ```json
-$ pf -u filter -f "({time}) => time >= 1556928000 && time <= 1557014399" < 2019.jsonl > out.jsonl
+$ pf -t filter -f "({time}) => time >= 1556928000 && time <= 1557014399" < 2019.jsonl > out.jsonl
 
 {"time":1556928000}
 {"time":1556928001}

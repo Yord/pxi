@@ -1,4 +1,4 @@
-module.exports = (lex, parse, update, marshal) => {
+module.exports = (lex, parse, transform, marshal) => {
   process.stdin.setEncoding('utf8')
 
   let buffer      = ''
@@ -8,12 +8,12 @@ module.exports = (lex, parse, update, marshal) => {
   .on('data', chunk => {
     const {err: lErr, tokens, lines, lastLine, rest} = lex(buffer + chunk, linesOffset)
     const {err: pErr, jsons}                         = parse(tokens, lines)
-    const {err: uErr, jsons: jsons2}                 = update(jsons, lines)
-    const {err: mErr, str}                           = marshal(jsons2)
+    const {err: tErr, jsons: transformedJsons}       = transform(jsons, lines)
+    const {err: mErr, str}                           = marshal(transformedJsons)
 
     if (lErr !== '') process.stderr.write(lErr + '\n')
     if (pErr !== '') process.stderr.write(pErr + '\n')
-    if (uErr !== '') process.stderr.write(uErr + '\n')
+    if (tErr !== '') process.stderr.write(tErr + '\n')
     if (mErr !== '') process.stderr.write(mErr + '\n')
     process.stdout.write(str)
 
