@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-require('./src/fxrc')
+require('./src/pfrc')
 
 const _process           = require('process')
 
