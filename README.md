@@ -249,7 +249,7 @@ $ fx ??? < 2019.jsonl > out.jsonl
 
 ## License
 
-MIT
+This project is under the MIT license.
 
 [BMI]: https://en.wikipedia.org/wiki/Body_mass_index
 [fx]: https://github.com/antonmedv/fx
