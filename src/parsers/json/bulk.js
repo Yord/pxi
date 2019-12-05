@@ -34,8 +34,9 @@ function tokenParser (verbose, failEarly) {
     try {
       jsons = JSON.parse(token)
     } catch (e) {
-      const line = verbose ? 'Line ' + firstLine + ': ' : ''
-      err += line + e + '\n'
+      const line = verbose > 0 ? '(Line ' + firstLine + ') ' : ''
+      const info = verbose > 1 ? ' while parsing:\n' + token : ''
+      err += line + e + info + '\n'
       if (failEarly) {
         process.stderr.write(err)
         process.exit(1)

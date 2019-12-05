@@ -10,8 +10,9 @@ module.exports = {
         const obj = jsons[index]
         if (typeof p === 'undefined' || p(obj) === true) jsons2.push(obj)
       } catch (e) {
-        const line = verbose ? 'Line ' + lines[index] + ': ' : ''
-        err += line + e + '\n'
+        const line = verbose > 0 ? 'Line ' + lines[index] + ': '                           : ''
+        const info = verbose > 1 ? ' while transforming:\n' + JSON.stringify(obj, null, 2) : ''
+        err += line + e + info + '\n'
         if (failEarly) {
           process.stderr.write(err)
           process.exit(1)

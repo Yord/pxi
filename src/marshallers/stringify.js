@@ -15,7 +15,8 @@ module.exports = {
           const obj = jsons[index]
           str += JSON.stringify(obj, replacer, spaces) + '\n'
         } catch (e) {
-          err += e + '\n'
+          const info = verbose > 1 ? ' while marshalling:\n' + JSON.stringify(obj, null, 2) : ''
+          err += e + info + '\n'
           if (failEarly) {
             process.stderr.write(err)
             process.exit(1)
