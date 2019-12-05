@@ -9,6 +9,7 @@ const _defaults           = _PF.defaults || {}
 
 const _line               = require('./src/lexers/line')
 const _jsonStream         = require('./src/lexers/json/stream')
+const _id                 = require('./src/parsers/id')
 const _bulk               = require('./src/parsers/json/bulk')
 const _single             = require('./src/parsers/json/single')
 const _map                = require('./src/transformers/map')
@@ -17,7 +18,7 @@ const _filter             = require('./src/transformers/filter')
 const _stringify          = require('./src/marshallers/stringify')
 
 const _lexers             = [_line, _jsonStream].concat(_PF.lexers || [])
-const _parsers            = [_single, _bulk].concat(_PF.parsers || [])
+const _parsers            = [_id, _single, _bulk].concat(_PF.parsers || [])
 const _transformers       = [_map, _flatMap, _filter].concat(_PF.transformers || [])
 const _marshallers        = [_stringify].concat(_PF.marshallers || [])
 
