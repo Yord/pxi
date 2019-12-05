@@ -9,8 +9,8 @@ module.exports = (lexers, parsers, updaters, marshallers) => (lexerDefault, pars
     'Shows this help message.'
   )
 
-  .alias('l', 'lexer')
   .nargs('lexer', 1)
+  .alias('l', 'lexer')
   .describe(
     'lexer',
     'Defines how the input is tokenized: ' +
@@ -18,8 +18,8 @@ module.exports = (lexers, parsers, updaters, marshallers) => (lexerDefault, pars
     ' If --lexer gets any other string, the global scope is searched for a matching variable or function.'
   )
 
-  .alias('p', 'parser')
   .nargs('parser', 1)
+  .alias('p', 'parser')
   .describe(
     'parser',
     'Defines how tokens are parsed into JSON: ' +
@@ -27,15 +27,15 @@ module.exports = (lexers, parsers, updaters, marshallers) => (lexerDefault, pars
     ' If --parser gets any other string, the global scope is searched for a matching variable or function.'
   )
 
-  .alias('f', 'function')
   .nargs('function', 1)
+  .alias('f', 'function')
   .describe(
     'function',
     'Defines how JSON is transformed: "json => json" (default) If no function string is given, the identity function is used. "json => ..." All variables and functions in global scope may be used in the function. If you would like to use libraries like lodash or ramda, read the documentation on .pfrc on the github page.'
   )
 
-  .alias('u', 'updater')
   .nargs('updater', 1)
+  .alias('u', 'updater')
   .describe(
     'updater',
     'Defines how the function f is applied to JSON: ' +
@@ -43,8 +43,8 @@ module.exports = (lexers, parsers, updaters, marshallers) => (lexerDefault, pars
     ' If --updater gets any other string, the global scope is searched for a matching variable or function.'
   )
 
-  .alias('m', 'marshaller')
   .nargs('marshaller', 1)
+  .alias('m', 'marshaller')
   .describe(
     'marshaller',
     'Defines how the updated JSON is transformed back to a string: ' +
@@ -52,8 +52,8 @@ module.exports = (lexers, parsers, updaters, marshallers) => (lexerDefault, pars
     ' If --marshaller gets any other string, the global scope is searched for a matching variable or function.'
   )
 
-  .alias('e', 'fail-early')
   .boolean('fail-early')
+  .alias('e', 'fail-early')
   .describe(
     'fail-early',
     'Usually, every error is caught and written to stderr. But if ' +
@@ -61,8 +61,8 @@ module.exports = (lexers, parsers, updaters, marshallers) => (lexerDefault, pars
     'process exits with code 1.'
   )
 
+  .count('verbose')
   .alias('v', 'verbose')
-  .boolean('verbose')
   .describe(
     'verbose',
     'Adds lines to errors.'
