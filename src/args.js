@@ -14,7 +14,7 @@ module.exports = (lexers, parsers, updaters, marshallers) => (lexerDefault, pars
   .describe(
     'lexer',
     'Defines how the input is tokenized: ' +
-    describePlugin(lexers, lexerDefault) +
+    describePlugins(lexers, lexerDefault) +
     ' If --lexer gets any other string, the global scope is searched for a matching variable or function.'
   )
 
@@ -23,7 +23,7 @@ module.exports = (lexers, parsers, updaters, marshallers) => (lexerDefault, pars
   .describe(
     'parser',
     'Defines how tokens are parsed into JSON: ' +
-    describePlugin(parsers, parserDefault) +
+    describePlugins(parsers, parserDefault) +
     ' If --parser gets any other string, the global scope is searched for a matching variable or function.'
   )
 
@@ -39,7 +39,7 @@ module.exports = (lexers, parsers, updaters, marshallers) => (lexerDefault, pars
   .describe(
     'updater',
     'Defines how the function f is applied to JSON: ' +
-    describePlugin(updaters, updaterDefault) +
+    describePlugins(updaters, updaterDefault) +
     ' If --updater gets any other string, the global scope is searched for a matching variable or function.'
   )
 
@@ -48,7 +48,7 @@ module.exports = (lexers, parsers, updaters, marshallers) => (lexerDefault, pars
   .describe(
     'marshaller',
     'Defines how the updated JSON is transformed back to a string: ' +
-    describePlugin(marshallers, marshallerDefault) +
+    describePlugins(marshallers, marshallerDefault) +
     ' If --marshaller gets any other string, the global scope is searched for a matching variable or function.'
   )
 
@@ -72,6 +72,14 @@ module.exports = (lexers, parsers, updaters, marshallers) => (lexerDefault, pars
   .argv
 )
 
-function describePlugin (plugins, defaultName) {
-  return plugins.map(p => '"' + p.name + '"' + (p.name === defaultName ? ' (default) ' : ' ') + p.desc).join(' ')
+function describePlugins (plugins, defaultName) {
+  return plugins.map(describePlugin(defaultName)).join(' ')
+}
+
+function describePlugin (defaultName) {
+  return plugin => (
+    '"' + plugin.name + '"' +
+    (plugin.name === defaultName ? ' (default) ' : ' ') +
+    plugin.desc
+  )
 }
