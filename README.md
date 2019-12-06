@@ -5,12 +5,6 @@
 [![npm version](https://img.shields.io/npm/v/fx.svg?color=orange)](https://www.npmjs.com/package/fx)
 [![license](https://img.shields.io/badge/license-MIT-blue.svg?color=green)](https://github.com/Yord/pf/blob/master/LICENSE)
 
-+   **Blazing fast:** **>2x faster** than [`jq`][jq] and **>10x faster** than [`fx`][fx] in transforming json.
-+   **Highly extensible:** Trivial to add and use custom parsers, lexers or marshallers.
-+   **Configurable DSL:** Add Lodash or any other library for transforming json.
-+   **Streaming support:** Supports streaming JSON out of the box.
-+   **Very few dependencies:** Depends only on yargs.
-
 ## Installation
 
 `pf` requires **node v8.3.0** or higher.
@@ -20,6 +14,14 @@ Installation is done using [`npm install --global` command][npm].
 ```bash
 $ npm install --global pf
 ```
+
+## Features
+
++   **Blazing fast:** **>2x faster** than [`jq`][jq] and **>10x faster** than [`fx`][fx] in transforming json.
++   **Highly extensible:** Trivial to add and use custom parsers, lexers or marshallers.
++   **Configurable DSL:** Add Lodash or any other library for transforming json.
++   **Streaming support:** Supports streaming JSON out of the box.
++   **Very few dependencies:** Depends only on yargs.
 
 ## Sample Usage
 
