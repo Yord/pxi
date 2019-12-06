@@ -36,7 +36,7 @@ const _functionString     = _argv.f || 'json => json'
 const _lexer              = _argv.l || _lexerDefault
 const _marshaller         = _argv.m || _marshallerDefault
 const _parser             = _argv.p || _parserDefault
-const _transformer        = _argv.u || _transformerDefault
+const _transformer        = _argv.t || _transformerDefault
 const _verbose            = typeof _argv.v !== 'undefined' ? _argv.v : false
 
 const _f                  = eval(_functionString)
