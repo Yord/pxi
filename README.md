@@ -74,13 +74,13 @@ Lexing, parsing, and marshalling JSON is supported through the [`pf-json`][pf-js
 
 The following plugins are available:
 
-| Plugin                     | Lexers     | Parsers              | Transformers         | Marshallers   | in `pf` |
-|----------------------------|------------|----------------------|----------------------|---------------|:-------:|
-| [`pf-core`][pf-core]       | id, line   | id                   | map, flatMap, filter | toString      |    ✓    |
-| [`pf-json`][pf-json]       | jsonStream | jsonSingle, jsonBulk |                      | jsonStringify |    ✓    |
-| [`pf-csv`][pf-csv]         | ???        | ???                  | ???                  | ???           |    ✕    |
-| [`pf-xml`][pf-xml]         | ???        | ???                  | ???                  | ???           |    ✕    |
-| [`pf-geojson`][pf-geojson] | ???        | ???                  | ???                  | geojson       |    ✕    |
+| Plugin                     | Lexers       | Parsers                  | Transformers               | Marshallers     | in `pf` |
+|----------------------------|--------------|--------------------------|----------------------------|-----------------|:-------:|
+| [`pf-core`][pf-core]       | `id`, `line` | `id`                     | `map`, `flatMap`, `filter` | `toString`      |    ✓    |
+| [`pf-json`][pf-json]       | `jsonStream` | `jsonSingle`, `jsonBulk` |                            | `jsonStringify` |    ✓    |
+| [`pf-csv`][pf-csv]         | ???          | ???                      | ???                        | ???             |    ✕    |
+| [`pf-xml`][pf-xml]         | ???          | ???                      | ???                        | ???             |    ✕    |
+| [`pf-geojson`][pf-geojson] | ???          | ???                      | ???                        | geojson         |    ✕    |
 
 The last column tells what plugins come preinstalled in `pf`.
 Refer to the `.pfrc` section to see how to enable other plugins.
