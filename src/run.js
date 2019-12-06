@@ -4,6 +4,9 @@ module.exports = (lex, parse, transform, marshal) => {
   let buffer      = ''
   let linesOffset = 0
 
+  process.stdout.on('error', () => process.exit(1))
+  process.stderr.on('error', () => process.exit(1))
+
   process.stdin
   .on('data', chunk => {
     const {err: lErr, tokens, lines, lastLine, rest} = lex(buffer + chunk, linesOffset)
@@ -20,5 +23,6 @@ module.exports = (lex, parse, transform, marshal) => {
     buffer      = rest
     linesOffset = lastLine
   })
-  .on('end', () => process.exit(0))
+  .on('end',   () => process.exit(0))
+  .on('error', () => process.exit(1))
 }
