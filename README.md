@@ -17,7 +17,7 @@ $ npm install --global pf
 
 ## Features
 
-+   **Blazing fast:** **>2x faster** than [`jq`][jq] and **>10x faster** than [`fx`][fx] in transforming json.
++   **Blazing fast:** >2x faster than `jq` and >10x faster than `fx` in transforming json.
 +   **Highly extensible:** Trivial to add and use custom parsers, lexers or marshallers.
 +   **Configurable DSL:** Add Lodash or any other library for transforming json.
 +   **Streaming support:** Supports streaming JSON out of the box.
@@ -31,7 +31,7 @@ Using `pf` to select all Unix timestamps from a large file containing all second
 $ pf -f "json => json.time" < 2019.jsonl > out.jsonl
 ```
 
-[`jq`][jq] takes 2.5x longer (~46 seconds) and [`fx`][fx] takes 16x longer (~290 seconds).
+`jq` takes 2.5x longer (~46 seconds) and `fx` takes 16x longer (~290 seconds).
 See the performance section for details.
 
 `pf` also works on JSON streams:
@@ -86,7 +86,7 @@ Refer to the `.pfrc` section to see how to enable other plugins.
 
 ### Performance
 
-`pf-json`s lexers and parsers are build for speed and beat `jq` and `fx` in several benchmarks (see medium post (TODO) for details):
+`pf-json`s lexers and parsers are build for speed and beat [`jq`][jq] and [`fx`][fx] in several benchmarks (see medium post (TODO) for details):
 
 |                 | `pf` (time) | `jq` (time) | `fx` (time) | `jq` (RAM) | `pf` (RAM) | `fx` (RAM) | all (CPU) |
 |-----------------|------------:|------------:|------------:|-----------:|-----------:|-----------:|----------:|
@@ -190,6 +190,11 @@ $ curl -s https://swapi.co/api/people/ |
 ```
 
 Turns out, Anakin could use some training!
+
+## Related
+
++   [`jq`][jq]: Command-line JSON processor
++   [`fx`][fx]: Command-line tool and terminal JSON viewer
 
 ## License
 
