@@ -9,7 +9,7 @@
 
 `pf` requires **node v8.3.0** or higher.
 
-Installation is done using [`npm install --global` command][npm].
+Installation is done using the [`npm install --global` command][npm].
 
 ```bash
 $ npm install --global pf
@@ -18,8 +18,9 @@ $ npm install --global pf
 ## Features
 
 +   **Blazing fast:** >2x faster than `jq` and >10x faster than `fx` in transforming json.
-+   **Highly extensible:** Trivial to add and use custom parsers, lexers or marshallers.
-+   **Configurable DSL:** Add Lodash or any other library for transforming json.
++   **Highly extensible:** Trivial to write and use parser, lexer, and marshaller plugins.
++   **Not limited to JSON:** Also supports parsing CSV and XML via plugins.
++   **Configurable DSL:** Add Lodash or any other library for transforming JSON.
 +   **Streaming support:** Supports streaming JSON out of the box.
 +   **Very few dependencies:** Depends only on yargs.
 
