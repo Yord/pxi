@@ -1,47 +1,38 @@
-# Parser Functions
+![pf header][header]
 
-Fast and extensible command-line data (e.g. JSON) processor and transformer.
+`pf` (parser functions) is a fast and extensible command-line data (e.g. JSON) processor similar to `jq` and `fx`.
 
-+   **Easy to use**: Knowing JavaScript makes it even more simple.
-+   **Blazing fast**: Faster than [`jq`][jq] and much faster than [`fx`][fx] when transforming json.
-+   **Very convenient**: Use Lodash or any other library in your transformation function (see guide below).
-+   **Highly extensible**: Trivial to add and use your own parsers, lexers or marshallers (see guide below).
-+   **Streaming support**: Supports streaming JSON out of the box (through the `jsonStream` lexer).
-+   **Very few dependencies**: Depends only on yargs.
-+   **Concise code**: Only ??? lines of code.
+[![npm version](https://img.shields.io/npm/v/fx.svg?color=orange)](https://www.npmjs.com/package/fx)
+[![license](https://img.shields.io/badge/license-MIT-blue.svg?color=green)](https://github.com/Yord/pf/blob/master/LICENSE)
 
-[![license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/Yord/pf/blob/master/LICENSE)
-[![npm version](https://img.shields.io/npm/v/fx.svg)](https://www.npmjs.com/package/fx)
++   **Blazing fast:** **>2x faster** than [`jq`][jq] and **>10x faster** than [`fx`][fx] in transforming json.
++   **Highly extensible:** Trivial to add and use custom parsers, lexers or marshallers.
++   **Configurable DSL:** Add Lodash or any other library for transforming json.
++   **Streaming support:** Supports streaming JSON out of the box.
++   **Very few dependencies:** Depends only on yargs.
+
+## Installation
+
+`pf` requires **node v8.3.0** or higher.
+
+Installation is done using [`npm install --global` command][npm].
 
 ```bash
 $ npm install --global pf
 ```
 
-Selecting all Unix timestamps from a file containing all seconds of 2019 (602 MB, 31536000 lines) in JSON format (e.g. `{"time":1546300800}`) takes ~18 seconds (macOS 10.15, 2.8 GHz i7 processor):
+## Sample Usage
+
+Using `pf` to select all Unix timestamps from a large file containing all seconds of 2019 (602 MB, 31536000 lines) in JSON format takes ~18 seconds (macOS 10.15, 2.8 GHz i7 processor):
 
 ```bash
 $ pf -f "json => json.time" < 2019.jsonl > out.jsonl
-
-1546300800
-1546300801
-...
-1577836798
-1577836799
 ```
 
-[`jq`][jq] (version 1.6) takes ~46 seconds and is 2.5x slower:
+[`jq`][jq] takes 2.5x longer (~46 seconds) and [`fx`][fx] takes 16x longer (~290 seconds).
+See the performance section for details.
 
-```bash
-$ jq '.time' < 2019.jsonl > out.jsonl
-```
-
-[`fx`][fx] (version 14.1.0) takes ~290 seconds and is 16x slower:
-
-```bash
-$ fx "json => json.time" < 2019.jsonl > out.jsonl
-```
-
-Printing the episode ids and names of all Star Wars movies:
+`pf` also works on JSON streams:
 
 ```json
 $ curl -s https://swapi.co/api/films/ |
@@ -57,92 +48,93 @@ $ curl -s https://swapi.co/api/films/ |
 {"episode_id":7,"title":"The Force Awakens"}
 ```
 
-See the example and performance sections below for more examples.
+See the usage and performance sections below for more examples.
+
+## Parser Functions
+
+`pf` is a command-line tool for processing data from large files and streams.
+Simply put, it works like this:
+
+```javascript
+function pf (chunk) {             // Data chunks are passed to pf from stdin.
+  const tokens = lex(chunk)       // The chunks are lexed and tokens are identified.
+  const jsons  = parse(tokens)    // The tokens get parsed into JSON objects. 
+  const jsons2 = transform(jsons) // Each object is transformed into a new JSON object.
+  const string = marshal(jsons2)  // The new objects are converted to a string.
+  process.stdout.write(string)    // The string is written to stdout.
+}
+```
+
+Lexing, parsing, and marshalling JSON is supported through the [`pf-json`][pf-json] plugin.
+
+### Plugins
+
+The following plugins are available:
+
+| Plugin                     | Lexers     | Parsers              | Transformers         | Marshallers   | in `pf` |
+|----------------------------|------------|----------------------|----------------------|---------------|:-------:|
+| [`pf-core`][pf-core]       | id, line   | id                   | map, flatMap, filter | toString      |    ✓    |
+| [`pf-json`][pf-json]       | jsonStream | jsonSingle, jsonBulk |                      | jsonStringify |    ✓    |
+| [`pf-csv`][pf-csv]         | ???        | ???                  | ???                  | ???           |    ✕    |
+| [`pf-xml`][pf-xml]         | ???        | ???                  | ???                  | ???           |    ✕    |
+| [`pf-geojson`][pf-geojson] | ???        | ???                  | ???                  | geojson       |    ✕    |
+
+The last column tells what plugins come preinstalled in `pf`.
+Refer to the `.pfrc` section to see how to enable other plugins.
+
+### Performance
+
+`pf-json`s lexers and parsers are build for speed and beat `jq` and `fx` in several benchmarks (see medium post (TODO) for details):
+
+|                 | `pf` (time) | `jq` (time) | `fx` (time) | `jq` (RAM) | `pf` (RAM) | `fx` (RAM) | all (CPU) |
+|-----------------|------------:|------------:|------------:|-----------:|-----------:|-----------:|----------:|
+| **Benchmark A** |     **18s** |         46s |        290s |     **1M** |        46M |        54M |  **100%** |
+| **Benchmark B** |     **42s** |        164s |        463s |     **1M** |        48M |        73M |  **100%** |
+| **Benchmark C** |     **14s** |         44s |         96s |     **1M** |        48M |        51M |  **100%** |
+
+`pf` beats `jq` and `fx` in processing speed in all three benchmarks.
+Since `jq` is written in C, it beats `pf` and `fx` in RAM usage in orders of magnitudes.
+All three run single-threaded and use 100% of one CPU core.
 
 ## Usage
 
-The following command line options are most common. See `pf --help` for all options.
+Selecting all Unix timestamps from a file containing all seconds of 2019 (602 MB, 31536000 lines) in JSON format (e.g. `{"time":1546300800}`) takes ~18 seconds (macOS 10.15, 2.8 GHz i7 processor):
 
-<dl>
-  <dt><code>pf [-l|--lexer] STRING</code></dt>
-  <dd>
-    <p>Defines how the input is tokenized:</p>
-    <ul>
-      <li>
-        <code>line</code> (<b>default</b>) treats lines as tokens.
-      </li>
-      <li>
-        <code>jsonStream</code> parses streams of JSON objects (not arrays!) and drops all characters in between.
-      </li>
-    </ul>
-    <p>If <code>--lexer</code> gets any other string, the global scope is searched for a matching variable or function.</p>
-  </dd>
-  <dt><code>pf [-p|--parser] STRING</code></dt>
-  <dd>
-    <p>Defines how tokens are parsed into JSON:</p>
-    <ul>
-      <li>
-        <code>single</code> parses each token individually.
-      </li>
-      <li>
-        <code>bulk</code> (<b>default</b>) parses all tokens in one go, which is faster, but fails the whole bulk instead of just a single token if an error is thrown.
-      </li>
-    </ul>
-    <p>If <code>--parser</code> gets any other string, the global scope is searched for a matching variable or function.</p>
-  </dd>
-  <dt><code>pf [-f|--function] FUNCTION_STRING</code></dt>
-  <dd>
-    <p>Defines how JSON is transformed:</p>
-    <ul>
-      <li>
-        <code>"json => json"</code> (<b>default</b>) If no function string is given, the identity function is used.
-      </li>
-      <li>
-        <code>"json => ..."</code> All variables and functions in global scope may be used in the function.
-      </li>
-    </ul>
-    <p>If you would like to use libraries like lodash or ramda, read the documentation on <code>.pfrc</code> below.</p>
-  </dd>
-  <dt><code>pf [-t|--transformer] STRING</code></dt>
-  <dd>
-    <p>Defines how the the function f is applied to JSON:</p>
-    <ul>
-      <li>
-        <code>map</code> (<b>default</b>) applies f to each parsed JSON element and replaces it with f's result.
-      </li>
-      <li>
-        <code>flatMap</code> applies f to each element, but acts differently depending on f's result.
-        <ul>
-          <li><code>undefined</code>: return nothing.</li>
-          <li><code>[...]</code>: return every array item individually or nothing for empty arrays.</li>
-          <li>otherwise: act like map.</li>
-        </ul>
-      </li>
-      <li>
-        <code>filter</code> expects f to be a predicate and keeps all JSON elements for which f yields true.
-      </li>
-    </ul>
-    <p>If <code>--transformer</code> gets any other string, the global scope is searched for a matching variable or function.</p>
-  </dd>
-  <dt><code>pf [-m|--marshaller] STRING</code></dt>
-  <dd>
-    <p>Defines how the transformed JSON is Brought back to a string:</p>
-    <ul>
-      <li>
-        <code>stringify</code> (<b>default</b>) uses <code>JSON.stringify</code> and has the following additional options:
-        <dl>
-          <dt><code>[-s|--spaces]</code></dt>
-          <dd>The number of spaces used to format JSON. If it is set to <code>0</code> (<b>default</b>), the JSON is printed in a single line.</dd>
-          <dt><code>[-r|--replacer]</code></dt>
-          <dd>Determines which JSON fields are kept. If it is set to <code>null</code> (<b>default</b>), all fields remain. See the documentation of <code>JSON.stringify</code> for details.</dd>
-        </dl>
-      </li>
-    </ul>
-    <p>If <code>--marshaller</code> gets any other string, the global scope is searched for a matching variable or function.</p>
-  </dd>
-</dl>
+```bash
+$ pf -f "json => json.time" < 2019.jsonl > out.jsonl
 
-## Examples
+1546300800
+1546300801
+...
+1577836798
+1577836799
+```
+
+Transforming Unix timestamps to an ISO string from the same file (602MB) takes ~42 seconds:
+
+```bash
+$ pf -f "json => (json.iso = new Date(json.time * 1000).toISOString(), json)" < 2019.jsonl > out.jsonl
+
+{"time":1546300800,"iso":"2019-01-01T00:00:00.000Z"}
+{"time":1546300801,"iso":"2019-01-01T00:00:01.000Z"}
+...
+{"time":1577836798,"iso":"2019-12-31T23:59:58.000Z"}
+{"time":1577836799,"iso":"2019-12-31T23:59:59.000Z"}
+```
+
+Selecting all entries from May the 4th from the same file (602MB) takes 14sec:
+
+```bash
+$ pf -t filter -f "({time}) => time >= 1556928000 && time <= 1557014399" < 2019.jsonl > out.jsonl
+
+{"time":1556928000}
+{"time":1556928001}
+...
+{"time":1557014398}
+{"time":1557014399}
+```
+
+### Example: Way to go Anakin!
 
 Select the name, height, and mass of the first ten Star Wars characters:
 
@@ -197,60 +189,17 @@ $ curl -s https://swapi.co/api/people/ |
 
 Turns out, Anakin could use some training!
 
-## Performance
-
-Transforming Unix timestamps to an ISO string in a file containing all seconds of 2019 (602 MB, 31536000 lines) in JSON format (`{"time":1546300800}`) takes ~42 seconds (macOS 10.15, 2.8 GHz i7 processor)
-
-```json
-$ pf -f "json => (json.iso = new Date(json.time * 1000).toISOString(), json)" < 2019.jsonl > out.jsonl
-
-{"time":1546300800,"iso":"2019-01-01T00:00:00.000Z"}
-{"time":1546300801,"iso":"2019-01-01T00:00:01.000Z"}
-...
-{"time":1577836798,"iso":"2019-12-31T23:59:58.000Z"}
-{"time":1577836799,"iso":"2019-12-31T23:59:59.000Z"}
-```
-
-[`jq`][jq] takes ~164 seconds (4x slower):
-
-```bash
-$ jq -c '{time, iso: .time|todate}' < 2019.jsonl > out.jsonl
-```
-
-[`fx`][fx] takes ~463 seconds (11x slower):
-
-```bash
-$ fx "json => (json.iso = new Date(json.time * 1000).toISOString(), json)" < 2019.jsonl > out.jsonl
-```
-
-Selecting all entries from May the 4th from the same file (602MB) takes 14sec:
-
-```json
-$ pf -t filter -f "({time}) => time >= 1556928000 && time <= 1557014399" < 2019.jsonl > out.jsonl
-
-{"time":1556928000}
-{"time":1556928001}
-...
-{"time":1557014398}
-{"time":1557014399}
-```
-
-[`jq`][jq] takes ~44 seconds (3x slower):
-
-```bash
-$ jq -c 'select(.time >= 1556928000 and .time <= 1557014399)' < 2019.jsonl > out.jsonl
-```
-
-[`fx`][fx] takes ~XYZ seconds (Xx slower):
-
-```bash
-$ fx ??? < 2019.jsonl > out.jsonl
-```
-
 ## License
 
 This project is under the MIT license.
 
+[header]: ./header.gif
+[npm]: https://docs.npmjs.com/downloading-and-installing-packages-globally
 [BMI]: https://en.wikipedia.org/wiki/Body_mass_index
 [fx]: https://github.com/antonmedv/fx
 [jq]: https://github.com/stedolan/jq
+[pf-core]: https://github.com/Yord/pf
+[pf-json]: https://github.com/Yord/pf
+[pf-csv]: https://github.com/Yord/pf
+[pf-xml]: https://github.com/Yord/pf
+[pf-geojson]: https://github.com/Yord/pf
