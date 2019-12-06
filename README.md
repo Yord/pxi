@@ -3,7 +3,7 @@
 `pf` (parser functions) is a fast and extensible command-line data (e.g. JSON) processor similar to `jq` and `fx`.
 
 [![npm version](https://img.shields.io/npm/v/fx.svg?color=orange)](https://www.npmjs.com/package/fx)
-[![license](https://img.shields.io/badge/license-MIT-blue.svg?color=green)](https://github.com/Yord/pf/blob/master/LICENSE)
+[![license](https://img.shields.io/badge/license-MIT-blue.svg?color=green)][license]
 
 ## Installation
 
@@ -74,7 +74,7 @@ Lexing, parsing, and marshalling JSON is supported through the [`pf-json`][pf-js
 
 The following plugins are available:
 
-| Plugin                     | Lexers       | Parsers                  | Transformers               | Marshallers     | in `pf` |
+|                            | Lexers       | Parsers                  | Transformers               | Marshallers     | in `pf` |
 |----------------------------|--------------|--------------------------|----------------------------|-----------------|:-------:|
 | [`pf-core`][pf-core]       | `id`, `line` | `id`                     | `map`, `flatMap`, `filter` | `toString`      |    ✓    |
 | [`pf-json`][pf-json]       | `jsonStream` | `jsonSingle`, `jsonBulk` |                            | `jsonStringify` |    ✓    |
@@ -96,7 +96,7 @@ Refer to the `.pfrc` section to see how to enable other plugins.
 | **Benchmark C** |     **14s** |         44s |         96s |     **1M** |        48M |        51M |  **100%** |
 
 `pf` beats `jq` and `fx` in processing speed in all three benchmarks.
-Since `jq` is written in C, it beats `pf` and `fx` in RAM usage in orders of magnitudes.
+Since `jq` is written in C, it easily beats `pf` and `fx` in RAM usage.
 All three run single-threaded and use 100% of one CPU core.
 
 ## Usage
@@ -194,12 +194,12 @@ Turns out, Anakin could use some training!
 
 ## Related
 
-+   [`jq`][jq]: Command-line JSON processor
-+   [`fx`][fx]: Command-line tool and terminal JSON viewer
++   [`jq`][jq]: Command-line JSON processor.
++   [`fx`][fx]: Command-line tool and terminal JSON viewer.
 
 ## License
 
-This project is under the MIT license.
+This project is under the [MIT][license] license.
 
 [header]: ./header.gif
 [npm]: https://docs.npmjs.com/downloading-and-installing-packages-globally
@@ -211,3 +211,4 @@ This project is under the MIT license.
 [pf-csv]: https://github.com/Yord/pf
 [pf-xml]: https://github.com/Yord/pf
 [pf-geojson]: https://github.com/Yord/pf
+[license]: https://github.com/Yord/pf/blob/master/LICENSE
