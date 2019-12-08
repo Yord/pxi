@@ -78,7 +78,7 @@ module.exports = (lexers, parsers, applicators, marshallers) => (lexerDefault, p
 )
 
 function describePlugins (plugins, defaultName) {
-  return plugins.flatMap(describePlugin(defaultName)).join(' ')
+  return plugins.map(describePlugin(defaultName)).join(' ')
 }
 
 function describePlugin (defaultName) {
