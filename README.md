@@ -41,7 +41,7 @@ See the performance section for details.
 
 ```json
 $ curl -s "https://swapi.co/api/films/" |
-  pf -l jsonStream -t flatMap -f "json => json.results" -r "['episode_id','title']" |
+  pf -l jsonStream -a flatMap -f "json => json.results" -R "['episode_id','title']" |
   sort
 
 {"episode_id":1,"title":"The Phantom Menace"}
@@ -61,12 +61,12 @@ See the usage and performance sections below for more examples.
 Simply put, it works like this:
 
 ```javascript
-function pf (chunk) {             // Data chunks are passed to pf from stdin.
-  const tokens = lex(chunk)       // The chunks are lexed and tokens are identified.
-  const jsons  = parse(tokens)    // The tokens get parsed into JSON objects. 
-  const jsons2 = transform(jsons) // Each object is transformed into a new JSON object.
-  const string = marshal(jsons2)  // The new objects are converted to a string.
-  process.stdout.write(string)    // The string is written to stdout.
+function pf (chunk) {            // Data chunks are passed to pf from stdin.
+  const tokens = lex(chunk)      // The chunks are lexed and tokens are identified.
+  const jsons  = parse(tokens)   // The tokens get parsed into JSON objects. 
+  const jsons2 = apply(f, jsons) // Applying f on each object returns transformed JSON objects.
+  const string = marshal(jsons2) // The new objects are converted to a string.
+  process.stdout.write(string)   // The string is written to stdout.
 }
 ```
 
@@ -76,7 +76,7 @@ Lexing, parsing, and marshalling JSON is supported through the [`pf-json`][pf-js
 
 The following plugins are available:
 
-|                            | Lexers       | Parsers                  | Transformers               | Marshallers     | in `pf` |
+|                            | Lexers       | Parsers                  | Applicators                | Marshallers     | in `pf` |
 |----------------------------|--------------|--------------------------|----------------------------|-----------------|:-------:|
 | [`pf-core`][pf-core]       | `id`, `line` | `id`                     | `map`, `flatMap`, `filter` | `toString`      |    ✓    |
 | [`pf-json`][pf-json]       | `jsonStream` | `jsonSingle`, `jsonBulk` |                            | `jsonStringify` |    ✓    |
@@ -130,7 +130,7 @@ $ pf -f "json => (json.iso = new Date(json.time * 1000).toISOString(), json)" < 
 Selecting all entries from May the 4th from the same file (602MB) takes 14 seconds:
 
 ```bash
-$ pf -t filter -f "({time}) => time >= 1556928000 && time <= 1557014399" < 2019.jsonl > out.jsonl
+$ pf -a filter -f "({time}) => time >= 1556928000 && time <= 1557014399" < 2019.jsonl > out.jsonl
 
 {"time":1556928000}
 {"time":1556928001}
@@ -145,7 +145,7 @@ Select the name, height, and mass of the first ten Star Wars characters:
 
 ```json
 $ curl -s "https://swapi.co/api/people/" |
-  pf -l jsonStream -t flatMap -f "json => json.results" -r "['name','height','mass']"
+  pf -l jsonStream -a flatMap -f "json => json.results" -R "['name','height','mass']"
 
 {"name":"Luke Skywalker","height":"172","mass":"77"}
 {"name":"C-3PO","height":"167","mass":"75"}
@@ -163,8 +163,8 @@ Compute all character's [BMI][BMI]:
 
 ```json
 $ curl -s "https://swapi.co/api/people/" |
-  pf -l jsonStream -t flatMap -f "json => json.results" -r "['name','height','mass']" |
-  pf -f "ch => (ch.bmi = ch.mass / (ch.height / 100) ** 2, ch)" -r "['name','bmi']"
+  pf -l jsonStream -a flatMap -f "json => json.results" -R "['name','height','mass']" |
+  pf -f "ch => (ch.bmi = ch.mass / (ch.height / 100) ** 2, ch)" -R "['name','bmi']"
 
 {"name":"Luke Skywalker","bmi":26.027582477014604}
 {"name":"C-3PO","bmi":26.89232313815483}
@@ -182,9 +182,9 @@ Select only obese Star Wars characters:
 
 ```json
 $ curl -s "https://swapi.co/api/people/" |
-  pf -l jsonStream -t flatMap -f "json => json.results" -r "['name','height','mass']" |
-  pf -f "ch => (ch.bmi = ch.mass / (ch.height / 100) ** 2, ch)" -r "['name','bmi']" |
-  pf -t filter -f "ch => ch.bmi >= 30" -r "['name']"
+  pf -l jsonStream -a flatMap -f "json => json.results" -R "['name','height','mass']" |
+  pf -f "ch => (ch.bmi = ch.mass / (ch.height / 100) ** 2, ch)" -R "['name','bmi']" |
+  pf -a filter -f "ch => ch.bmi >= 30" -R "['name']"
 
 {"name":"R2-D2"}
 {"name":"Darth Vader"}

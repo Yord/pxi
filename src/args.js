@@ -32,10 +32,10 @@ module.exports = (lexers, parsers, transformers, marshallers) => (lexerDefault, 
     'Defines how JSON is transformed: "json => json" (default) If no function string is given, the identity function is used. "json => ..." All variables and functions in global scope may be used in the function. If you would like to use libraries like lodash or ramda, read the documentation on .pfrc on the github page.'
   )
 
-  .nargs('transformer', 1)
-  .alias('u', 'transformer')
+  .nargs('applicator', 1)
+  .alias('a', 'applicator')
   .describe(
-    'transformer',
+    'applicator',
     'Defines how the function f is applied to JSON: ' +
     describePlugins(transformers, transformerDefault)
   )
