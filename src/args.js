@@ -23,7 +23,7 @@ module.exports = (lexers, parsers, applicators, marshallers) => (lexerDefault, p
   .choices('lexer', lexers.map(plugin => plugin.name))
   .describe(
     'lexer',
-    'Defines how the input is tokenized: ' +
+    'Defines how the input is split into tokens: ' +
     describePlugins(lexers, lexerDefault)
   )
 
@@ -70,7 +70,10 @@ module.exports = (lexers, parsers, applicators, marshallers) => (lexerDefault, p
   .alias('v', 'verbose')
   .describe(
     'verbose',
-    'Adds lines to errors.'
+    'Apply -v several times (-vv) to be more verbose. Level 1     ' +
+    'pints lines in parser and applicator error messages. Level 2 ' +
+    'also prints the tokens or JSON objects that failed to be     ' +
+    'parsed or transformed.'
   )
 
   .epilog('Copyright (c) Philipp Wille 2019')
