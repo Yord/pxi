@@ -1,7 +1,7 @@
 module.exports = {
   name: 'jsonStream',
   desc: 'parses streams of JSON objects (not arrays!) and drops all characters in between.',
-  func: (verbose, failEarly, argv) => data => {
+  func: (verbose, failEarly, argv) => (data, linesOffset) => {
     const tokens = []
     const lines  = []
   
@@ -9,7 +9,7 @@ module.exports = {
     let len      = text.length
   
     let at       = -1
-    let line     = 1
+    let lastLine = linesOffset
     
     let escaped  = false
     let string   = false
@@ -26,7 +26,7 @@ module.exports = {
       at++
       ch = text.charAt(at)
   
-      if (verbose && ch === '\n') line++
+      if (verbose && ch === '\n') lastLine++
   
       if (string) {
         if (escaped) escaped = false
@@ -55,14 +55,14 @@ module.exports = {
         obj = false
         const token = text.slice(from, at + 1)
         tokens.push(token)
-        if (verbose) lines.push(line)
+        if (verbose) lines.push(lastLine)
   
         text = text.slice(at + 1, len)
-        len = text.length
-        at = -1
+        len  = text.length
+        at   = -1
       }
     } while (!done)
   
-    return {err: '', tokens, lines, rest: text}
+    return {err: '', tokens, lines, lastLine, rest: text}
   }
 }

@@ -1,22 +1,28 @@
-module.exports = (lex, parse, update, marshal) => {
+module.exports = (lex, parse, apply, marshal) => {
   process.stdin.setEncoding('utf8')
 
-  let buffer = ''
+  let buffer      = ''
+  let linesOffset = 0
+
+  process.stdout.on('error', () => process.exit(1))
+  process.stderr.on('error', () => process.exit(1))
 
   process.stdin
   .on('data', chunk => {
-    const {err: lexErr, tokens, lines, rest} = lex(buffer + chunk)
-    const {err: parseErr, jsons}             = parse(tokens, lines)
-    const {err: updateErr, jsons: jsons2}    = update(jsons, lines)
-    const {err: marshalErr, str}             = marshal(jsons2)
+    const {err: lErr, tokens, lines, lastLine, rest} = lex(buffer + chunk, linesOffset)
+    const {err: pErr, jsons}                         = parse(tokens, lines)
+    const {err: tErr, jsons: jsons2}                 = apply(jsons, lines)
+    const {err: mErr, str}                           = marshal(jsons2)
 
-    if (lexErr     !== '') process.stderr.write(lexErr     + '\n')
-    if (parseErr   !== '') process.stderr.write(parseErr   + '\n')
-    if (updateErr  !== '') process.stderr.write(updateErr  + '\n')
-    if (marshalErr !== '') process.stderr.write(marshalErr + '\n')
+    if (lErr !== '') process.stderr.write(lErr + '\n')
+    if (pErr !== '') process.stderr.write(pErr + '\n')
+    if (tErr !== '') process.stderr.write(tErr + '\n')
+    if (mErr !== '') process.stderr.write(mErr + '\n')
     process.stdout.write(str)
 
-    buffer = rest
+    buffer      = rest
+    linesOffset = lastLine
   })
-  .on('end', () => process.exit(0))
+  .on('end',   () => process.exit(0))
+  .on('error', () => process.exit(1))
 }

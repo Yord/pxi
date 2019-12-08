@@ -1,7 +1,15 @@
-module.exports = (lexers, parsers, updaters, marshallers) => (lexerDefault, parserDefault, updaterDefault, marshallerDefault) => (
+module.exports = (lexers, parsers, applicators, marshallers) => (lexerDefault, parserDefault, applicatorDefault, marshallerDefault) => (
   require('yargs')
-  .usage('Usage: $0 [options]')
-  
+  .usage(
+    '$0 FUNCTIONS ... [OPTIONS ...] \n' +
+    '\n' +
+    'FUNCTIONS define how JSON is transformed. If several functions are given, they  ' +
+    'are applied in order. If no function is given, "json => json" is used, instead. ' +
+    'All variables and functions in global scope may be used in the function. If you ' +
+    'would like to use libraries like lodash or ramda, read the .pfrc section on the ' +
+    'github page: https://github.com/Yord/pf                                 [string]'
+  )
+
   .help('h')
   .alias('h', 'help')
   .describe(
@@ -9,51 +17,48 @@ module.exports = (lexers, parsers, updaters, marshallers) => (lexerDefault, pars
     'Shows this help message.'
   )
 
-  .alias('l', 'lexer')
+  .string('lexer')
   .nargs('lexer', 1)
+  .alias('l', 'lexer')
+  .choices('lexer', lexers.map(plugin => plugin.name))
   .describe(
     'lexer',
     'Defines how the input is tokenized: ' +
-    describePlugin(lexers, lexerDefault) +
-    ' If --lexer gets any other string, the global scope is searched for a matching variable or function.'
+    describePlugins(lexers, lexerDefault)
   )
 
-  .alias('p', 'parser')
+  .string('parser')
   .nargs('parser', 1)
+  .alias('p', 'parser')
+  .choices('parser', parsers.map(plugin => plugin.name))
   .describe(
     'parser',
     'Defines how tokens are parsed into JSON: ' +
-    describePlugin(parsers, parserDefault) +
-    ' If --parser gets any other string, the global scope is searched for a matching variable or function.'
+    describePlugins(parsers, parserDefault)
   )
 
-  .alias('f', 'function')
-  .nargs('function', 1)
+  .string('applicator')
+  .nargs('applicator', 1)
+  .alias('a', 'applicator')
+  .choices('applicator', applicators.map(plugin => plugin.name))
   .describe(
-    'function',
-    'Defines how JSON is transformed: "json => json" (default) If no function string is given, the identity function is used. "json => ..." All variables and functions in global scope may be used in the function. If you would like to use libraries like lodash or ramda, read the documentation on .pfrc on the github page.'
-  )
-
-  .alias('u', 'updater')
-  .nargs('updater', 1)
-  .describe(
-    'updater',
+    'applicator',
     'Defines how the function f is applied to JSON: ' +
-    describePlugin(updaters, updaterDefault) +
-    ' If --updater gets any other string, the global scope is searched for a matching variable or function.'
+    describePlugins(applicators, applicatorDefault)
   )
 
-  .alias('m', 'marshaller')
+  .string('marshaller')
   .nargs('marshaller', 1)
+  .alias('m', 'marshaller')
+  .choices('marshaller', marshallers.map(plugin => plugin.name))
   .describe(
     'marshaller',
-    'Defines how the updated JSON is transformed back to a string: ' +
-    describePlugin(marshallers, marshallerDefault) +
-    ' If --marshaller gets any other string, the global scope is searched for a matching variable or function.'
+    'Defines how the transformed JSON is printed as a string: ' +
+    describePlugins(marshallers, marshallerDefault)
   )
 
-  .alias('e', 'fail-early')
   .boolean('fail-early')
+  .alias('e', 'fail-early')
   .describe(
     'fail-early',
     'Usually, every error is caught and written to stderr. But if ' +
@@ -61,8 +66,8 @@ module.exports = (lexers, parsers, updaters, marshallers) => (lexerDefault, pars
     'process exits with code 1.'
   )
 
+  .count('verbose')
   .alias('v', 'verbose')
-  .boolean('verbose')
   .describe(
     'verbose',
     'Adds lines to errors.'
@@ -72,6 +77,17 @@ module.exports = (lexers, parsers, updaters, marshallers) => (lexerDefault, pars
   .argv
 )
 
-function describePlugin (plugins, defaultName) {
-  return plugins.map(p => '"' + p.name + '"' + (p.name === defaultName ? ' (default) ' : ' ') + p.desc).join(' ')
+function describePlugins (plugins, defaultName) {
+  return plugins.flatMap(describePlugin(defaultName)).join(' ')
+}
+
+function describePlugin (defaultName) {
+  return plugin => {
+    if (typeof plugin.name === 'undefined') return []
+    else return [
+      '"' + plugin.name + '"' +
+      (plugin.name === defaultName ? ' (default) ' : ' ') +
+      plugin.desc
+    ]
+  }
 }

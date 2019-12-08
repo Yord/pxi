@@ -1,7 +1,7 @@
 module.exports = {
   name: 'line',
   desc: 'treats lines as tokens.',
-  func: (verbose, failEarly, argv) => data => {
+  func: (verbose, failEarly, argv) => (data, linesOffset) => {
     const tokens = []
     const lines  = []
   
@@ -9,7 +9,7 @@ module.exports = {
     let len      = text.length
   
     let at       = -1
-    let line     = 1
+    let lastLine = linesOffset
     
     let obj      = false
   
@@ -21,7 +21,7 @@ module.exports = {
       ch = text.charAt(at)
   
       if (ch === '\n') {
-        if (verbose) line++
+        if (verbose) lastLine++
         obj = true
       }
   
@@ -31,7 +31,7 @@ module.exports = {
         obj = false
         const token = text.slice(0, at)
         tokens.push(token)
-        if (verbose) lines.push(line)
+        if (verbose) lines.push(lastLine)
   
         text = text.slice(at + 1, len)
         len = text.length
@@ -39,6 +39,6 @@ module.exports = {
       }
     } while (!done)
   
-    return {err: '', tokens, lines, rest: text}
+    return {err: '', tokens, lines, lastLine, rest: text}
   }
 }

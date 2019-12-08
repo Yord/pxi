@@ -1,19 +1,20 @@
 module.exports = {
-  name: "single",
-  desc: "parses each token individually.",
+  name: 'jsonSingle',
+  desc: 'parses each token into JSON individually.',
   func: (verbose, failEarly, argv) => (tokens, lines) => {
     let err = ''
     let jsons = []
   
     for (let index = 0; index < tokens.length; index++) {
-      const str = tokens[index]
+      const token = tokens[index]
   
       try {
-        const obj = JSON.parse(str)
+        const obj = JSON.parse(token)
         jsons.push(obj)
       } catch (e) {
-        const line = verbose && lines[index]
-        err += (verbose ? 'Line ' + line + ': ' : '') + e + ' while parsing ' + str + '\n'
+        const line = verbose > 0 ? '(Line ' + lines[index] + ') ' : ''
+        const info = verbose > 1 ? ' while parsing:\n' + token    : ''
+        err += line + e + info + '\n'
         if (failEarly) {
           process.stderr.write(err)
           process.exit(1)
