@@ -14,8 +14,7 @@ module.exports = (lexers, parsers, transformers, marshallers) => (lexerDefault, 
   .describe(
     'lexer',
     'Defines how the input is tokenized: ' +
-    describePlugins(lexers, lexerDefault) +
-    ' If --lexer gets any other string, the global scope is searched for a matching variable or function.'
+    describePlugins(lexers, lexerDefault)
   )
 
   .nargs('parser', 1)
@@ -23,8 +22,7 @@ module.exports = (lexers, parsers, transformers, marshallers) => (lexerDefault, 
   .describe(
     'parser',
     'Defines how tokens are parsed into JSON: ' +
-    describePlugins(parsers, parserDefault) +
-    ' If --parser gets any other string, the global scope is searched for a matching variable or function.'
+    describePlugins(parsers, parserDefault)
   )
 
   .nargs('function', 1)
@@ -39,8 +37,7 @@ module.exports = (lexers, parsers, transformers, marshallers) => (lexerDefault, 
   .describe(
     'transformer',
     'Defines how the function f is applied to JSON: ' +
-    describePlugins(transformers, transformerDefault) +
-    ' If --transformer gets any other string, the global scope is searched for a matching variable or function.'
+    describePlugins(transformers, transformerDefault)
   )
 
   .nargs('marshaller', 1)
@@ -48,8 +45,7 @@ module.exports = (lexers, parsers, transformers, marshallers) => (lexerDefault, 
   .describe(
     'marshaller',
     'Defines how the transformed JSON is brought back to a string: ' +
-    describePlugins(marshallers, marshallerDefault) +
-    ' If --marshaller gets any other string, the global scope is searched for a matching variable or function.'
+    describePlugins(marshallers, marshallerDefault)
   )
 
   .boolean('fail-early')
