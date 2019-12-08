@@ -64,7 +64,7 @@ Simply put, it works like this:
 function pf (chunk) {            // Data chunks are passed to pf from stdin.
   const tokens = lex(chunk)      // The chunks are lexed and tokens are identified.
   const jsons  = parse(tokens)   // The tokens get parsed into JSON objects. 
-  const jsons2 = apply(f, jsons) // Applying f to each object returns transformed JSON objects.
+  const jsons2 = apply(f, jsons) // f is applied to each object and new JSON objects are returned.
   const string = marshal(jsons2) // The new objects are converted to a string.
   process.stdout.write(string)   // The string is written to stdout.
 }

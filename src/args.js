@@ -53,7 +53,7 @@ module.exports = (lexers, parsers, applicators, marshallers) => (lexerDefault, p
   .choices('marshaller', marshallers.map(plugin => plugin.name))
   .describe(
     'marshaller',
-    'Defines how the transformed JSON is printed as a string: ' +
+    'Defines how the transformed JSON is converted to a string: ' +
     describePlugins(marshallers, marshallerDefault)
   )
 
