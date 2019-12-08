@@ -9,17 +9,19 @@
 
 `pf` requires **node v8.3.0** or higher.
 
-Installation is done using the [`npm install --global` command][npm].
+Installation is done using the [global `npm install` command][npm].
 
 ```bash
 $ npm install --global pf
 ```
 
+Try `pf --help` to see if the installation was successful.
+
 ## Features
 
 +   **Blazing fast:** >2x faster than `jq` and >10x faster than `fx` in transforming json.
 +   **Highly extensible:** Trivial to write and use parser, lexer, and marshaller plugins.
-+   **Not limited to JSON:** Also supports parsing CSV and XML via plugins.
++   **Not limited to JSON:** Also supports i.a. parsing and writing CSV and XML via plugins.
 +   **Configurable DSL:** Add Lodash or any other library for transforming JSON.
 +   **Streaming support:** Supports streaming JSON out of the box.
 +   **Very few dependencies:** Depends only on yargs.
@@ -38,7 +40,7 @@ See the performance section for details.
 `pf` also works on JSON streams:
 
 ```json
-$ curl -s https://swapi.co/api/films/ |
+$ curl -s "https://swapi.co/api/films/" |
   pf -l jsonStream -t flatMap -f "json => json.results" -r "['episode_id','title']" |
   sort
 
@@ -125,7 +127,7 @@ $ pf -f "json => (json.iso = new Date(json.time * 1000).toISOString(), json)" < 
 {"time":1577836799,"iso":"2019-12-31T23:59:59.000Z"}
 ```
 
-Selecting all entries from May the 4th from the same file (602MB) takes 14sec:
+Selecting all entries from May the 4th from the same file (602MB) takes 14 seconds:
 
 ```bash
 $ pf -t filter -f "({time}) => time >= 1556928000 && time <= 1557014399" < 2019.jsonl > out.jsonl
@@ -142,7 +144,7 @@ $ pf -t filter -f "({time}) => time >= 1556928000 && time <= 1557014399" < 2019.
 Select the name, height, and mass of the first ten Star Wars characters:
 
 ```json
-$ curl -s https://swapi.co/api/people/ |
+$ curl -s "https://swapi.co/api/people/" |
   pf -l jsonStream -t flatMap -f "json => json.results" -r "['name','height','mass']"
 
 {"name":"Luke Skywalker","height":"172","mass":"77"}
@@ -160,7 +162,7 @@ $ curl -s https://swapi.co/api/people/ |
 Compute all character's [BMI][BMI]:
 
 ```json
-$ curl -s https://swapi.co/api/people/ |
+$ curl -s "https://swapi.co/api/people/" |
   pf -l jsonStream -t flatMap -f "json => json.results" -r "['name','height','mass']" |
   pf -f "ch => (ch.bmi = ch.mass / (ch.height / 100) ** 2, ch)" -r "['name','bmi']"
 
@@ -179,7 +181,7 @@ $ curl -s https://swapi.co/api/people/ |
 Select only obese Star Wars characters:
 
 ```json
-$ curl -s https://swapi.co/api/people/ |
+$ curl -s "https://swapi.co/api/people/" |
   pf -l jsonStream -t flatMap -f "json => json.results" -r "['name','height','mass']" |
   pf -f "ch => (ch.bmi = ch.mass / (ch.height / 100) ** 2, ch)" -r "['name','bmi']" |
   pf -t filter -f "ch => ch.bmi >= 30" -r "['name']"
