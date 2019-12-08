@@ -31,7 +31,7 @@ Try `pf --help` to see if the installation was successful.
 Using `pf` to select all Unix timestamps from a large file containing all seconds of 2019 (602 MB, 31536000 lines) in JSON format takes ~18 seconds (macOS 10.15, 2.8 GHz i7 processor):
 
 ```bash
-$ pf -f "json => json.time" < 2019.jsonl > out.jsonl
+$ pf "json => json.time" < 2019.jsonl > out.jsonl
 ```
 
 `jq` takes 2.5x longer (~46 seconds) and `fx` takes 16x longer (~290 seconds).
@@ -41,7 +41,7 @@ See the performance section for details.
 
 ```json
 $ curl -s "https://swapi.co/api/films/" |
-  pf -l jsonStream -a flatMap -f "json => json.results" -R "['episode_id','title']" |
+  pf "json => json.results" -l jsonStream -a flatMap -R "['episode_id','title']" |
   sort
 
 {"episode_id":1,"title":"The Phantom Menace"}
@@ -64,13 +64,13 @@ Simply put, it works like this:
 function pf (chunk) {            // Data chunks are passed to pf from stdin.
   const tokens = lex(chunk)      // The chunks are lexed and tokens are identified.
   const jsons  = parse(tokens)   // The tokens get parsed into JSON objects. 
-  const jsons2 = apply(f, jsons) // Applying f on each object returns transformed JSON objects.
+  const jsons2 = apply(f, jsons) // Applying f to each object returns transformed JSON objects.
   const string = marshal(jsons2) // The new objects are converted to a string.
   process.stdout.write(string)   // The string is written to stdout.
 }
 ```
 
-Lexing, parsing, and marshalling JSON is supported through the [`pf-json`][pf-json] plugin.
+Lexing, parsing, and marshalling JSON is provided by the [`pf-json`][pf-json] plugin.
 
 ### Plugins
 
@@ -106,7 +106,7 @@ All three run single-threaded and use 100% of one CPU core.
 Selecting all Unix timestamps from a file containing all seconds of 2019 (602 MB, 31536000 lines) in JSON format (e.g. `{"time":1546300800}`) takes ~18 seconds (macOS 10.15, 2.8 GHz i7 processor):
 
 ```bash
-$ pf -f "json => json.time" < 2019.jsonl > out.jsonl
+$ pf "json => json.time" < 2019.jsonl > out.jsonl
 
 1546300800
 1546300801
@@ -118,7 +118,7 @@ $ pf -f "json => json.time" < 2019.jsonl > out.jsonl
 Transforming Unix timestamps to an ISO string from the same file (602MB) takes ~42 seconds:
 
 ```bash
-$ pf -f "json => (json.iso = new Date(json.time * 1000).toISOString(), json)" < 2019.jsonl > out.jsonl
+$ pf "json => (json.iso = new Date(json.time * 1000).toISOString(), json)" < 2019.jsonl > out.jsonl
 
 {"time":1546300800,"iso":"2019-01-01T00:00:00.000Z"}
 {"time":1546300801,"iso":"2019-01-01T00:00:01.000Z"}
@@ -130,7 +130,7 @@ $ pf -f "json => (json.iso = new Date(json.time * 1000).toISOString(), json)" < 
 Selecting all entries from May the 4th from the same file (602MB) takes 14 seconds:
 
 ```bash
-$ pf -a filter -f "({time}) => time >= 1556928000 && time <= 1557014399" < 2019.jsonl > out.jsonl
+$ pf "({time}) => time >= 1556928000 && time <= 1557014399" -a filter < 2019.jsonl > out.jsonl
 
 {"time":1556928000}
 {"time":1556928001}
@@ -145,7 +145,7 @@ Select the name, height, and mass of the first ten Star Wars characters:
 
 ```json
 $ curl -s "https://swapi.co/api/people/" |
-  pf -l jsonStream -a flatMap -f "json => json.results" -R "['name','height','mass']"
+  pf "json => json.results" -l jsonStream -a flatMap -R "['name','height','mass']"
 
 {"name":"Luke Skywalker","height":"172","mass":"77"}
 {"name":"C-3PO","height":"167","mass":"75"}
@@ -163,8 +163,8 @@ Compute all character's [BMI][BMI]:
 
 ```json
 $ curl -s "https://swapi.co/api/people/" |
-  pf -l jsonStream -a flatMap -f "json => json.results" -R "['name','height','mass']" |
-  pf -f "ch => (ch.bmi = ch.mass / (ch.height / 100) ** 2, ch)" -R "['name','bmi']"
+  pf "json => json.results" -l jsonStream -a flatMap -R "['name','height','mass']" |
+  pf "ch => (ch.bmi = ch.mass / (ch.height / 100) ** 2, ch)" -R "['name','bmi']"
 
 {"name":"Luke Skywalker","bmi":26.027582477014604}
 {"name":"C-3PO","bmi":26.89232313815483}
@@ -182,9 +182,9 @@ Select only obese Star Wars characters:
 
 ```json
 $ curl -s "https://swapi.co/api/people/" |
-  pf -l jsonStream -a flatMap -f "json => json.results" -R "['name','height','mass']" |
-  pf -f "ch => (ch.bmi = ch.mass / (ch.height / 100) ** 2, ch)" -R "['name','bmi']" |
-  pf -a filter -f "ch => ch.bmi >= 30" -R "['name']"
+  pf "json => json.results" -l jsonStream -a flatMap -R "['name','height','mass']" |
+  pf "ch => (ch.bmi = ch.mass / (ch.height / 100) ** 2, ch)" -R "['name','bmi']" |
+  pf "ch => ch.bmi >= 30" -a filter -R "['name']"
 
 {"name":"R2-D2"}
 {"name":"Darth Vader"}
