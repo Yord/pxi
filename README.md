@@ -83,6 +83,7 @@ The following plugins are available:
 | [`@pf/csv`][pf-csv]         | ???          | ???                      | ???                        | ???             |    ✕    |
 | [`@pf/xml`][pf-xml]         | ???          | ???                      | ???                        | ???             |    ✕    |
 | [`@pf/geojson`][pf-geojson] | ???          | ???                      | ???                        | `geojson`       |    ✕    |
+| [`@pf/sample`][pf-sample]   | `sample`     | `sample`                 | `sample`                   | `sample`        |    ✕    |
 
 The last column tells what plugins come preinstalled in `pf`.
 Refer to the `.pfrc` section to see how to enable other plugins.
@@ -101,10 +102,10 @@ Refer to the `.pfrc` section to see how to enable other plugins.
 Since `jq` is written in C, it easily beats `pf` and `fx` in RAM usage.
 All three run single-threaded and use 100% of one CPU core.
 
-## `~/.pfrc`
+## `.pfrc` Module
 
-Users may extend and modify `pf` by defining a `.pfrc` module.
-Please create a `~/.pfrc/index.js` file and insert the following base structure:
+Users may extend and modify `pf` by providing a `.pfrc` module.
+If you wish to do that, create a `~/.pfrc/index.js` file and insert the following base structure:
 
 ```js
 module.exports = {
@@ -222,7 +223,7 @@ $ pf "json => _.get(json, 'time')" < 2019.jsonl > out.jsonl
 
 > :warning: Using Ramda and Lodash may have a **negative impact on performance**!
 
-### Changing Defaults
+### Changing `pf` Defaults
 
 You may **globally** change default lexers, parsers, applicators, and marshallers in `~/.pfrc/index.js`, as follows:
 
@@ -353,6 +354,7 @@ This project is under the [MIT][license] license.
 [pf-csv]: https://github.com/Yord/pf-cli
 [pf-xml]: https://github.com/Yord/pf-cli
 [pf-geojson]: https://github.com/Yord/pf-cli
+[pf-sample]: https://github.com/Yord/pf-sample
 [ramda]: https://ramdajs.com/
 [lodash]: https://lodash.com/
 [license]: https://github.com/Yord/pf-cli/blob/master/LICENSE
