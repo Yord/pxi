@@ -85,7 +85,7 @@ The following plugins are available:
 | [`@pf/sample`][pf-sample]   | `sample`     | `sample`                 | `sample`                         | `sample`         |   ✕  |
 
 The last column tells what plugins come preinstalled in `pf`.
-Refer to the `.pfrc` section to see how to enable other plugins.
+Refer to the `.pfrc` Module section to see how to enable other plugins.
 
 ### Performance
 
@@ -123,25 +123,33 @@ Writing your own extensions is straightforward:
 const sampleLexer = {
   name: 'sample',
   desc: 'is a sample lexer.',
-  func: (verbose, failEarly, argv) => (data, prevLines) => data
+  func: (verbose, failEarly, argv) => (data, prevLines) => (
+    {err: '', tokens: [data], lines: [], lastLine: -1, rest: ''}
+  )
 }
 
 const sampleParser = {
   name: 'sample',
   desc: 'is a sample parser.',
-  func: (verbose, failEarly, argv) => (tokens, lines) => tokens
+  func: (verbose, failEarly, argv) => (tokens, lines) => (
+    {err: '', jsons: tokens}
+  )
 }
 
 const sampleApplicator = {
   name: 'sample',
   desc: 'is a sample applicator.',
-  func: (verbose, failEarly, fs, argv) => (jsons, lines) => jsons
+  func: (verbose, failEarly, fs, argv) => (jsons, lines) => (
+    {err: '', jsons: jsons}
+  )
 }
 
 const sampleMarshaller = {
   name: 'sample',
   desc: 'is a sample marshaller.',
-  func: (verbose, failEarly, argv) => jsons => jsons
+  func: (verbose, failEarly, argv) => jsons => (
+    {err: '', str: jsons.map(json => json.toString()).join('')}
+  )
 }
 ```
 
