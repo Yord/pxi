@@ -1,4 +1,4 @@
-module.exports = (lex, parse, apply, marshal) => {
+module.exports = ({lex, parse, apply, marshal}) => {
   process.stdin.setEncoding('utf8')
 
   let buffer      = ''

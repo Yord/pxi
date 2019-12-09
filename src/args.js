@@ -1,4 +1,4 @@
-module.exports = (lexers, parsers, applicators, marshallers) => (lexerDefault, parserDefault, applicatorDefault, marshallerDefault) => (
+module.exports = ({lexer, parser, applicator, marshaller}, {lexers, parsers, applicators, marshallers}) => (
   require('yargs')
   .usage(
     '$0 FUNCTIONS ... [OPTIONS ...] \n' +
@@ -23,8 +23,8 @@ module.exports = (lexers, parsers, applicators, marshallers) => (lexerDefault, p
   .choices('lexer', lexers.map(plugin => plugin.name))
   .describe(
     'lexer',
-    'Defines how the input is tokenized: ' +
-    describePlugins(lexers, lexerDefault)
+    'Defines how the input is split into tokens: ' +
+    describePlugins(lexers, lexer)
   )
 
   .string('parser')
@@ -34,7 +34,7 @@ module.exports = (lexers, parsers, applicators, marshallers) => (lexerDefault, p
   .describe(
     'parser',
     'Defines how tokens are parsed into JSON: ' +
-    describePlugins(parsers, parserDefault)
+    describePlugins(parsers, parser)
   )
 
   .string('applicator')
@@ -43,8 +43,8 @@ module.exports = (lexers, parsers, applicators, marshallers) => (lexerDefault, p
   .choices('applicator', applicators.map(plugin => plugin.name))
   .describe(
     'applicator',
-    'Defines how the function f is applied to JSON: ' +
-    describePlugins(applicators, applicatorDefault)
+    'Defines how FUNCTIONS are applied to JSON: ' +
+    describePlugins(applicators, applicator)
   )
 
   .string('marshaller')
@@ -54,7 +54,7 @@ module.exports = (lexers, parsers, applicators, marshallers) => (lexerDefault, p
   .describe(
     'marshaller',
     'Defines how the transformed JSON is converted to a string: ' +
-    describePlugins(marshallers, marshallerDefault)
+    describePlugins(marshallers, marshaller)
   )
 
   .boolean('fail-early')
@@ -70,7 +70,10 @@ module.exports = (lexers, parsers, applicators, marshallers) => (lexerDefault, p
   .alias('v', 'verbose')
   .describe(
     'verbose',
-    'Adds lines to errors.'
+    'Apply -v several times (-vv) to be more verbose. Level 1     ' +
+    'pints lines in parser and applicator error messages. Level 2 ' +
+    'also prints the tokens or JSON objects that failed to be     ' +
+    'parsed or transformed.'
   )
 
   .epilog('Copyright (c) Philipp Wille 2019')
