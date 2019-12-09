@@ -1,4 +1,4 @@
-module.exports = (lexers, parsers, applicators, marshallers) => (lexerDefault, parserDefault, applicatorDefault, marshallerDefault) => (
+module.exports = ({lexer, parser, applicator, marshaller}, {lexers, parsers, applicators, marshallers}) => (
   require('yargs')
   .usage(
     '$0 FUNCTIONS ... [OPTIONS ...] \n' +
@@ -24,7 +24,7 @@ module.exports = (lexers, parsers, applicators, marshallers) => (lexerDefault, p
   .describe(
     'lexer',
     'Defines how the input is split into tokens: ' +
-    describePlugins(lexers, lexerDefault)
+    describePlugins(lexers, lexer)
   )
 
   .string('parser')
@@ -34,7 +34,7 @@ module.exports = (lexers, parsers, applicators, marshallers) => (lexerDefault, p
   .describe(
     'parser',
     'Defines how tokens are parsed into JSON: ' +
-    describePlugins(parsers, parserDefault)
+    describePlugins(parsers, parser)
   )
 
   .string('applicator')
@@ -43,8 +43,8 @@ module.exports = (lexers, parsers, applicators, marshallers) => (lexerDefault, p
   .choices('applicator', applicators.map(plugin => plugin.name))
   .describe(
     'applicator',
-    'Defines how the function f is applied to JSON: ' +
-    describePlugins(applicators, applicatorDefault)
+    'Defines how FUNCTIONS are applied to JSON: ' +
+    describePlugins(applicators, applicator)
   )
 
   .string('marshaller')
@@ -54,7 +54,7 @@ module.exports = (lexers, parsers, applicators, marshallers) => (lexerDefault, p
   .describe(
     'marshaller',
     'Defines how the transformed JSON is converted to a string: ' +
-    describePlugins(marshallers, marshallerDefault)
+    describePlugins(marshallers, marshaller)
   )
 
   .boolean('fail-early')

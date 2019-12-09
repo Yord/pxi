@@ -12,7 +12,7 @@
 Installation is done using the [global `npm install` command][npm].
 
 ```bash
-$ npm install --global pf
+$ npm install --global @pf/cli
 ```
 
 Try `pf --help` to see if the installation was successful.
@@ -41,7 +41,7 @@ See the performance section for details.
 
 ```json
 $ curl -s "https://swapi.co/api/films/" |
-  pf "json => json.results" -l jsonStream -a flatMap -s "['episode_id','title']" |
+  pf "json => json.results" -l jsonStream -a flatMap -s '["episode_id","title"]' |
   sort
 
 {"episode_id":1,"title":"The Phantom Menace"}
@@ -76,13 +76,13 @@ Lexing, parsing, and marshalling JSON is provided by the [`pf-json`][pf-json] pl
 
 The following plugins are available:
 
-|                            | Lexers       | Parsers                  | Applicators                | Marshallers     | in `pf` |
-|----------------------------|--------------|--------------------------|----------------------------|-----------------|:-------:|
-| [`pf-core`][pf-core]       | `id`, `line` | `id`                     | `map`, `flatMap`, `filter` | `toString`      |    ✓    |
-| [`pf-json`][pf-json]       | `jsonStream` | `jsonSingle`, `jsonBulk` |                            | `jsonStringify` |    ✓    |
-| [`pf-csv`][pf-csv]         | ???          | ???                      | ???                        | ???             |    ✕    |
-| [`pf-xml`][pf-xml]         | ???          | ???                      | ???                        | ???             |    ✕    |
-| [`pf-geojson`][pf-geojson] | ???          | ???                      | ???                        | geojson         |    ✕    |
+|                             | Lexers       | Parsers                  | Applicators                | Marshallers     | in `pf` |
+|-----------------------------|--------------|--------------------------|----------------------------|-----------------|:-------:|
+| [`@pf/core`][pf-core]       | `id`, `line` | `id`                     | `map`, `flatMap`, `filter` | `toString`      |    ✓    |
+| [`@pf/json`][pf-json]       | `jsonStream` | `jsonSingle`, `jsonBulk` |                            | `jsonStringify` |    ✓    |
+| [`@pf/csv`][pf-csv]         | ???          | ???                      | ???                        | ???             |    ✕    |
+| [`@pf/xml`][pf-xml]         | ???          | ???                      | ???                        | ???             |    ✕    |
+| [`@pf/geojson`][pf-geojson] | ???          | ???                      | ???                        | `geojson`       |    ✕    |
 
 The last column tells what plugins come preinstalled in `pf`.
 Refer to the `.pfrc` section to see how to enable other plugins.
@@ -145,7 +145,7 @@ Select the name, height, and mass of the first ten Star Wars characters:
 
 ```json
 $ curl -s "https://swapi.co/api/people/" |
-  pf "json => json.results" -l jsonStream -a flatMap -s "['name','height','mass']"
+  pf "json => json.results" -l jsonStream -a flatMap -s '["name","height","mass"]'
 
 {"name":"Luke Skywalker","height":"172","mass":"77"}
 {"name":"C-3PO","height":"167","mass":"75"}
@@ -163,8 +163,8 @@ Compute all character's [BMI][BMI]:
 
 ```json
 $ curl -s "https://swapi.co/api/people/" |
-  pf "json => json.results" -l jsonStream -a flatMap -s "['name','height','mass']" |
-  pf "ch => (ch.bmi = ch.mass / (ch.height / 100) ** 2, ch)" -s "['name','bmi']"
+  pf "json => json.results" -l jsonStream -a flatMap -s '["name","height","mass"]' |
+  pf "ch => (ch.bmi = ch.mass / (ch.height / 100) ** 2, ch)" -s '["name","bmi"]'
 
 {"name":"Luke Skywalker","bmi":26.027582477014604}
 {"name":"C-3PO","bmi":26.89232313815483}
@@ -182,9 +182,9 @@ Select only obese Star Wars characters:
 
 ```json
 $ curl -s "https://swapi.co/api/people/" |
-  pf "json => json.results" -l jsonStream -a flatMap -s "['name','height','mass']" |
-  pf "ch => (ch.bmi = ch.mass / (ch.height / 100) ** 2, ch)" -s "['name','bmi']" |
-  pf "ch => ch.bmi >= 30" -a filter -s "['name']"
+  pf "json => json.results" -l jsonStream -a flatMap -s '["name","height","mass"]' |
+  pf "ch => (ch.bmi = ch.mass / (ch.height / 100) ** 2, ch)" -s '["name","bmi"]' |
+  pf "ch => ch.bmi >= 30" -a filter -s '["name"]'
 
 {"name":"R2-D2"}
 {"name":"Darth Vader"}
