@@ -1,4 +1,4 @@
-const combinePlugin = field => (list, plugin) => (
+const combinePlugin = field => (list, plugin = {}) => (
   list.concat(plugin[field] || [])
 )
 

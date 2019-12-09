@@ -22,9 +22,8 @@ Try `pf --help` to see if the installation was successful.
 +   **Blazing fast:** >2x faster than `jq` and >10x faster than `fx` in transforming json.
 +   **Highly extensible:** Trivial to write and use parser, lexer, and marshaller plugins.
 +   **Not limited to JSON:** Also supports parsing and writing other data formats via plugins (i.a. [CSV][pf-csv], [XML][pf-xml]).
-+   **Configurable DSL:** Add Lodash or any other library for transforming JSON.
++   **Configurable DSL:** Add Ramda, Lodash or any other library for transforming JSON.
 +   **Streaming support:** Supports streaming JSON out of the box.
-+   **Very few dependencies:** Depends only on yargs.
 
 ## Sample Usage
 
@@ -76,16 +75,17 @@ Lexing, parsing, and marshalling JSON is provided by the [`pf-json`][pf-json] pl
 
 The following plugins are available:
 
-|                             | Lexers       | Parsers                  | Applicators                | Marshallers     | in `pf` |
-|-----------------------------|--------------|--------------------------|----------------------------|-----------------|:-------:|
-| [`@pf/core`][pf-core]       | `id`, `line` | `id`                     | `map`, `flatMap`, `filter` | `toString`      |    ✓    |
-| [`@pf/json`][pf-json]       | `jsonStream` | `jsonSingle`, `jsonBulk` |                            | `jsonStringify` |    ✓    |
-| [`@pf/csv`][pf-csv]         | ???          | ???                      | ???                        | ???             |    ✕    |
-| [`@pf/xml`][pf-xml]         | ???          | ???                      | ???                        | ???             |    ✕    |
-| [`@pf/geojson`][pf-geojson] | ???          | ???                      | ???                        | `geojson`       |    ✕    |
+|                             | Lexers       | Parsers                  | Applicators                      | Marshallers      | `pf` |
+|-----------------------------|--------------|--------------------------|----------------------------------|------------------|:----:|
+| [`@pf/core`][pf-core]       | `id`, `line` | `id`                     | `map`, `flatMap`, `filter`, `id` | `toString`, `id` |   ✓  |
+| [`@pf/json`][pf-json]       | `jsonStream` | `jsonSingle`, `jsonBulk` |                                  | `jsonStringify`  |   ✓  |
+| [`@pf/csv`][pf-csv]         | ???          | ???                      | ???                              | ???              |   ✕  |
+| [`@pf/xml`][pf-xml]         | ???          | ???                      | ???                              | ???              |   ✕  |
+| [`@pf/geojson`][pf-geojson] | ???          | ???                      | ???                              | `geojson`        |   ✕  |
+| [`@pf/sample`][pf-sample]   | `sample`     | `sample`                 | `sample`                         | `sample`         |   ✕  |
 
 The last column tells what plugins come preinstalled in `pf`.
-Refer to the `.pfrc` section to see how to enable other plugins.
+Refer to the `.pfrc` Module section to see how to enable other plugins.
 
 ### Performance
 
@@ -100,6 +100,154 @@ Refer to the `.pfrc` section to see how to enable other plugins.
 `pf` beats `jq` and `fx` in processing speed in all three benchmarks.
 Since `jq` is written in C, it easily beats `pf` and `fx` in RAM usage.
 All three run single-threaded and use 100% of one CPU core.
+
+## `.pfrc` Module
+
+Users may extend and modify `pf` by providing a `.pfrc` module.
+If you wish to do that, create a `~/.pfrc/index.js` file and insert the following base structure:
+
+```js
+module.exports = {
+  plugins:  [],
+  context:  {},
+  defaults: {}
+}
+```
+
+### Writing Custom Plugins
+
+You may write custom `pf` plugins in `~/.pfrc/index.js`.
+Writing your own extensions is straightforward:
+
+```js
+const sampleLexer = {
+  name: 'sample',
+  desc: 'is a sample lexer.',
+  func: (verbose, failEarly, argv) => (data, prevLines) => (
+    {err: '', tokens: [data], lines: [], lastLine: -1, rest: ''}
+  )
+}
+
+const sampleParser = {
+  name: 'sample',
+  desc: 'is a sample parser.',
+  func: (verbose, failEarly, argv) => (tokens, lines) => (
+    {err: '', jsons: tokens}
+  )
+}
+
+const sampleApplicator = {
+  name: 'sample',
+  desc: 'is a sample applicator.',
+  func: (verbose, failEarly, fs, argv) => (jsons, lines) => (
+    {err: '', jsons: jsons}
+  )
+}
+
+const sampleMarshaller = {
+  name: 'sample',
+  desc: 'is a sample marshaller.',
+  func: (verbose, failEarly, argv) => jsons => (
+    {err: '', str: jsons.map(json => json.toString()).join('')}
+  )
+}
+```
+
+The `name` is used by `pf` to select your extension,
+the `desc` is displayed in the options section of `pf --help`, and
+the `func` is called by `pf` to transform data.
+
+The sample extensions are bundled to the sample plugin, as follows:
+
+```js
+const samplePlugin = {
+  lexers:      [sampleLexer],
+  parsers:     [sampleParser],
+  applicators: [sampleApplicator],
+  marshallers: [sampleMarshaller]
+}
+```
+
+### Extending `pf` with Plugins
+
+Plugins can come from two sources.
+They are either written by users, as shown in the previous section, or they are installed in `~/.pfrc/` as follows:
+
+```bash
+npm install @pf/sample
+```
+
+If a plugin was installed from `npm`, it has to be imported into `~/.pfrc/index.js`:
+
+```js
+const samplePlugin = require('@pf/sample')
+```
+
+Regardless of whether a plugin was defined by the user or installed from `npm`,
+all plugins are added to the `.pfrc` module the same way:
+
+```js
+module.exports = {
+  plugins:  [samplePlugin],
+  context:  {},
+  defaults: {}
+}
+```
+
+`pf --help` should now list the sample plugin extensions in the options section.
+
+### Including Libraries like Ramda or Lodash
+
+Libraries like [Ramda][ramda] and [Lodash][lodash] are of immense help when writing functions to transform JSON objects.
+But different people have different preferences, which is why `pf` lets the user decide which libraries to use.
+
+First, install your preferred library in `~/.pfrc/`:
+
+```bash
+npm install ramda
+npm install lodash
+```
+
+Next, add the libraries to `~/.pfrc/index.js`:
+
+```js
+const R = require('ramda')
+const L = require('lodash')
+
+module.exports = {
+  plugins:  [],
+  context:  Object.assign({}, R, {_: L}),
+  defaults: {}
+}
+```
+
+You may now use all ramda functions without prefix, and all lodash functions with prefix `_`:
+
+```bash
+$ pf "prop('time')" < 2019.jsonl > out.jsonl
+$ pf "json => _.get(json, 'time')" < 2019.jsonl > out.jsonl
+```
+
+> :warning: Using Ramda and Lodash may have a **negative impact on performance**!
+
+### Changing `pf` Defaults
+
+You may **globally** change default lexers, parsers, applicators, and marshallers in `~/.pfrc/index.js`, as follows:
+
+```js
+module.exports = {
+  plugins:  [],
+  context:  {},
+  defaults: {
+    lexer:      'sample',
+    parser:     'sample',
+    applicator: 'sample',
+    marshaller: 'sample'
+  }
+}
+```
+
+> :warning: Defaults are assigned **globally** and changing them may **break existing `pf` scripts**!
 
 ## Usage
 
@@ -213,4 +361,7 @@ This project is under the [MIT][license] license.
 [pf-csv]: https://github.com/Yord/pf-cli
 [pf-xml]: https://github.com/Yord/pf-cli
 [pf-geojson]: https://github.com/Yord/pf-cli
+[pf-sample]: https://github.com/Yord/pf-sample
+[ramda]: https://ramdajs.com/
+[lodash]: https://lodash.com/
 [license]: https://github.com/Yord/pf-cli/blob/master/LICENSE
