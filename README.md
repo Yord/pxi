@@ -208,9 +208,9 @@ This project is under the [MIT][license] license.
 [BMI]: https://en.wikipedia.org/wiki/Body_mass_index
 [fx]: https://github.com/antonmedv/fx
 [jq]: https://github.com/stedolan/jq
-[pf-core]: https://github.com/Yord/pf
-[pf-json]: https://github.com/Yord/pf
-[pf-csv]: https://github.com/Yord/pf
-[pf-xml]: https://github.com/Yord/pf
-[pf-geojson]: https://github.com/Yord/pf
-[license]: https://github.com/Yord/pf/blob/master/LICENSE
+[pf-core]: https://github.com/Yord/pf-core
+[pf-json]: https://github.com/Yord/pf-json
+[pf-csv]: https://github.com/Yord/pf-cli
+[pf-xml]: https://github.com/Yord/pf-cli
+[pf-geojson]: https://github.com/Yord/pf-cli
+[license]: https://github.com/Yord/pf-cli/blob/master/LICENSE
