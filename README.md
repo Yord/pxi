@@ -76,14 +76,14 @@ Lexing, parsing, and marshalling JSON is provided by the [`pf-json`][pf-json] pl
 
 The following plugins are available:
 
-|                             | Lexers       | Parsers                  | Applicators                | Marshallers     | in `pf` |
-|-----------------------------|--------------|--------------------------|----------------------------|-----------------|:-------:|
-| [`@pf/core`][pf-core]       | `id`, `line` | `id`                     | `map`, `flatMap`, `filter` | `toString`      |    ✓    |
-| [`@pf/json`][pf-json]       | `jsonStream` | `jsonSingle`, `jsonBulk` |                            | `jsonStringify` |    ✓    |
-| [`@pf/csv`][pf-csv]         | ???          | ???                      | ???                        | ???             |    ✕    |
-| [`@pf/xml`][pf-xml]         | ???          | ???                      | ???                        | ???             |    ✕    |
-| [`@pf/geojson`][pf-geojson] | ???          | ???                      | ???                        | `geojson`       |    ✕    |
-| [`@pf/sample`][pf-sample]   | `sample`     | `sample`                 | `sample`                   | `sample`        |    ✕    |
+|                             | Lexers       | Parsers                  | Applicators                      | Marshallers      | `pf` |
+|-----------------------------|--------------|--------------------------|----------------------------------|------------------|:----:|
+| [`@pf/core`][pf-core]       | `id`, `line` | `id`                     | `map`, `flatMap`, `filter`, `id` | `toString`, `id` |   ✓  |
+| [`@pf/json`][pf-json]       | `jsonStream` | `jsonSingle`, `jsonBulk` |                                  | `jsonStringify`  |   ✓  |
+| [`@pf/csv`][pf-csv]         | ???          | ???                      | ???                              | ???              |   ✕  |
+| [`@pf/xml`][pf-xml]         | ???          | ???                      | ???                              | ???              |   ✕  |
+| [`@pf/geojson`][pf-geojson] | ???          | ???                      | ???                              | `geojson`        |   ✕  |
+| [`@pf/sample`][pf-sample]   | `sample`     | `sample`                 | `sample`                         | `sample`         |   ✕  |
 
 The last column tells what plugins come preinstalled in `pf`.
 Refer to the `.pfrc` section to see how to enable other plugins.
