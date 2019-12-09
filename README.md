@@ -22,9 +22,8 @@ Try `pf --help` to see if the installation was successful.
 +   **Blazing fast:** >2x faster than `jq` and >10x faster than `fx` in transforming json.
 +   **Highly extensible:** Trivial to write and use parser, lexer, and marshaller plugins.
 +   **Not limited to JSON:** Also supports parsing and writing other data formats via plugins (i.a. [CSV][pf-csv], [XML][pf-xml]).
-+   **Configurable DSL:** Add Lodash or any other library for transforming JSON.
++   **Configurable DSL:** Add Ramda, Lodash or any other library for transforming JSON.
 +   **Streaming support:** Supports streaming JSON out of the box.
-+   **Very few dependencies:** Depends only on yargs.
 
 ## Sample Usage
 
