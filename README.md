@@ -84,7 +84,7 @@ The following plugins are available:
 | [`@pf/geojson`][pf-geojson] | ???          | ???                      | ???                              | `geojson`        |   ✕  |
 | [`@pf/sample`][pf-sample]   | `sample`     | `sample`                 | `sample`                         | `sample`         |   ✕  |
 
-The last column tells what plugins come preinstalled in `pf`.
+The last column states which plugins come preinstalled in `pf`.
 Refer to the `.pfrc` Module section to see how to enable other plugins.
 
 ### Performance
@@ -114,9 +114,9 @@ module.exports = {
 }
 ```
 
-### Writing Custom Plugins
+### Writing Plugins
 
-You may write custom `pf` plugins in `~/.pfrc/index.js`.
+You may write `pf` plugins in `~/.pfrc/index.js`.
 Writing your own extensions is straightforward:
 
 ```js
@@ -174,7 +174,7 @@ Plugins can come from two sources.
 They are either written by users, as shown in the previous section, or they are installed in `~/.pfrc/` as follows:
 
 ```bash
-npm install @pf/sample
+$ npm install @pf/sample
 ```
 
 If a plugin was installed from `npm`, it has to be imported into `~/.pfrc/index.js`:
@@ -183,7 +183,7 @@ If a plugin was installed from `npm`, it has to be imported into `~/.pfrc/index.
 const samplePlugin = require('@pf/sample')
 ```
 
-Regardless of whether a plugin was defined by the user or installed from `npm`,
+Regardless of whether a plugin was defined by a user or installed from `npm`,
 all plugins are added to the `.pfrc` module the same way:
 
 ```js
@@ -204,8 +204,8 @@ But different people have different preferences, which is why `pf` lets the user
 First, install your preferred library in `~/.pfrc/`:
 
 ```bash
-npm install ramda
-npm install lodash
+$ npm install ramda
+$ npm install lodash
 ```
 
 Next, add the libraries to `~/.pfrc/index.js`:
@@ -228,7 +228,7 @@ $ pf "prop('time')" < 2019.jsonl > out.jsonl
 $ pf "json => _.get(json, 'time')" < 2019.jsonl > out.jsonl
 ```
 
-> :warning: Using Ramda and Lodash may have a **negative impact on performance**!
+> :speak_no_evil: Using Ramda and Lodash may have a **negative impact on performance**!
 
 ### Changing `pf` Defaults
 
@@ -247,7 +247,7 @@ module.exports = {
 }
 ```
 
-> :warning: Defaults are assigned **globally** and changing them may **break existing `pf` scripts**!
+> :speak_no_evil: Defaults are assigned **globally** and changing them may **break existing `pf` scripts**!
 
 ## Usage
 
