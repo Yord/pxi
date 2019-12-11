@@ -7,25 +7,25 @@
 
 ## Installation
 
-`pf` requires **node v8.3.0** or higher.
+`pf` requires **Node.js v8.3.0** or higher.
 
 Installation is done using the [global `npm install` command][npm].
 
 ```bash
-$ npm install --global @pf/cli
+$ npm install --global @pf/pf
 ```
 
 Try `pf --help` to see if the installation was successful.
 
 ## Features
 
-+   **Blazing fast:** >2x faster than `jq` and >10x faster than `fx` in transforming json.
-+   **Highly extensible:** Trivial to write and use parser, lexer, and marshaller plugins.
-+   **Not limited to JSON:** Also supports parsing and writing other data formats via plugins (i.a. [CSV][pf-csv], [XML][pf-xml]).
-+   **Configurable DSL:** Add Ramda, Lodash or any other library for transforming JSON.
-+   **Streaming support:** Supports streaming JSON out of the box.
++   :rocket: **Blazing fast:** >2x faster than `jq` and >10x faster than `fx` in transforming json.
++   :sparkles: **Highly extensible:** Trivial to write your own parser, lexer, and marshaller plugins.
++   :scream_cat: **Not limited to JSON:** Also supports parsing and writing other data formats via plugins.
++   :ram: **Configurable DSL:** Add Ramda, Lodash or any other library for transforming JSON.
++   :sweat_drops: **Streaming support:** Supports streaming JSON out of the box.
 
-## Sample Usage
+## Getting Started
 
 Using `pf` to select all Unix timestamps from a large file containing all seconds of 2019 (602 MB, 31536000 lines) in JSON format takes ~18 seconds (macOS 10.15, 2.8 GHz i7 processor):
 
@@ -52,12 +52,26 @@ $ curl -s "https://swapi.co/api/films/" |
 {"episode_id":7,"title":"The Force Awakens"}
 ```
 
-See the usage and performance sections below for more examples.
+See the [usage](#usage) and [performance](#performance) sections below for more examples.
+
+### Introductory Blogposts
+
+For a quick start, read the following medium posts:
+
++   Getting started with `pf` (TODO)
++   Building `pf` from scratch (TODO)
++   Comparing `pf`'s performance to `jq` and `fx` (TODO)
 
 ## Parser Functions
 
-`pf` is a command-line tool for processing data from large files and streams.
-Simply put, it works like this:
+The `pf` philosophy is to provide a small, robust frame for processing large data files and streams with JavaScript functions.
+This involves lexing, parsing, applying functions, and marshalling data.
+However, `pf` does not reinvent parsers and marshallers, but instead uses awesome libraries from Node.js' ecosystem to do the job.
+But since most parser libraries need to know their full input in advance, `pf` supports them with lexing
+by dividing large data files into chunks that are parsed independently.
+It then applies functions on the parsed data.
+
+Expressed in code, it works like this:
 
 ```javascript
 function pf (chunk) {            // Data chunks are passed to pf from stdin.
@@ -77,7 +91,7 @@ The following plugins are available:
 
 |                             | Lexers       | Parsers                  | Applicators                      | Marshallers      | `pf` |
 |-----------------------------|--------------|--------------------------|----------------------------------|------------------|:----:|
-| [`@pf/core`][pf-core]       | `id`, `line` | `id`                     | `map`, `flatMap`, `filter`, `id` | `toString`, `id` |   ✓  |
+| [`@pf/base`][pf-base]       | `id`, `line` | `id`                     | `map`, `flatMap`, `filter`, `id` | `toString`, `id` |   ✓  |
 | [`@pf/json`][pf-json]       | `jsonStream` | `jsonSingle`, `jsonBulk` |                                  | `jsonStringify`  |   ✓  |
 | [`@pf/csv`][pf-csv]         | ???          | ???                      | ???                              | ???              |   ✕  |
 | [`@pf/xml`][pf-xml]         | ???          | ???                      | ???                              | ???              |   ✕  |
@@ -93,9 +107,9 @@ Refer to the `.pfrc` Module section to see how to enable other plugins.
 
 |                 | `pf` (time) | `jq` (time) | `fx` (time) | `jq` (RAM) | `pf` (RAM) | `fx` (RAM) | all (CPU) |
 |-----------------|------------:|------------:|------------:|-----------:|-----------:|-----------:|----------:|
-| **Benchmark A** |     **18s** |         46s |        290s |     **1M** |        46M |        54M |  **100%** |
-| **Benchmark B** |     **42s** |        164s |        463s |     **1M** |        48M |        73M |  **100%** |
-| **Benchmark C** |     **14s** |         44s |         96s |     **1M** |        48M |        51M |  **100%** |
+| **Benchmark A** |     **18s** |         46s |        290s |    **1MB** |       46MB |       54MB |  **100%** |
+| **Benchmark B** |     **42s** |        164s |        463s |    **1MB** |       48MB |       73MB |  **100%** |
+| **Benchmark C** |     **14s** |         44s |         96s |    **1MB** |       48MB |       51MB |  **100%** |
 
 `pf` beats `jq` and `fx` in processing speed in all three benchmarks.
 Since `jq` is written in C, it easily beats `pf` and `fx` in RAM usage.
@@ -113,6 +127,9 @@ module.exports = {
   defaults: {}
 }
 ```
+
+The following sections will walk you through all capabilities of `.pfrc` modules.
+If you want to skip over the details and instead see sample code, visit [`pf-pfrc`][pf-pfrc]!
 
 ### Writing Plugins
 
@@ -170,7 +187,7 @@ const samplePlugin = {
 
 ### Extending `pf` with Plugins
 
-Plugins can come from two sources.
+Plugins can come from two sources:
 They are either written by users, as shown in the previous section, or they are installed in `~/.pfrc/` as follows:
 
 ```bash
@@ -196,12 +213,15 @@ module.exports = {
 
 `pf --help` should now list the sample plugin extensions in the options section.
 
+> :speak_no_evil: Adding third party plugins may **break the `pf` command line tool**! Use this feature responsibly.
+
 ### Including Libraries like Ramda or Lodash
 
-Libraries like [Ramda][ramda] and [Lodash][lodash] are of immense help when writing functions to transform JSON objects.
-But different people have different preferences, which is why `pf` lets the user decide which libraries to use.
+Libraries like [Ramda][ramda] and [Lodash][lodash] are of immense help when writing functions to transform JSON objects
+and many heated discussions have been had, which of these library is best.
+Since different people have different preferences, `pf` lets the user decide which library to use.
 
-First, install your preferred library in `~/.pfrc/`:
+First, install your preferred libraries in `~/.pfrc/`:
 
 ```bash
 $ npm install ramda
@@ -221,14 +241,38 @@ module.exports = {
 }
 ```
 
-You may now use all ramda functions without prefix, and all lodash functions with prefix `_`:
+You may now use all Ramda functions without prefix, and all Lodash functions with prefix `_`:
 
 ```bash
 $ pf "prop('time')" < 2019.jsonl > out.jsonl
 $ pf "json => _.get(json, 'time')" < 2019.jsonl > out.jsonl
 ```
 
-> :speak_no_evil: Using Ramda and Lodash may have a **negative impact on performance**!
+> :hear_no_evil: Using Ramda and Lodash may have a **negative impact on performance**! Use this feature responsibly.
+
+### Including Custom JavaScript Functions
+
+Just as you may extend `pf` with third-party libraries like Ramda and Lodash,
+you may add your own functions to `pf`.
+
+This is as simple as adding them to the context in `~/.pfrc/index.js`:
+
+```js
+const getTime = json => json.time
+
+module.exports = {
+  plugins:  [],
+  context:  {getTime},
+  defaults: {}
+}
+```
+
+After adding it to the context, you call your function as follows:
+
+```bash
+$ pf "json => getTime(json)" < 2019.jsonl > out.jsonl
+$ pf "getTime" < 2019.jsonl > out.jsonl
+```
 
 ### Changing `pf` Defaults
 
@@ -247,7 +291,7 @@ module.exports = {
 }
 ```
 
-> :speak_no_evil: Defaults are assigned **globally** and changing them may **break existing `pf` scripts**!
+> :see_no_evil: Defaults are assigned **globally** and changing them may **break existing `pf` scripts**! Use this feature responsibly.
 
 ## Usage
 
@@ -349,19 +393,21 @@ Turns out, Anakin could use some training!
 
 ## License
 
-This project is under the [MIT][license] license.
+`pf` is [MIT licensed][license].
 
 [header]: ./header.gif
 [npm]: https://docs.npmjs.com/downloading-and-installing-packages-globally
 [BMI]: https://en.wikipedia.org/wiki/Body_mass_index
 [fx]: https://github.com/antonmedv/fx
 [jq]: https://github.com/stedolan/jq
-[pf-core]: https://github.com/Yord/pf-core
+[pf-base]: https://github.com/Yord/pf-base
 [pf-json]: https://github.com/Yord/pf-json
-[pf-csv]: https://github.com/Yord/pf-cli
-[pf-xml]: https://github.com/Yord/pf-cli
-[pf-geojson]: https://github.com/Yord/pf-cli
+[pf-csv]: https://github.com/Yord/pf
+[pf-xml]: https://github.com/Yord/pf
+[pf-geojson]: https://github.com/Yord/pf
 [pf-sample]: https://github.com/Yord/pf-sample
+[pf-how-to-contribute]: https://github.com/Yord/pf
+[pf-pfrc]: https://github.com/Yord/pf-pfrc
 [ramda]: https://ramdajs.com/
 [lodash]: https://lodash.com/
-[license]: https://github.com/Yord/pf-cli/blob/master/LICENSE
+[license]: https://github.com/Yord/pf/blob/master/LICENSE
