@@ -5,7 +5,7 @@
 [![npm version](https://img.shields.io/npm/v/fx.svg?color=orange)](https://www.npmjs.com/package/fx)
 [![license](https://img.shields.io/badge/license-MIT-blue.svg?color=green)][license]
 [![unit tests status](https://github.com/Yord/pf/workflows/unit%20tests/badge.svg?branch=master)][actions]
-[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-yellow.svg)][pf-how-to-contribute]
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-yellow.svg)][pfx-how-to-contribute]
 
 ## Installation
 
@@ -14,7 +14,7 @@
 Installation is done using the [global `npm install` command][npm].
 
 ```bash
-$ npm install --global @pf/pf
+$ npm install --global @pfx/pf
 ```
 
 Try `pf --help` to see if the installation was successful.
@@ -85,27 +85,27 @@ function pf (chunk) {            // Data chunks are passed to pf from stdin.
 }
 ```
 
-Lexing, parsing, and marshalling JSON is provided by the [`@pf/json`][pf-json] plugin.
+Lexing, parsing, and marshalling JSON is provided by the [`@pfx/json`][pfx-json] plugin.
 
 ### Plugins
 
 The following plugins are available:
 
-|                             | Lexers       | Parsers                  | Applicators                      | Marshallers      | `pf` |
-|-----------------------------|--------------|--------------------------|----------------------------------|------------------|:----:|
-| [`@pf/base`][pf-base]       | `id`, `line` | `id`                     | `map`, `flatMap`, `filter`, `id` | `toString`, `id` |   ✓  |
-| [`@pf/json`][pf-json]       | `jsonStream` | `jsonSingle`, `jsonBulk` |                                  | `jsonStringify`  |   ✓  |
-| [`@pf/csv`][pf-csv]         | ???          | ???                      | ???                              | ???              |   ✕  |
-| [`@pf/xml`][pf-xml]         | ???          | ???                      | ???                              | ???              |   ✕  |
-| [`@pf/geojson`][pf-geojson] | ???          | ???                      | ???                              | `geojson`        |   ✕  |
-| [`@pf/sample`][pf-sample]   | `sample`     | `sample`                 | `sample`                         | `sample`         |   ✕  |
+|                               | Lexers       | Parsers                  | Applicators                      | Marshallers      | `pf` |
+|-------------------------------|--------------|--------------------------|----------------------------------|------------------|:----:|
+| [`@pfx/base`][pfx-base]       | `id`, `line` | `id`                     | `map`, `flatMap`, `filter`, `id` | `toString`, `id` |   ✓  |
+| [`@pfx/json`][pfx-json]       | `jsonStream` | `jsonSingle`, `jsonBulk` |                                  | `jsonStringify`  |   ✓  |
+| [`@pfx/csv`][pfx-csv]         | ???          | ???                      | ???                              | ???              |   ✕  |
+| [`@pfx/xml`][pfx-xml]         | ???          | ???                      | ???                              | ???              |   ✕  |
+| [`@pfx/geojson`][pfx-geojson] | ???          | ???                      | ???                              | `geojson`        |   ✕  |
+| [`@pfx/sample`][pfx-sample]   | `sample`     | `sample`                 | `sample`                         | `sample`         |   ✕  |
 
 The last column states which plugins come preinstalled in `pf`.
 Refer to the `.pfrc` Module section to see how to enable more plugins.
 
 ### Performance
 
-`pf-json`'s lexers and parsers are build for speed and beat [`jq`][jq] and [`fx`][fx] in several benchmarks (see medium post (TODO) for details):
+`@pfx/json`'s lexers and parsers are build for speed and beat [`jq`][jq] and [`fx`][fx] in several benchmarks (see medium post (TODO) for details):
 
 |                 | `pf` (time) | `jq` (time) | `fx` (time) | `jq` (RAM) | `pf` (RAM) | `fx` (RAM) | all (CPU) |
 |-----------------|------------:|------------:|------------:|-----------:|-----------:|-----------:|----------:|
@@ -131,7 +131,7 @@ module.exports = {
 ```
 
 The following sections will walk you through all capabilities of `.pfrc` modules.
-If you want to skip over the details and instead see sample code, visit [`pf-pfrc`][pf-pfrc]!
+If you want to skip over the details and instead see sample code, visit [`pfx-pfrc`][pfx-pfrc]!
 
 ### Writing Plugins
 
@@ -193,13 +193,13 @@ Plugins can come from two sources:
 They are either written by users, as shown in the previous section, or they are installed in `~/.pfrc/` as follows:
 
 ```bash
-$ npm install @pf/sample
+$ npm install @pfx/sample
 ```
 
 If a plugin was installed from `npm`, it has to be imported into `~/.pfrc/index.js`:
 
 ```js
-const samplePlugin = require('@pf/sample')
+const samplePlugin = require('@pfx/sample')
 ```
 
 Regardless of whether a plugin was defined by a user or installed from `npm`,
@@ -402,14 +402,14 @@ Turns out, Anakin could use some training!
 [BMI]: https://en.wikipedia.org/wiki/Body_mass_index
 [fx]: https://github.com/antonmedv/fx
 [jq]: https://github.com/stedolan/jq
-[pf-base]: https://github.com/Yord/pf-base
-[pf-json]: https://github.com/Yord/pf-json
-[pf-csv]: https://github.com/Yord/pf
-[pf-xml]: https://github.com/Yord/pf
-[pf-geojson]: https://github.com/Yord/pf
-[pf-sample]: https://github.com/Yord/pf-sample
-[pf-how-to-contribute]: https://github.com/Yord/pf
-[pf-pfrc]: https://github.com/Yord/pf-pfrc
+[pfx-base]: https://github.com/Yord/pfx-base
+[pfx-json]: https://github.com/Yord/pfx-json
+[pfx-csv]: https://github.com/Yord/pf
+[pfx-xml]: https://github.com/Yord/pf
+[pfx-geojson]: https://github.com/Yord/pf
+[pfx-sample]: https://github.com/Yord/pfx-sample
+[pfx-how-to-contribute]: https://github.com/Yord/pf
+[pfx-pfrc]: https://github.com/Yord/pfx-pfrc
 [ramda]: https://ramdajs.com/
 [lodash]: https://lodash.com/
 [license]: https://github.com/Yord/pf/blob/master/LICENSE

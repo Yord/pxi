@@ -3,8 +3,8 @@
 const _run       = require('./src/run')
 const _api       = require('./src/api')
 
-const _base      = require('@pf/base')
-const _json      = require('@pf/json')
+const _base      = require('@pfx/base')
+const _json      = require('@pfx/json')
 const _PF        = require('./src/pfrc') || {}
 
 const _reference = {lexer: 'line', parser: 'jsonBulk', applicator: 'map', marshaller: 'jsonStringify'}
