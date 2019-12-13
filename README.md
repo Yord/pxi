@@ -1,9 +1,11 @@
-![pf header][header]
+![pf teaser][teaser]
 
 `pf` (parser functions) is a fast and extensible command-line data (e.g. JSON) processor similar to `jq` and `fx`.
 
 [![npm version](https://img.shields.io/npm/v/fx.svg?color=orange)](https://www.npmjs.com/package/fx)
 [![license](https://img.shields.io/badge/license-MIT-blue.svg?color=green)][license]
+[![unit tests status](https://github.com/Yord/pf/workflows/unit%20tests/badge.svg?branch=master)][actions]
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-yellow.svg)][pf-how-to-contribute]
 
 ## Installation
 
@@ -34,7 +36,7 @@ $ pf "json => json.time" < 2019.jsonl > out.jsonl
 ```
 
 `jq` takes 2.5x longer (~46 seconds) and `fx` takes 16x longer (~290 seconds).
-See the performance section for details.
+See the [performance](#performance) section for details.
 
 `pf` also works on JSON streams:
 
@@ -83,7 +85,7 @@ function pf (chunk) {            // Data chunks are passed to pf from stdin.
 }
 ```
 
-Lexing, parsing, and marshalling JSON is provided by the [`pf-json`][pf-json] plugin.
+Lexing, parsing, and marshalling JSON is provided by the [`@pf/json`][pf-json] plugin.
 
 ### Plugins
 
@@ -99,11 +101,11 @@ The following plugins are available:
 | [`@pf/sample`][pf-sample]   | `sample`     | `sample`                 | `sample`                         | `sample`         |   ✕  |
 
 The last column states which plugins come preinstalled in `pf`.
-Refer to the `.pfrc` Module section to see how to enable other plugins.
+Refer to the `.pfrc` Module section to see how to enable more plugins.
 
 ### Performance
 
-`pf-json`s lexers and parsers are build for speed and beat [`jq`][jq] and [`fx`][fx] in several benchmarks (see medium post (TODO) for details):
+`pf-json`'s lexers and parsers are build for speed and beat [`jq`][jq] and [`fx`][fx] in several benchmarks (see medium post (TODO) for details):
 
 |                 | `pf` (time) | `jq` (time) | `fx` (time) | `jq` (RAM) | `pf` (RAM) | `fx` (RAM) | all (CPU) |
 |-----------------|------------:|------------:|------------:|-----------:|-----------:|-----------:|----------:|
@@ -218,7 +220,7 @@ module.exports = {
 ### Including Libraries like Ramda or Lodash
 
 Libraries like [Ramda][ramda] and [Lodash][lodash] are of immense help when writing functions to transform JSON objects
-and many heated discussions have been had, which of these library is best.
+and many heated discussions have been had, which of these libraries is superior.
 Since different people have different preferences, `pf` lets the user decide which library to use.
 
 First, install your preferred libraries in `~/.pfrc/`:
@@ -395,7 +397,7 @@ Turns out, Anakin could use some training!
 
 `pf` is [MIT licensed][license].
 
-[header]: ./header.gif
+[teaser]: ./teaser.gif
 [npm]: https://docs.npmjs.com/downloading-and-installing-packages-globally
 [BMI]: https://en.wikipedia.org/wiki/Body_mass_index
 [fx]: https://github.com/antonmedv/fx
@@ -411,3 +413,4 @@ Turns out, Anakin could use some training!
 [ramda]: https://ramdajs.com/
 [lodash]: https://lodash.com/
 [license]: https://github.com/Yord/pf/blob/master/LICENSE
+[actions]: https://github.com/Yord/pf/actions
