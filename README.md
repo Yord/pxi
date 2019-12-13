@@ -2,10 +2,10 @@
 
 `pf` (parser functions) is a fast and extensible command-line data (e.g. JSON) processor similar to `jq` and `fx`.
 
-[![npm version](https://img.shields.io/npm/v/fx.svg?color=orange)](https://www.npmjs.com/package/fx)
-[![license](https://img.shields.io/badge/license-MIT-blue.svg?color=green)][license]
-[![unit tests status](https://github.com/Yord/pf/workflows/unit%20tests/badge.svg?branch=master)][actions]
-[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-yellow.svg)][pfx-how-to-contribute]
+[![npm version][npm-shield]][npm-package]
+[![license][license-shield]][license]
+[![unit tests status][unit-tests-shield]][actions]
+[![PRs Welcome][prs-shield]][pfx-how-to-contribute]
 
 ## Installation
 
@@ -397,6 +397,7 @@ Turns out, Anakin could use some training!
 
 `pf` is [MIT licensed][license].
 
+[npm-package]: https://www.npmjs.com/package/@pfx/pf
 [teaser]: ./teaser.gif
 [npm]: https://docs.npmjs.com/downloading-and-installing-packages-globally
 [BMI]: https://en.wikipedia.org/wiki/Body_mass_index
@@ -414,3 +415,7 @@ Turns out, Anakin could use some training!
 [lodash]: https://lodash.com/
 [license]: https://github.com/Yord/pf/blob/master/LICENSE
 [actions]: https://github.com/Yord/pf/actions
+[npm-shield]: https://img.shields.io/npm/v/@pfx/pf.svg?color=orange
+[license-shield]: https://img.shields.io/badge/license-MIT-blue.svg?color=green
+[unit-tests-shield]: https://github.com/Yord/pf/workflows/unit%20tests/badge.svg?branch=master
+[prs-shield]: https://img.shields.io/badge/PRs-welcome-yellow.svg
