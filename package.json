@@ -35,7 +35,7 @@
   },
   "scripts": {
     "start": "./index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest --passWithNoTests"
   },
   "dependencies": {
     "@pf/base": "0.3.0",
@@ -45,5 +45,9 @@
   "engines": {
     "node": ">=8.3.0"
   },
-  "private": false
+  "private": false,
+  "devDependencies": {
+    "fast-check": "1.20.1",
+    "jest": "24.9.0"
+  }
 }
