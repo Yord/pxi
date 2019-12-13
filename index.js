@@ -3,7 +3,7 @@
 const _run       = require('./src/run')
 const A          = require('./src/api')
 
-const _core      = require('@pf/core')
+const _base      = require('@pf/base')
 const _json      = require('@pf/json')
 const _PF        = require('./src/pfrc') || {}
 
