@@ -38,7 +38,7 @@ $ pf "json => json.time" < 2019.jsonl > out.jsonl
 `jq` takes 2.5x longer (~46 seconds) and `fx` takes 16x longer (~290 seconds).
 See the [performance](#performance) section for details.
 
-`pf` also works on JSON streams:
+`pf` also works on streams of JSON objects:
 
 ```json
 $ curl -s "https://swapi.co/api/films/" |
