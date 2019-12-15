@@ -1,5 +1,8 @@
 module.exports = (argv, {lexer, parser, applicator, marshaller}, {lexers, parsers, applicators, marshallers}) => (
   require('yargs/yargs')(argv)
+
+  .parserConfiguration({"boolean-negation": false})
+
   .usage(
     '$0 FUNCTIONS ... [OPTIONS ...] \n' +
     '\n' +
