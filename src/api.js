@@ -22,20 +22,18 @@ const combineDefaults = defaults => ({
 })
 
 const initFunctions = (argv, plugins, defaults) => {
-  const failEarly  = typeof argv.e !== 'undefined' ? argv.e : false
-  const functions  = argv._.length > 0 ? argv._ : ['json => json']
-  const lexer      = argv.l || defaults.lexer
-  const marshaller = argv.m || defaults.marshaller
-  const parser     = argv.p || defaults.parser
-  const applicator = argv.a || defaults.applicator
-  const verbose    = typeof argv.v !== 'undefined' ? argv.v : false
+  const lexer      = argv.lexer      || argv.l || defaults.lexer
+  const marshaller = argv.marshaller || argv.m || defaults.marshaller
+  const parser     = argv.parser     || argv.p || defaults.parser
+  const applicator = argv.applicator || argv.a || defaults.applicator
   
+  const functions  = argv._.length > 0 ? argv._ : ['json => json']
   const fs         = functions.map(eval)
   
-  const lex        = selectPlugin(lexer,      plugins.lexers     )(verbose, failEarly, argv)
-  const parse      = selectPlugin(parser,     plugins.parsers    )(verbose, failEarly, argv)
-  const apply      = selectPlugin(applicator, plugins.applicators)(verbose, failEarly, fs, argv)
-  const marshal    = selectPlugin(marshaller, plugins.marshallers)(verbose, failEarly, argv)
+  const lex        = selectPlugin(lexer,      plugins.lexers     )(argv)
+  const parse      = selectPlugin(parser,     plugins.parsers    )(argv)
+  const apply      = selectPlugin(applicator, plugins.applicators)(fs, argv)
+  const marshal    = selectPlugin(marshaller, plugins.marshallers)(argv)
 
   return {lex, parse, apply, marshal}
 }
