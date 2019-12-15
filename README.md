@@ -288,7 +288,8 @@ module.exports = {
     lexer:      'sample',
     parser:     'sample',
     applicator: 'sample',
-    marshaller: 'sample'
+    marshaller: 'sample',
+    noPlugins:  false
   }
 }
 ```
