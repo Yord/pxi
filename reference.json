@@ -1,0 +1,13 @@
+{
+  "plugins": [
+    "@pfx/base",
+    "@pfx/json"
+  ],
+  "defaults": {
+    "lexer":      "line",
+    "parser":     "jsonBulk",
+    "applicator": "map",
+    "marshaller": "jsonStringify",
+    "noPlugins":  false
+  }
+}

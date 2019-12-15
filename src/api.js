@@ -17,7 +17,8 @@ const combineDefaults = defaults => ({
   lexer:      defaults.reduce(combineDefault('lexer'),      undefined),
   parser:     defaults.reduce(combineDefault('parser'),     undefined),
   applicator: defaults.reduce(combineDefault('applicator'), undefined),
-  marshaller: defaults.reduce(combineDefault('marshaller'), undefined)
+  marshaller: defaults.reduce(combineDefault('marshaller'), undefined),
+  noPlugins:  defaults.reduce(combineDefault('noPlugins'), undefined)
 })
 
 const initFunctions = (argv, plugins, defaults) => {
