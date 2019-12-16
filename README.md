@@ -2,10 +2,11 @@
 
 `pf` (parser functions) is a fast and extensible command-line data (e.g. JSON) processor similar to `jq` and `fx`.
 
+[![node version][node-shield]][node]
 [![npm version][npm-shield]][npm-package]
 [![license][license-shield]][license]
-[![unit tests status][unit-tests-shield]][actions]
 [![PRs Welcome][prs-shield]][pfx-how-to-contribute]
+[![unit tests status][unit-tests-shield]][actions]
 
 ## Installation
 
@@ -417,6 +418,8 @@ Turns out, Anakin could use some training!
 [license]: https://github.com/Yord/pf/blob/master/LICENSE
 [actions]: https://github.com/Yord/pf/actions
 [npm-shield]: https://img.shields.io/npm/v/@pfx/pf.svg?color=orange
-[license-shield]: https://img.shields.io/badge/license-MIT-blue.svg?color=green
-[unit-tests-shield]: https://github.com/Yord/pf/workflows/unit%20tests/badge.svg?branch=master
-[prs-shield]: https://img.shields.io/badge/PRs-welcome-yellow.svg
+[license-shield]: https://img.shields.io/npm/l/@pfx/pf?color=yellow
+[unit-tests-shield]: https://github.com/Yord/pf/workflows/unit%20tests/badge.svg?branch=master&style=flat
+[prs-shield]: https://img.shields.io/badge/PRs-welcome-green.svg
+[node-shield]: https://img.shields.io/node/v/@pfx/pf?color=red
+[node]: https://nodejs.org/
