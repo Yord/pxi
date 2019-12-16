@@ -143,32 +143,32 @@ Writing your own extensions is straightforward:
 const sampleLexer = {
   name: 'sample',
   desc: 'is a sample lexer.',
-  func: (verbose, failEarly, argv) => (data, prevLines) => (
-    {err: '', tokens: [data], lines: [], lastLine: -1, rest: ''}
+  func: ({}) => (data, prevLines) => (
+    {err: [], tokens: [data], lines: [], lastLine: prevLines, rest: ''}
   )
 }
 
 const sampleParser = {
   name: 'sample',
   desc: 'is a sample parser.',
-  func: (verbose, failEarly, argv) => (tokens, lines) => (
-    {err: '', jsons: tokens}
+  func: ({}) => (tokens, lines) => (
+    {err: [], jsons: tokens}
   )
 }
 
 const sampleApplicator = {
   name: 'sample',
   desc: 'is a sample applicator.',
-  func: (verbose, failEarly, fs, argv) => (jsons, lines) => (
-    {err: '', jsons: jsons}
+  func: (fs, {}) => (jsons, lines) => (
+    {err: [], jsons: jsons}
   )
 }
 
 const sampleMarshaller = {
   name: 'sample',
   desc: 'is a sample marshaller.',
-  func: (verbose, failEarly, argv) => jsons => (
-    {err: '', str: jsons.map(json => json.toString()).join('')}
+  func: ({}) => jsons => (
+    {err: [], str: jsons.map(json => json.toString()).join('')}
   )
 }
 ```
