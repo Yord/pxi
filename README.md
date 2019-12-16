@@ -2,10 +2,11 @@
 
 `pf` (parser functions) is a fast and extensible command-line data (e.g. JSON) processor similar to `jq` and `fx`.
 
+[![node version][node-shield]][node]
 [![npm version][npm-shield]][npm-package]
 [![license][license-shield]][license]
-[![unit tests status][unit-tests-shield]][actions]
 [![PRs Welcome][prs-shield]][pfx-how-to-contribute]
+[![unit tests status][unit-tests-shield]][actions]
 
 ## Installation
 
@@ -38,7 +39,7 @@ $ pf "json => json.time" < 2019.jsonl > out.jsonl
 `jq` takes 2.5x longer (~46 seconds) and `fx` takes 16x longer (~290 seconds).
 See the [performance](#performance) section for details.
 
-`pf` also works on JSON streams:
+`pf` also works on streams of JSON objects:
 
 ```json
 $ curl -s "https://swapi.co/api/films/" |
@@ -142,32 +143,32 @@ Writing your own extensions is straightforward:
 const sampleLexer = {
   name: 'sample',
   desc: 'is a sample lexer.',
-  func: (verbose, failEarly, argv) => (data, prevLines) => (
-    {err: '', tokens: [data], lines: [], lastLine: -1, rest: ''}
+  func: ({}) => (data, prevLines) => (
+    {err: [], tokens: [data], lines: [], lastLine: prevLines, rest: ''}
   )
 }
 
 const sampleParser = {
   name: 'sample',
   desc: 'is a sample parser.',
-  func: (verbose, failEarly, argv) => (tokens, lines) => (
-    {err: '', jsons: tokens}
+  func: ({}) => (tokens, lines) => (
+    {err: [], jsons: tokens}
   )
 }
 
 const sampleApplicator = {
   name: 'sample',
   desc: 'is a sample applicator.',
-  func: (verbose, failEarly, fs, argv) => (jsons, lines) => (
-    {err: '', jsons: jsons}
+  func: (fs, {}) => (jsons, lines) => (
+    {err: [], jsons: jsons}
   )
 }
 
 const sampleMarshaller = {
   name: 'sample',
   desc: 'is a sample marshaller.',
-  func: (verbose, failEarly, argv) => jsons => (
-    {err: '', str: jsons.map(json => json.toString()).join('')}
+  func: ({}) => jsons => (
+    {err: [], str: jsons.map(json => json.toString()).join('')}
   )
 }
 ```
@@ -288,7 +289,8 @@ module.exports = {
     lexer:      'sample',
     parser:     'sample',
     applicator: 'sample',
-    marshaller: 'sample'
+    marshaller: 'sample',
+    noPlugins:  false
   }
 }
 ```
@@ -416,6 +418,8 @@ Turns out, Anakin could use some training!
 [license]: https://github.com/Yord/pf/blob/master/LICENSE
 [actions]: https://github.com/Yord/pf/actions
 [npm-shield]: https://img.shields.io/npm/v/@pfx/pf.svg?color=orange
-[license-shield]: https://img.shields.io/badge/license-MIT-blue.svg?color=green
-[unit-tests-shield]: https://github.com/Yord/pf/workflows/unit%20tests/badge.svg?branch=master
-[prs-shield]: https://img.shields.io/badge/PRs-welcome-yellow.svg
+[license-shield]: https://img.shields.io/npm/l/@pfx/pf?color=yellow
+[unit-tests-shield]: https://github.com/Yord/pf/workflows/unit%20tests/badge.svg?branch=master&style=flat
+[prs-shield]: https://img.shields.io/badge/PRs-welcome-green.svg
+[node-shield]: https://img.shields.io/node/v/@pfx/pf?color=red
+[node]: https://nodejs.org/

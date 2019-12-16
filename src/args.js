@@ -1,5 +1,8 @@
-module.exports = ({lexer, parser, applicator, marshaller}, {lexers, parsers, applicators, marshallers}) => (
-  require('yargs')
+module.exports = (argv, {lexer, parser, applicator, marshaller}, {lexers, parsers, applicators, marshallers}) => (
+  require('yargs/yargs')(argv)
+
+  .parserConfiguration({"boolean-negation": false})
+
   .usage(
     '$0 FUNCTIONS ... [OPTIONS ...] \n' +
     '\n' +
@@ -8,13 +11,6 @@ module.exports = ({lexer, parser, applicator, marshaller}, {lexers, parsers, app
     'All variables and functions in global scope may be used in the function. If you ' +
     'would like to use libraries like lodash or ramda, read the .pfrc section on the ' +
     'github page: https://github.com/Yord/pf                                 [string]'
-  )
-
-  .help('h')
-  .alias('h', 'help')
-  .describe(
-    'help',
-    'Shows this help message.'
   )
 
   .string('lexer')
@@ -66,6 +62,14 @@ module.exports = ({lexer, parser, applicator, marshaller}, {lexers, parsers, app
     'process exits with code 1.'
   )
 
+  .boolean('no-plugins')
+  .describe(
+    'no-plugins',
+    'Disables all plugins except those added in the .pfrc module. ' +
+    'May be used if e.g. an alternative json plugin is used or    ' +
+    'during plugin development.'
+  )
+
   .count('verbose')
   .alias('v', 'verbose')
   .describe(
@@ -76,12 +80,25 @@ module.exports = ({lexer, parser, applicator, marshaller}, {lexers, parsers, app
     'parsed or transformed.'
   )
 
+  .help('h')
+  .alias('h', 'help')
+  .describe(
+    'help',
+    'Shows this help message.'
+  )
+
+  .version('version')
+  .describe(
+    'version',
+    'Show version number.'
+  )
+
   .epilog('Copyright (c) Philipp Wille 2019')
   .argv
 )
 
 function describePlugins (plugins, defaultName) {
-  return plugins.map(describePlugin(defaultName)).join(' ')
+  return plugins.length === 0 ? 'None defined.' : plugins.map(describePlugin(defaultName)).join(' ')
 }
 
 function describePlugin (defaultName) {
