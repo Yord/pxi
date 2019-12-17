@@ -392,14 +392,14 @@ Turns out, Anakin could use some training!
 
 ## Comparison to Related Tools
 
-|                       | `pf`                                                          | [`jq`][jq]                                     | [`fx`][fx]                                     | [`pandoc`][pandoc]                         |
-|-----------------------|---------------------------------------------------------------|------------------------------------------------|------------------------------------------------|--------------------------------------------|
-| **Self-description**  | *Fast and extensible command-line data processor*             | *Command-line JSON processor*                  | *Command-line tool and terminal JSON viewer*   | *Universal markup converter*               |
-| **Focus**             | Transforming data with user provided functions                | Transforming JSON with user provided functions | Transforming JSON with user provided functions | Converting one markup format into another  |
-| **License**           | [MIT][license]                                                | [MIT][jq-license]                              | [MIT][fx-license]                              | [GPL-2.0-only][pandoc-license]             |
-| **Performance**       | (performance is given relative to `pf`)                       | `jq` is [>2x slower](#performance) than `pf`   | `fx` is [>10x slower](#performance) than `pf`  | ???                                        |
-| **Extensibility**     | Third party plugins, any JavaScript library, custom functions | ???                                            | Any JavaScript library, custom functions       | ???                                        |
-| **Processing DSL**    | JavaScript with configurable libraries                        | [jq language][jq-lang]                         | JavaScript with configurable libraries         | [Any programming language][pandoc-filters] |
+|                       | `pf`                                                          | [`jq`][jq]                                     | [`fx`][fx]                                      | [`pandoc`][pandoc]                         |
+|-----------------------|---------------------------------------------------------------|------------------------------------------------|-------------------------------------------------|--------------------------------------------|
+| **Self-description**  | *Fast and extensible command-line data processor*             | *Command-line JSON processor*                  | *Command-line tool and terminal JSON viewer*    | *Universal markup converter*               |
+| **Focus**             | Transforming data with user provided functions                | Transforming JSON with user provided functions | Transforming JSON with user provided functions  | Converting one markup format into another  |
+| **License**           | [MIT][license]                                                | [MIT][jq-license]                              | [MIT][fx-license]                               | [GPL-2.0-only][pandoc-license]             |
+| **Performance**       | (performance is given relative to `pf`)                       | `jq` is [>2x slower](#performance) than `pf`   | `fx` is [>10x slower](#performance) than `pf`   | ???                                        |
+| **Extensibility**     | Third party plugins, any JavaScript library, custom functions | ???                                            | Any JavaScript library, custom functions        | ???                                        |
+| **Processing DSL**    | Vanilla JavaScript and all JavaScript libraries               | [jq language][jq-lang]                         | Vanilla JavaScript and all JavaScript libraries | [Any programming language][pandoc-filters] |
 
 ## License
 
