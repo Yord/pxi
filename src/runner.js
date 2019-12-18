@@ -1,6 +1,6 @@
 module.exports = failEarly => {
   const handle = handler(failEarly)
-  
+
   return ({lex, parse, apply, marshal}) => {
     process.stdin.setEncoding('utf8')
 
@@ -31,7 +31,7 @@ function handler (failEarly) {
   return obj => {
     const err = obj.err || []
     if (err.length > 0) {
-      process.stderr.write(err.map(e => e + '\n'))
+      process.stderr.write(err.map(e => e + '\n').join(''))
       if (failEarly) process.exit(1)
     }
     return obj
