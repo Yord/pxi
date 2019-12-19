@@ -143,32 +143,53 @@ Writing your own extensions is straightforward:
 const sampleLexer = {
   name: 'sample',
   desc: 'is a sample lexer.',
-  func: ({}) => (data, prevLines) => (
-    {err: [], tokens: [data], lines: [], lastLine: prevLines, rest: ''}
+  func: ({verbose}) => (data, prevLines) => (
+    // * Turn data into an array of tokens
+    // * Count lines for better error reporting throughout pf
+    // * Collect error reports: {msg: String, line: Number, info: String}
+    //   If verbose > 0, include line in error reports
+    //   If verbose > 1, include info in error reports
+    // * Return errors, tokens, lines, the last line, and all unlexed data
+    {err: [], tokens: [], lines: [], lastLine: 0, rest: ''}
   )
 }
 
 const sampleParser = {
   name: 'sample',
   desc: 'is a sample parser.',
-  func: ({}) => (tokens, lines) => (
-    {err: [], jsons: tokens}
+  func: ({verbose}) => (tokens, lines) => (
+    // * Parse tokens to jsons
+    // * Collect error reports: {msg: String, line: Number, info: Token}
+    //   If verbose > 0, include line in error reports
+    //   If verbose > 1, include info in error reports
+    // * Return errors and parsed jsons
+    {err: [], jsons: []}
   )
 }
 
 const sampleApplicator = {
   name: 'sample',
   desc: 'is a sample applicator.',
-  func: (fs, {}) => (jsons, lines) => (
-    {err: [], jsons: jsons}
+  func: (functions, {verbose}) => (jsons, lines) => (
+    // * Turn jsons into other jsons by applying all functions
+    // * Collect error reports: {msg: String, line: Number, info: Json}
+    //   If verbose > 0, include line in error reports
+    //   If verbose > 1, include info in error reports
+    // * Return errors and marshalled string
+    {err: [], jsons: []}
   )
 }
 
 const sampleMarshaller = {
   name: 'sample',
   desc: 'is a sample marshaller.',
-  func: ({}) => jsons => (
-    {err: [], str: jsons.map(json => json.toString()).join('')}
+  func: ({verbose}) => jsons => (
+    // * Turn jsons into a string
+    // * Collect error reports: {msg: String, line: Number, info: Json}
+    //   If verbose > 0, include line in error reports
+    //   If verbose > 1, include info in error reports
+    // * Return errors and marshalled string
+    {err: [], str: ''}
   )
 }
 ```
