@@ -43,7 +43,7 @@ See the [performance](#performance) section for details.
 
 ```json
 $ curl -s "https://swapi.co/api/films/" |
-  pf "json => json.results" -l jsonStream -a flatMap -s '["episode_id","title"]' |
+  pf "json => json.results" -l jsonStream -a flatMap -K '["episode_id","title"]' |
   sort
 
 {"episode_id":1,"title":"The Phantom Menace"}
@@ -320,7 +320,8 @@ module.exports = {
 
 ## Usage
 
-Selecting all Unix timestamps from a file containing all seconds of 2019 (602 MB, 31536000 lines) in JSON format (e.g. `{"time":1546300800}`) takes ~18 seconds (macOS 10.15, 2.8 GHz i7 processor):
+Selecting all Unix timestamps from a file containing all seconds of 2019 (602 MB, 31536000 lines)
+in JSON format (e.g. `{"time":1546300800}`) takes ~18 seconds (macOS 10.15, 2.8 GHz i7 processor):
 
 ```bash
 $ pf "json => json.time" < 2019.jsonl > out.jsonl
@@ -362,7 +363,7 @@ Select the name, height, and mass of the first ten Star Wars characters:
 
 ```json
 $ curl -s "https://swapi.co/api/people/" |
-  pf "json => json.results" -l jsonStream -a flatMap -s '["name","height","mass"]'
+  pf "json => json.results" -l jsonStream -a flatMap -K '["name","height","mass"]'
 
 {"name":"Luke Skywalker","height":"172","mass":"77"}
 {"name":"C-3PO","height":"167","mass":"75"}
@@ -380,8 +381,8 @@ Compute all character's [BMI][BMI]:
 
 ```json
 $ curl -s "https://swapi.co/api/people/" |
-  pf "json => json.results" -l jsonStream -a flatMap -s '["name","height","mass"]' |
-  pf "ch => (ch.bmi = ch.mass / (ch.height / 100) ** 2, ch)" -s '["name","bmi"]'
+  pf "json => json.results" -l jsonStream -a flatMap -K '["name","height","mass"]' |
+  pf "ch => (ch.bmi = ch.mass / (ch.height / 100) ** 2, ch)" -K '["name","bmi"]'
 
 {"name":"Luke Skywalker","bmi":26.027582477014604}
 {"name":"C-3PO","bmi":26.89232313815483}
@@ -399,9 +400,9 @@ Select only obese Star Wars characters:
 
 ```json
 $ curl -s "https://swapi.co/api/people/" |
-  pf "json => json.results" -l jsonStream -a flatMap -s '["name","height","mass"]' |
-  pf "ch => (ch.bmi = ch.mass / (ch.height / 100) ** 2, ch)" -s '["name","bmi"]' |
-  pf "ch => ch.bmi >= 30" -a filter -s '["name"]'
+  pf "json => json.results" -l jsonStream -a flatMap -K '["name","height","mass"]' |
+  pf "ch => (ch.bmi = ch.mass / (ch.height / 100) ** 2, ch)" -K '["name","bmi"]' |
+  pf "ch => ch.bmi >= 30" -a filter -K '["name"]'
 
 {"name":"R2-D2"}
 {"name":"Darth Vader"}
