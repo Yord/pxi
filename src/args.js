@@ -66,8 +66,8 @@ module.exports = (argv, {lexer, parser, applicator, marshaller}, {lexers, parser
   .describe(
     'no-plugins',
     'Disables all plugins except those added in the .pfrc module. ' +
-    'May be used if e.g. an alternative json plugin is used or    ' +
-    'during plugin development.'
+    'Useful for plugin development. BEWARE: You may need to set   ' +
+    'new defaults in the .pfrc module!'
   )
 
   .count('verbose')
