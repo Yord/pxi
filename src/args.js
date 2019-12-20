@@ -9,8 +9,8 @@ module.exports = (argv, {lexer, parser, applicator, marshaller}, {lexers, parser
     'FUNCTIONS define how JSON is transformed. If several functions are given, they  ' +
     'are applied in order. If no function is given, "json => json" is used, instead. ' +
     'All variables and functions in global scope may be used in the function. If you ' +
-    'would like to use libraries like lodash or ramda, read the .pfrc section on the ' +
-    'github page: https://github.com/Yord/pf                                 [string]'
+    'would like to use libraries like lodash or ramda, read the .pfrc module section ' +
+    'on the github page: https://github.com/Yord/pf#pfrc-module              [string]'
   )
 
   .string('lexer')
