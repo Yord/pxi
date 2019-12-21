@@ -237,7 +237,9 @@ module.exports = {
 
 `pf --help` should now list the sample plugin extensions in the options section.
 
-> :speak_no_evil: Adding third party plugins may **break the `pf` command line tool**! Use this feature responsibly.
+> :speak_no_evil: Adding plugins may **break the `pf` command line tool**!
+> If this happens, just remove the plugin from the list and `pf` should work normal again.
+> Use this feature responsibly.
 
 ### Including Libraries like Ramda or Lodash
 
