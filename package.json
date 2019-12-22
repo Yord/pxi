@@ -34,7 +34,7 @@
   },
   "dependencies": {
     "@pfx/base": "0.6.6",
-    "@pfx/json": "0.6.0",
+    "@pfx/json": "0.6.2",
     "yargs": "15.0.2"
   },
   "engines": {
