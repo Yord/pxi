@@ -32,8 +32,8 @@
     "test": "jest --passWithNoTests"
   },
   "dependencies": {
-    "@pfx/base": "0.7.0",
     "@pfx/json": "0.7.0",
+    "@pfx/base": "0.7.1",
     "yargs": "15.0.2"
   },
   "engines": {
