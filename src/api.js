@@ -39,10 +39,11 @@ const initFunctions = (argv, plugins, defaults) => {
 }
 
 function selectPlugin (name, plugins) {
+  if (typeof plugins === 'undefined') return () => () => {}
   const p = plugins.find(p => p.name === name)
-  return typeof p === 'undefined' ? () => {} :
-         p.func   === 'undefined' ? () => {}
-                                  : p.func
+  return typeof p      === 'undefined' ? () => () => {} :
+         typeof p.func === 'undefined' ? () => () => {}
+                                       : p.func
 }
 
 module.exports = {
