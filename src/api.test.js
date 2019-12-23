@@ -66,3 +66,10 @@ validDefaults.map(field =>
     })
   )
 )
+
+test('combineDefaults works on no other field', () => {
+  const field = unicodeString().map(str => validDefaults.indexOf(str) > -1 ? str + str : str)
+  property(field, field =>
+    testCombineDefaults(field, () => undefined)  
+  )
+})
