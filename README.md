@@ -6,7 +6,9 @@
 [![npm version][npm-shield]][npm-package]
 [![license][license-shield]][license]
 [![PRs Welcome][prs-shield]][pfx-how-to-contribute]
-[![unit tests status][unit-tests-shield]][actions]
+[![linux unit tests status][linux-unit-tests-shield]][actions]
+[![macos unit tests status][macos-unit-tests-shield]][actions]
+[![windows unit tests status][windows-unit-tests-shield]][actions]
 
 ## Installation
 
