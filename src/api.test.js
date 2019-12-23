@@ -32,3 +32,10 @@ validPlugins.map(field =>
     () => testCombinePlugins(field, fieldPlugins => fieldPlugins[field])
   )
 )
+
+test('combinePlugins works on no other field', () => {
+  const field = unicodeString().map(str => validPlugins.indexOf(str) > -1 ? str + str : str)
+  property(field, field =>
+    testCombinePlugins(field, () => undefined)
+  )
+})
