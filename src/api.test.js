@@ -39,3 +39,30 @@ test('combinePlugins works on no other field', () => {
     testCombinePlugins(field, () => undefined)
   )
 })
+
+function testCombineDefaults (field, f) {
+  const defaults = integer(0, 20).chain(len =>
+    array(option(anything(), 5).map(option => ({[field]: option})), len, len)
+  )
+  
+  assert(
+    property(defaults, (defaults) =>
+      expect(
+        combineDefaults(defaults)[field]
+      ).toStrictEqual(
+        f(defaults)
+      )
+    )
+  )
+}
+
+const validDefaults = ['lexer', 'parser', 'applicator', 'marshaller', 'noPlugins']
+validDefaults.map(field =>
+  test(
+    `combineDefaults works on ${field}`,
+    () => testCombineDefaults(field, defaults => {
+      const elem = defaults.find(def => typeof def[field] !== 'undefined')
+      return typeof elem === 'undefined' ? elem : elem[field] 
+    })
+  )
+)
