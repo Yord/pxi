@@ -115,3 +115,7 @@ validInits.map(init =>
     testInitFunctions(init, 42)
   })
 )
+
+test('initFunctions does not work on foo', () => {
+  testInitFunctions(['foo', 'foo', 'foo', 'foo', 'foo'], 'does not work')
+})
