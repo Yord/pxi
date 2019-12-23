@@ -73,3 +73,45 @@ test('combineDefaults works on no other field', () => {
     testCombineDefaults(field, () => undefined)  
   )
 })
+
+function testInitFunctions ([extension, option, alias, def, func], result) {
+  const apdr = unicodeString(1, 20).chain(name =>
+    oneof(...['option', 'alias', 'def'].map(constant)).map(oad => ({
+      argv:     {
+        _:           [],
+        [option]:    oad === 'option' ? name : undefined,
+        [alias]:     oad === 'alias'  ? name : undefined
+      },
+      defaults: {
+        [def]:       oad === 'def'    ? name : undefined
+      },
+      plugins:  {
+        [extension]: [{name, func: () => () => result}]
+      },
+      result
+    }))
+  )
+
+  assert(
+    property(apdr, ({argv, plugins, defaults, result}) => {
+      const g = initFunctions(argv, plugins, defaults)[func]
+      expect(
+        g && g() || 'does not work'
+      ).toStrictEqual(
+        result
+      )
+    })
+  )
+}
+
+const validInits = [
+  ['lexers',      'lexer',      'l', 'lexer',      'lex'    ],
+  ['parsers',     'parser',     'p', 'parser',     'parse'  ],
+  ['applicators', 'applicator', 'a', 'applicator', 'apply'  ],
+  ['marshallers', 'marshaller', 'm', 'marshaller', 'marshal']
+]
+validInits.map(init =>
+  test(`initFunctions initializes ${init[4]}`, () => {
+    testInitFunctions(init, 42)
+  })
+)
