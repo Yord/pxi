@@ -31,7 +31,13 @@ function handler (failEarly) {
   return obj => {
     const err = obj.err || []
     if (err.length > 0) {
-      process.stderr.write(err.map(e => e + '\n').join(''))
+      const msgs = err.map(({msg, line, info}) =>
+        (typeof line !== 'undefined' ? '(Line ' + line + ') ' : '') +
+        msg + 
+        (typeof info !== 'undefined' ? ', in ' + info : '') +
+        '\n'
+      )
+      process.stderr.write(msgs.join(''))
       if (failEarly) process.exit(1)
     }
     return obj
