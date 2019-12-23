@@ -449,7 +449,6 @@ Turns out, Anakin could use some training!
 [actions]: https://github.com/Yord/pf/actions
 [npm-shield]: https://img.shields.io/npm/v/@pfx/pf.svg?color=orange
 [license-shield]: https://img.shields.io/npm/l/@pfx/pf?color=yellow
-[unit-tests-shield]: https://github.com/Yord/pf/workflows/unit%20tests/badge.svg?branch=master&style=flat
 [prs-shield]: https://img.shields.io/badge/PRs-welcome-green.svg
 [node-shield]: https://img.shields.io/node/v/@pfx/pf?color=red
 [node]: https://nodejs.org/
@@ -459,3 +458,6 @@ Turns out, Anakin could use some training!
 [pandoc-license]: https://github.com/jgm/pandoc/blob/master/COPYRIGHT
 [jq-license]: https://github.com/stedolan/jq/blob/master/COPYING
 [fx-license]: https://github.com/antonmedv/fx/blob/master/LICENSE
+[linux-unit-tests-shield]: https://github.com/Yord/pf/workflows/linux/badge.svg?branch=master
+[macos-unit-tests-shield]: https://github.com/Yord/pf/workflows/macos/badge.svg?branch=master
+[windows-unit-tests-shield]: https://github.com/Yord/pf/workflows/windows/badge.svg?branch=master
