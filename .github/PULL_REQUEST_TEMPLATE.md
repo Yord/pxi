@@ -1,5 +1,5 @@
 ---
-name: "\U0001F41B Bug fix or new feature"
+name: "Bug fix or new feature"
 about: Fixing a problem with pf
 ---
 
