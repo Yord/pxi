@@ -12,8 +12,6 @@
 
 ## Installation
 
-`pf` requires **Node.js v8.3.0** or higher.
-
 Installation is done using the [global `npm install` command][npm].
 
 ```bash
