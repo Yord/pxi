@@ -92,14 +92,15 @@ Lexing, parsing, and marshalling JSON is provided by the [`@pfx/json`][pfx-json]
 
 The following plugins are available:
 
-|                               | Lexers       | Parsers                  | Applicators                      | Marshallers      | `pf` |
-|-------------------------------|--------------|--------------------------|----------------------------------|------------------|:----:|
-| [`@pfx/base`][pfx-base]       | `id`, `line` | `id`                     | `map`, `flatMap`, `filter`, `id` | `toString`, `id` |   ✓  |
-| [`@pfx/json`][pfx-json]       | `jsonStream` | `jsonSingle`, `jsonBulk` |                                  | `jsonStringify`  |   ✓  |
-| [`@pfx/csv`][pfx-csv]         | ???          | ???                      | ???                              | ???              |   ✕  |
-| [`@pfx/xml`][pfx-xml]         | ???          | ???                      | ???                              | ???              |   ✕  |
-| [`@pfx/geojson`][pfx-geojson] | ???          | ???                      | ???                              | `geojson`        |   ✕  |
-| [`@pfx/sample`][pfx-sample]   | `sample`     | `sample`                 | `sample`                         | `sample`         |   ✕  |
+|                               | Lexers       | Parsers                  | Applicators                | Marshallers     | `pf` |
+|-------------------------------|--------------|--------------------------|----------------------------|-----------------|:----:|
+| [`@pfx/pf`][pfx-id]           | `id`         | `id`                     | `id`                       | `id`            |   ✓  |
+| [`@pfx/base`][pfx-base]       | `line`       |                          | `map`, `flatMap`, `filter` | `toString`      |   ✓  |
+| [`@pfx/json`][pfx-json]       | `jsonStream` | `jsonSingle`, `jsonBulk` |                            | `jsonStringify` |   ✓  |
+| [`@pfx/csv`][pfx-csv]         | ???          | ???                      | ???                        | ???             |   ✕  |
+| [`@pfx/xml`][pfx-xml]         | ???          | ???                      | ???                        | ???             |   ✕  |
+| [`@pfx/geojson`][pfx-geojson] | ???          | ???                      | ???                        | `geojson`       |   ✕  |
+| [`@pfx/sample`][pfx-sample]   | `sample`     | `sample`                 | `sample`                   | `sample`        |   ✕  |
 
 The last column states which plugins come preinstalled in `pf`.
 Refer to the `.pfrc` Module section to see how to enable more plugins.
@@ -435,6 +436,7 @@ Turns out, Anakin could use some training!
 [BMI]: https://en.wikipedia.org/wiki/Body_mass_index
 [fx]: https://github.com/antonmedv/fx
 [jq]: https://github.com/stedolan/jq
+[pfx-id]: https://github.com/Yord/pf
 [pfx-base]: https://github.com/Yord/pfx-base
 [pfx-json]: https://github.com/Yord/pfx-json
 [pfx-csv]: https://github.com/Yord/pf
