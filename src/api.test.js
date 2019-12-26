@@ -74,31 +74,35 @@ test('combineDefaults works on no other field', () => {
   )
 })
 
-function testInitFunctions ([extension, option, alias, def, func], result) {
+function testInitFunctions ([extension, option, alias, def, func], result, {pluginsEmpty, nameNotFound, funcNotFound} = {}, fallback) {
   const apdr = unicodeString(1, 20).chain(name =>
     oneof(...['option', 'alias', 'def'].map(constant)).map(oad => ({
-      argv:     {
+      argv:      {
         _:           [],
         [option]:    oad === 'option' ? name : undefined,
         [alias]:     oad === 'alias'  ? name : undefined
       },
-      defaults: {
+      defaults:  {
         [def]:       oad === 'def'    ? name : undefined
       },
-      plugins:  {
-        [extension]: [{name, func: () => () => result}]
+      plugins:   {
+        [extension]: pluginsEmpty ? [] :
+                     nameNotFound   ? [{      func: () => () => result}] :
+                     funcNotFound     ? [{name}]
+                                      : [{name, func: () => () => result}]
       },
+      fallbacks: Object.assign({}, ...fallbacks),
       result
     }))
   )
 
   assert(
-    property(apdr, ({argv, plugins, defaults, result}) => {
-      const g = initFunctions(argv, plugins, defaults)[func]
+    property(apdr, ({argv, plugins, defaults, fallbacks, result}) => {
+      const g = initFunctions(argv, plugins, defaults, fallbacks)[func]
       expect(
         g && g() || 'does not work'
       ).toStrictEqual(
-        result
+        pluginsEmpty || nameNotFound || funcNotFound ? fallback : result
       )
     })
   )
@@ -110,6 +114,9 @@ const validInits = [
   ['applicators', 'applicator', 'a', 'applicator', 'apply'  ],
   ['marshallers', 'marshaller', 'm', 'marshaller', 'marshal']
 ]
+const fallback = 'fallback'
+const fallbacks = validInits.map(init => ({[init[3]]: {func: () => () => fallback}}))
+
 validInits.map(init =>
   test(`initFunctions initializes ${init[4]}`, () => {
     testInitFunctions(init, 42)
@@ -119,3 +126,21 @@ validInits.map(init =>
 test('initFunctions does not work on foo', () => {
   testInitFunctions(['foo', 'foo', 'foo', 'foo', 'foo'], 'does not work')
 })
+
+validInits.map(init =>
+  test(`initFunctions fallbacks work if ${init[3]} plugins are undefined`, () => {
+    testInitFunctions(init, 42, {pluginsEmpty: true}, fallback)
+  })
+)
+
+validInits.map(init =>
+  test(`initFunctions fallbacks work if a ${init[3]} plugin is not found by name`, () => {
+    testInitFunctions(init, 42, {nameNotFound: true}, fallback)
+  })
+)
+
+validInits.map(init =>
+  test(`initFunctions fallbacks work if a ${init[3]} plugin does not have a func`, () => {
+    testInitFunctions(init, 42, {funcNotFound: true}, fallback)
+  })
+)
