@@ -436,7 +436,7 @@ Turns out, Anakin could use some training!
 [BMI]: https://en.wikipedia.org/wiki/Body_mass_index
 [fx]: https://github.com/antonmedv/fx
 [jq]: https://github.com/stedolan/jq
-[pfx-id]: https://github.com/Yord/pf
+[pfx-id]: https://github.com/Yord/pf/tree/master/src/plugins/id
 [pfx-base]: https://github.com/Yord/pfx-base
 [pfx-json]: https://github.com/Yord/pfx-json
 [pfx-csv]: https://github.com/Yord/pf
