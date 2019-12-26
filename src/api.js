@@ -21,7 +21,7 @@ const combineDefaults = defaults => ({
   noPlugins:  defaults.reduce(combineDefault('noPlugins'),  undefined)
 })
 
-const initFunctions = (argv, plugins, defaults) => {
+const initFunctions = (argv, plugins, defaults, fallbacks) => {
   const lexer      = argv.lexer      || argv.l || defaults.lexer
   const marshaller = argv.marshaller || argv.m || defaults.marshaller
   const parser     = argv.parser     || argv.p || defaults.parser
@@ -30,19 +30,19 @@ const initFunctions = (argv, plugins, defaults) => {
   const functions  = argv._.length > 0 ? argv._ : ['json => json']
   const fs         = functions.map(eval)
   
-  const lex        = selectPlugin(lexer,      plugins.lexers     )(argv)
-  const parse      = selectPlugin(parser,     plugins.parsers    )(argv)
-  const apply      = selectPlugin(applicator, plugins.applicators)(fs, argv)
-  const marshal    = selectPlugin(marshaller, plugins.marshallers)(argv)
+  const lex        = selectPlugin(lexer,      plugins.lexers,      fallbacks.lexer     )(argv)
+  const parse      = selectPlugin(parser,     plugins.parsers,     fallbacks.parser    )(argv)
+  const apply      = selectPlugin(applicator, plugins.applicators, fallbacks.applicator)(fs, argv)
+  const marshal    = selectPlugin(marshaller, plugins.marshallers, fallbacks.marshaller)(argv)
 
   return {lex, parse, apply, marshal}
 }
 
-function selectPlugin (name, plugins) {
-  if (typeof plugins === 'undefined') return () => () => {}
+function selectPlugin (name, plugins, fallback) {
+  if (typeof plugins === 'undefined') return fallback.func
   const p = plugins.find(p => p.name === name)
-  return typeof p      === 'undefined' ? () => () => {} :
-         typeof p.func === 'undefined' ? () => () => {}
+  return typeof p      === 'undefined' ? fallback.func :
+         typeof p.func === 'undefined' ? fallback.func
                                        : p.func
 }
 
