@@ -5,7 +5,7 @@
   ],
   "defaults": {
     "lexer":      "line",
-    "parser":     "jsonBulk",
+    "parser":     "json",
     "applicator": "map",
     "marshaller": "stringify",
     "noPlugins":  false
