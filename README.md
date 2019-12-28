@@ -43,7 +43,7 @@ See the [performance](#performance) section for details.
 
 ```json
 $ curl -s "https://swapi.co/api/films/" |
-  pf "json => json.results" -l jsonStream -a flatMap -K '["episode_id","title"]' |
+  pf "json => json.results" -l jsonObj -a flatMap -K '["episode_id","title"]' |
   sort
 
 {"episode_id":1,"title":"The Phantom Menace"}
@@ -92,15 +92,15 @@ Lexing, parsing, and marshalling JSON is provided by the [`@pfx/json`][pfx-json]
 
 The following plugins are available:
 
-|                               | Lexers       | Parsers  | Applicators                | Marshallers | `pf` |
-|-------------------------------|--------------|----------|----------------------------|-------------|:----:|
-| [`@pfx/pf`][pfx-id]           | `id`         | `id`     | `id`                       | `id`        |   ✓  |
-| [`@pfx/base`][pfx-base]       | `line`       |          | `map`, `flatMap`, `filter` | `toString`  |   ✓  |
-| [`@pfx/json`][pfx-json]       | `jsonStream` | `json`   |                            | `stringify` |   ✓  |
-| [`@pfx/csv`][pfx-csv]         | ???          | ???      | ???                        | ???         |   ✕  |
-| [`@pfx/xml`][pfx-xml]         | ???          | ???      | ???                        | ???         |   ✕  |
-| [`@pfx/geojson`][pfx-geojson] | ???          | ???      | ???                        | `geojson`   |   ✕  |
-| [`@pfx/sample`][pfx-sample]   | `sample`     | `sample` | `sample`                   | `sample`    |   ✕  |
+|                               | Lexers    | Parsers  | Applicators                | Marshallers | `pf` |
+|-------------------------------|-----------|----------|----------------------------|-------------|:----:|
+| [`@pfx/pf`][pfx-id]           | `id`      | `id`     | `id`                       | `id`        |   ✓  |
+| [`@pfx/base`][pfx-base]       | `line`    |          | `map`, `flatMap`, `filter` | `toString`  |   ✓  |
+| [`@pfx/json`][pfx-json]       | `jsonObj` | `json`   |                            | `json`      |   ✓  |
+| [`@pfx/csv`][pfx-csv]         | ???       | ???      | ???                        | ???         |   ✕  |
+| [`@pfx/xml`][pfx-xml]         | ???       | ???      | ???                        | ???         |   ✕  |
+| [`@pfx/geojson`][pfx-geojson] | ???       | ???      | ???                        | `geojson`   |   ✕  |
+| [`@pfx/sample`][pfx-sample]   | `sample`  | `sample` | `sample`                   | `sample`    |   ✕  |
 
 The last column states which plugins come preinstalled in `pf`.
 Refer to the `.pfrc` Module section to see how to enable more plugins.
@@ -366,7 +366,7 @@ Select the name, height, and mass of the first ten Star Wars characters:
 
 ```json
 $ curl -s "https://swapi.co/api/people/" |
-  pf "json => json.results" -l jsonStream -a flatMap -K '["name","height","mass"]'
+  pf "json => json.results" -l jsonObj -a flatMap -K '["name","height","mass"]'
 
 {"name":"Luke Skywalker","height":"172","mass":"77"}
 {"name":"C-3PO","height":"167","mass":"75"}
@@ -384,7 +384,7 @@ Compute all character's [BMI][BMI]:
 
 ```json
 $ curl -s "https://swapi.co/api/people/" |
-  pf "json => json.results" -l jsonStream -a flatMap -K '["name","height","mass"]' |
+  pf "json => json.results" -l jsonObj -a flatMap -K '["name","height","mass"]' |
   pf "ch => (ch.bmi = ch.mass / (ch.height / 100) ** 2, ch)" -K '["name","bmi"]'
 
 {"name":"Luke Skywalker","bmi":26.027582477014604}
@@ -403,7 +403,7 @@ Select only obese Star Wars characters:
 
 ```json
 $ curl -s "https://swapi.co/api/people/" |
-  pf "json => json.results" -l jsonStream -a flatMap -K '["name","height","mass"]' |
+  pf "json => json.results" -l jsonObj -a flatMap -K '["name","height","mass"]' |
   pf "ch => (ch.bmi = ch.mass / (ch.height / 100) ** 2, ch)" -K '["name","bmi"]' |
   pf "ch => ch.bmi >= 30" -a filter -K '["name"]'
 
