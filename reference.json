@@ -7,7 +7,7 @@
     "lexer":      "line",
     "parser":     "json",
     "applicator": "map",
-    "marshaller": "stringify",
+    "marshaller": "json",
     "noPlugins":  false
   }
 }
