@@ -439,9 +439,9 @@ Turns out, Anakin could use some training!
 [pfx-id]: https://github.com/Yord/pf/tree/master/src/plugins/id
 [pfx-base]: https://github.com/Yord/pfx-base
 [pfx-json]: https://github.com/Yord/pfx-json
-[pfx-csv]: https://github.com/Yord/pf
-[pfx-xml]: https://github.com/Yord/pf
-[pfx-geojson]: https://github.com/Yord/pf
+[pfx-csv]: https://github.com/Yord/pf-sandbox
+[pfx-xml]: https://github.com/Yord/pf-sandbox
+[pfx-geojson]: https://github.com/Yord/pf-sandbox
 [pfx-sample]: https://github.com/Yord/pfx-sample
 [pfx-how-to-contribute]: https://github.com/Yord/pf
 [pfx-pfrc]: https://github.com/Yord/pfx-pfrc
