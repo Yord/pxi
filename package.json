@@ -29,7 +29,7 @@
   },
   "scripts": {
     "start": "./index.js",
-    "test": "jest --passWithNoTests"
+    "test": "jest --ci --coverage --logHeapUsage --passWithNoTests"
   },
   "dependencies": {
     "@pfx/base": "0.8.1",
