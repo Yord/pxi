@@ -97,7 +97,7 @@ The following plugins are available:
 | [`@pfx/pf`][pfx-id]           | `id`      | `id`     | `id`                       | `id`        |   ✓  |
 | [`@pfx/base`][pfx-base]       | `line`    |          | `map`, `flatMap`, `filter` | `toString`  |   ✓  |
 | [`@pfx/json`][pfx-json]       | `jsonObj` | `json`   |                            | `json`      |   ✓  |
-| [`@pfx/csv`][pfx-csv]         | ???       | ???      | ???                        | ???         |   ✕  |
+| [`@pfx/dsv`][pfx-dsv]         |           | `csv`    |                            | `csv`       |   ✕  |
 | [`@pfx/xml`][pfx-xml]         | ???       | ???      | ???                        | ???         |   ✕  |
 | [`@pfx/geojson`][pfx-geojson] | ???       | ???      | ???                        | `geojson`   |   ✕  |
 | [`@pfx/sample`][pfx-sample]   | `sample`  | `sample` | `sample`                   | `sample`    |   ✕  |
@@ -439,7 +439,7 @@ Turns out, Anakin could use some training!
 [pfx-id]: https://github.com/Yord/pf/tree/master/src/plugins/id
 [pfx-base]: https://github.com/Yord/pfx-base
 [pfx-json]: https://github.com/Yord/pfx-json
-[pfx-csv]: https://github.com/Yord/pf-sandbox
+[pfx-dsv]: https://github.com/Yord/pfx-dsv
 [pfx-xml]: https://github.com/Yord/pf-sandbox
 [pfx-geojson]: https://github.com/Yord/pf-sandbox
 [pfx-sample]: https://github.com/Yord/pfx-sample
