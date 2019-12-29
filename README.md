@@ -460,6 +460,6 @@ Turns out, Anakin could use some training!
 [pandoc-license]: https://github.com/jgm/pandoc/blob/master/COPYRIGHT
 [jq-license]: https://github.com/stedolan/jq/blob/master/COPYING
 [fx-license]: https://github.com/antonmedv/fx/blob/master/LICENSE
-[linux-unit-tests-shield]: https://github.com/Yord/pf/workflows/linux/badge.svg?branch=master
-[macos-unit-tests-shield]: https://github.com/Yord/pf/workflows/macos/badge.svg?branch=master
-[windows-unit-tests-shield]: https://github.com/Yord/pf/workflows/windows/badge.svg?branch=master
+[linux-unit-tests-shield]: https://img.shields.io/github/workflow/status/Yord/pfx-json/linux/master?label=linux&logo=github&color=#5A5A5A&logoColor=#5A5A5A
+[macos-unit-tests-shield]: https://img.shields.io/github/workflow/status/Yord/pfx-json/macos/master?label=macos&logo=github&color=#5A5A5A&logoColor=#5A5A5A
+[windows-unit-tests-shield]: https://img.shields.io/github/workflow/status/Yord/pfx-json/windows/master?label=windows&logo=github&color=#5A5A5A&logoColor=#5A5A5A
