@@ -202,7 +202,7 @@ the `func` is called by `pf` to transform data.
 The sample extensions are bundled to the sample plugin, as follows:
 
 ```js
-const samplePlugin = {
+const sample = {
   lexers:      [sampleLexer],
   parsers:     [sampleParser],
   applicators: [sampleApplicator],
@@ -222,7 +222,7 @@ $ npm install @pfx/sample
 If a plugin was installed from `npm`, it has to be imported into `~/.pfrc/index.js`:
 
 ```js
-const samplePlugin = require('@pfx/sample')
+const sample = require('@pfx/sample')
 ```
 
 Regardless of whether a plugin was defined by a user or installed from `npm`,
@@ -230,7 +230,7 @@ all plugins are added to the `.pfrc` module the same way:
 
 ```js
 module.exports = {
-  plugins:  [samplePlugin],
+  plugins:  [sample],
   context:  {},
   defaults: {}
 }
