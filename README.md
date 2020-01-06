@@ -101,7 +101,8 @@ The following plugins are available:
 | [`@pfx/sample`][pfx-sample]   | `sample`  | `sample`                   | `sample`                   | `sample`    |   ✕  |
 
 The last column states which plugins come preinstalled in `pf`.
-Refer to the `.pfrc` Module section to see how to enable more plugins.
+Refer to the `.pfrc` Module section to see how to enable more plugins and how to develop plugins.
+New `pf` plugins are developed in the [`pf-sandbox`][pf-sandbox] repository.
 
 ### Performance
 
@@ -459,3 +460,4 @@ Turns out, Anakin could use some training!
 [linux-unit-tests-shield]: https://img.shields.io/github/workflow/status/Yord/pfx-json/linux/master?label=linux&logo=github&color=#5A5A5A&logoColor=#5A5A5A
 [macos-unit-tests-shield]: https://img.shields.io/github/workflow/status/Yord/pfx-json/macos/master?label=macos&logo=github&color=#5A5A5A&logoColor=#5A5A5A
 [windows-unit-tests-shield]: https://img.shields.io/github/workflow/status/Yord/pfx-json/windows/master?label=windows&logo=github&color=#5A5A5A&logoColor=#5A5A5A
+[pf-sandbox]: https://github.com/Yord/pf-sandbox
