@@ -414,6 +414,17 @@ $ curl -s "https://swapi.co/api/people/" |
 
 Turns out, Anakin could use some training!
 
+## `id` Plugin
+
+`pf` includes the `id` plugin that comes with the following extensions:
+
+|                  | Description                                                                |
+|------------------|----------------------------------------------------------------------------|
+| `id` lexer       | Returns each chunk as a token.                                             |
+| `id` parser      | Returns all tokens unchanged.                                              |
+| `id` applicator  | Does not apply any functions and returns the JSON objects unchanged.       |
+| `id` marshaller  | Applies Object.prototype.toString to the input and joins without newlines. |
+
 ## Comparison to Related Tools
 
 |                       | `pf`                                                          | [`jq`][jq]                                     | [`fx`][fx]                                      | [`pandoc`][pandoc]                         |
