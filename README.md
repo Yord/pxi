@@ -425,6 +425,10 @@ Turns out, Anakin could use some training!
 | **Extensibility**     | Third party plugins, any JavaScript library, custom functions | ???                                            | Any JavaScript library, custom functions        | ???                                        |
 | **Processing DSL**    | Vanilla JavaScript and all JavaScript libraries               | [jq language][jq-lang]                         | Vanilla JavaScript and all JavaScript libraries | [Any programming language][pandoc-filters] |
 
+## Reporting Issues
+
+Please report issues [in the tracker][issues]!
+
 ## License
 
 `pf` is [MIT licensed][license].
@@ -434,6 +438,7 @@ Turns out, Anakin could use some training!
 [contribute]: https://github.com/Yord/pf
 [fx]: https://github.com/antonmedv/fx
 [fx-license]: https://github.com/antonmedv/fx/blob/master/LICENSE
+[issues]: https://github.com/Yord/pf/issues
 [jq]: https://github.com/stedolan/jq
 [jq-lang]: https://github.com/stedolan/jq/wiki/jq-Language-Description
 [jq-license]: https://github.com/stedolan/jq/blob/master/COPYING
