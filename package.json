@@ -32,8 +32,8 @@
     "test": "jest --ci --coverage --logHeapUsage --passWithNoTests"
   },
   "dependencies": {
-    "@pfx/base": "0.9.0",
     "@pfx/json": "0.10.3",
+    "@pfx/base": "0.9.1",
     "yargs": "15.0.2"
   },
   "engines": {
