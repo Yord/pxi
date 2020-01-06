@@ -2,13 +2,13 @@
 
 `pf` (parser functions) is a fast and extensible command-line data (e.g. JSON) processor similar to `jq` and `fx`.
 
-[![node version][node-shield]][node]
-[![npm version][npm-shield]][npm-package]
-[![license][license-shield]][license]
-[![PRs Welcome][prs-shield]][pfx-how-to-contribute]
-[![linux unit tests status][linux-unit-tests-shield]][actions]
-[![macos unit tests status][macos-unit-tests-shield]][actions]
-[![windows unit tests status][windows-unit-tests-shield]][actions]
+[![node version][shield-node]][node]
+[![npm version][shield-npm]][npm-package]
+[![license][shield-license]][license]
+[![PRs Welcome][shield-prs]][contribute]
+[![linux unit tests status][shield-unit-tests-linux]][actions]
+[![macos unit tests status][shield-unit-tests-macos]][actions]
+[![windows unit tests status][shield-unit-tests-windows]][actions]
 
 ## Installation
 
@@ -92,18 +92,17 @@ Lexing, parsing, and marshalling JSON is provided by the [`@pfx/json`][pfx-json]
 
 The following plugins are available:
 
-|                               | Lexers    | Parsers      | Applicators                | Marshallers | `pf` |
-|-------------------------------|-----------|--------------|----------------------------|-------------|:----:|
-| [`@pfx/pf`][pfx-id]           | `id`      | `id`         | `id`                       | `id`        |   ✓  |
-| [`@pfx/base`][pfx-base]       | `line`    |              | `map`, `flatMap`, `filter` | `toString`  |   ✓  |
-| [`@pfx/json`][pfx-json]       | `jsonObj` | `json`       |                            | `json`      |   ✓  |
-| [`@pfx/dsv`][pfx-dsv]         |           | `csv`, `dsv` |                            | `csv`       |   ✕  |
-| [`@pfx/xml`][pfx-xml]         | ???       | ???          | ???                        | ???         |   ✕  |
-| [`@pfx/geojson`][pfx-geojson] | ???       | ???          | ???                        | `geojson`   |   ✕  |
-| [`@pfx/sample`][pfx-sample]   | `sample`  | `sample`     | `sample`                   | `sample`    |   ✕  |
+|                               | Lexers    | Parsers                    | Applicators                | Marshallers | `pf` |
+|-------------------------------|-----------|----------------------------|----------------------------|-------------|:----:|
+| [`@pfx/pf`][pfx-id]           | `id`      | `id`                       | `id`                       | `id`        |   ✓  |
+| [`@pfx/base`][pfx-base]       | `line`    |                            | `map`, `flatMap`, `filter` | `toString`  |   ✓  |
+| [`@pfx/json`][pfx-json]       | `jsonObj` | `json`                     |                            | `json`      |   ✓  |
+| [`@pfx/dsv`][pfx-dsv]         |           | `csv`, `tsv`, `ssv`, `dsv` |                            | `csv`       |   ✕  |
+| [`@pfx/sample`][pfx-sample]   | `sample`  | `sample`                   | `sample`                   | `sample`    |   ✕  |
 
 The last column states which plugins come preinstalled in `pf`.
-Refer to the `.pfrc` Module section to see how to enable more plugins.
+Refer to the `.pfrc` Module section to see how to enable more plugins and how to develop plugins.
+New `pf` plugins are developed in the [`pf-sandbox`][pf-sandbox] repository.
 
 ### Performance
 
@@ -415,6 +414,17 @@ $ curl -s "https://swapi.co/api/people/" |
 
 Turns out, Anakin could use some training!
 
+## `id` Plugin
+
+`pf` includes the `id` plugin that comes with the following extensions:
+
+|                  | Description                                                                |
+|------------------|----------------------------------------------------------------------------|
+| `id` lexer       | Returns each chunk as a token.                                             |
+| `id` parser      | Returns all tokens unchanged.                                              |
+| `id` applicator  | Does not apply any functions and returns the JSON objects unchanged.       |
+| `id` marshaller  | Applies Object.prototype.toString to the input and joins without newlines. |
+
 ## Comparison to Related Tools
 
 |                       | `pf`                                                          | [`jq`][jq]                                     | [`fx`][fx]                                      | [`pandoc`][pandoc]                         |
@@ -426,40 +436,44 @@ Turns out, Anakin could use some training!
 | **Extensibility**     | Third party plugins, any JavaScript library, custom functions | ???                                            | Any JavaScript library, custom functions        | ???                                        |
 | **Processing DSL**    | Vanilla JavaScript and all JavaScript libraries               | [jq language][jq-lang]                         | Vanilla JavaScript and all JavaScript libraries | [Any programming language][pandoc-filters] |
 
+## Reporting Issues
+
+Please report issues [in the tracker][issues]!
+
 ## License
 
 `pf` is [MIT licensed][license].
 
-[npm-package]: https://www.npmjs.com/package/@pfx/pf
-[teaser]: ./teaser.gif
-[npm]: https://docs.npmjs.com/downloading-and-installing-packages-globally
-[BMI]: https://en.wikipedia.org/wiki/Body_mass_index
-[fx]: https://github.com/antonmedv/fx
-[jq]: https://github.com/stedolan/jq
-[pfx-id]: https://github.com/Yord/pf/tree/master/src/plugins/id
-[pfx-base]: https://github.com/Yord/pfx-base
-[pfx-json]: https://github.com/Yord/pfx-json
-[pfx-dsv]: https://github.com/Yord/pfx-dsv
-[pfx-xml]: https://github.com/Yord/pf-sandbox
-[pfx-geojson]: https://github.com/Yord/pf-sandbox
-[pfx-sample]: https://github.com/Yord/pfx-sample
-[pfx-how-to-contribute]: https://github.com/Yord/pf
-[pfx-pfrc]: https://github.com/Yord/pfx-pfrc
-[ramda]: https://ramdajs.com/
-[lodash]: https://lodash.com/
-[license]: https://github.com/Yord/pf/blob/master/LICENSE
 [actions]: https://github.com/Yord/pf/actions
-[npm-shield]: https://img.shields.io/npm/v/@pfx/pf.svg?color=orange
-[license-shield]: https://img.shields.io/npm/l/@pfx/pf?color=yellow
-[prs-shield]: https://img.shields.io/badge/PRs-welcome-green.svg
-[node-shield]: https://img.shields.io/node/v/@pfx/pf?color=red
-[node]: https://nodejs.org/
-[pandoc]: https://pandoc.org
+[BMI]: https://en.wikipedia.org/wiki/Body_mass_index
+[contribute]: https://github.com/Yord/pf
+[fx]: https://github.com/antonmedv/fx
+[fx-license]: https://github.com/antonmedv/fx/blob/master/LICENSE
+[issues]: https://github.com/Yord/pf/issues
+[jq]: https://github.com/stedolan/jq
 [jq-lang]: https://github.com/stedolan/jq/wiki/jq-Language-Description
+[jq-license]: https://github.com/stedolan/jq/blob/master/COPYING
+[license]: https://github.com/Yord/pf/blob/master/LICENSE
+[lodash]: https://lodash.com/
+[node]: https://nodejs.org/
+[npm]: https://docs.npmjs.com/downloading-and-installing-packages-globally
+[npm-package]: https://www.npmjs.com/package/@pfx/pf
+[pandoc]: https://pandoc.org
 [pandoc-filters]: https://github.com/jgm/pandoc/wiki/Pandoc-Filters
 [pandoc-license]: https://github.com/jgm/pandoc/blob/master/COPYRIGHT
-[jq-license]: https://github.com/stedolan/jq/blob/master/COPYING
-[fx-license]: https://github.com/antonmedv/fx/blob/master/LICENSE
-[linux-unit-tests-shield]: https://img.shields.io/github/workflow/status/Yord/pfx-json/linux/master?label=linux&logo=github&color=#5A5A5A&logoColor=#5A5A5A
-[macos-unit-tests-shield]: https://img.shields.io/github/workflow/status/Yord/pfx-json/macos/master?label=macos&logo=github&color=#5A5A5A&logoColor=#5A5A5A
-[windows-unit-tests-shield]: https://img.shields.io/github/workflow/status/Yord/pfx-json/windows/master?label=windows&logo=github&color=#5A5A5A&logoColor=#5A5A5A
+[pf-sandbox]: https://github.com/Yord/pf-sandbox
+[pfx-base]: https://github.com/Yord/pfx-base
+[pfx-dsv]: https://github.com/Yord/pfx-dsv
+[pfx-id]: https://github.com/Yord/pf/tree/master/src/plugins/id
+[pfx-json]: https://github.com/Yord/pfx-json
+[pfx-pfrc]: https://github.com/Yord/pfx-pfrc
+[pfx-sample]: https://github.com/Yord/pfx-sample
+[ramda]: https://ramdajs.com/
+[shield-license]: https://img.shields.io/npm/l/@pfx/pf?color=yellow&labelColor=313A42
+[shield-node]: https://img.shields.io/node/v/@pfx/pf?color=red&labelColor=313A42
+[shield-npm]: https://img.shields.io/npm/v/@pfx/pf.svg?color=orange&labelColor=313A42
+[shield-prs]: https://img.shields.io/badge/PRs-welcome-green.svg?labelColor=313A42
+[shield-unit-tests-linux]: https://github.com/Yord/pf/workflows/linux/badge.svg?branch=master
+[shield-unit-tests-macos]: https://github.com/Yord/pf/workflows/macos/badge.svg?branch=master
+[shield-unit-tests-windows]: https://github.com/Yord/pf/workflows/windows/badge.svg?branch=master
+[teaser]: ./teaser.gif
