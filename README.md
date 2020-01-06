@@ -2,13 +2,13 @@
 
 `pf` (parser functions) is a fast and extensible command-line data (e.g. JSON) processor similar to `jq` and `fx`.
 
-[![node version][node-shield]][node]
-[![npm version][npm-shield]][npm-package]
-[![license][license-shield]][license]
-[![PRs Welcome][prs-shield]][pfx-how-to-contribute]
-[![linux unit tests status][linux-unit-tests-shield]][actions]
-[![macos unit tests status][macos-unit-tests-shield]][actions]
-[![windows unit tests status][windows-unit-tests-shield]][actions]
+[![node version][shield-node]][node]
+[![npm version][shield-npm]][npm-package]
+[![license][shield-license]][license]
+[![PRs Welcome][shield-prs]][contribute]
+[![linux unit tests status][shield-unit-tests-linux]][actions]
+[![macos unit tests status][shield-unit-tests-macos]][actions]
+[![windows unit tests status][shield-unit-tests-windows]][actions]
 
 ## Installation
 
@@ -429,35 +429,35 @@ Turns out, Anakin could use some training!
 
 `pf` is [MIT licensed][license].
 
-[npm-package]: https://www.npmjs.com/package/@pfx/pf
-[teaser]: ./teaser.gif
-[npm]: https://docs.npmjs.com/downloading-and-installing-packages-globally
-[BMI]: https://en.wikipedia.org/wiki/Body_mass_index
-[fx]: https://github.com/antonmedv/fx
-[jq]: https://github.com/stedolan/jq
-[pfx-id]: https://github.com/Yord/pf/tree/master/src/plugins/id
-[pfx-base]: https://github.com/Yord/pfx-base
-[pfx-json]: https://github.com/Yord/pfx-json
-[pfx-dsv]: https://github.com/Yord/pfx-dsv
-[pfx-sample]: https://github.com/Yord/pfx-sample
-[pfx-how-to-contribute]: https://github.com/Yord/pf
-[pfx-pfrc]: https://github.com/Yord/pfx-pfrc
-[ramda]: https://ramdajs.com/
-[lodash]: https://lodash.com/
-[license]: https://github.com/Yord/pf/blob/master/LICENSE
 [actions]: https://github.com/Yord/pf/actions
-[npm-shield]: https://img.shields.io/npm/v/@pfx/pf.svg?color=orange&labelColor=313A42
-[license-shield]: https://img.shields.io/npm/l/@pfx/pf?color=yellow&labelColor=313A42
-[prs-shield]: https://img.shields.io/badge/PRs-welcome-green.svg?labelColor=313A42
-[node-shield]: https://img.shields.io/node/v/@pfx/pf?color=red&labelColor=313A42
-[node]: https://nodejs.org/
-[pandoc]: https://pandoc.org
+[BMI]: https://en.wikipedia.org/wiki/Body_mass_index
+[contribute]: https://github.com/Yord/pf
+[fx]: https://github.com/antonmedv/fx
+[fx-license]: https://github.com/antonmedv/fx/blob/master/LICENSE
+[jq]: https://github.com/stedolan/jq
 [jq-lang]: https://github.com/stedolan/jq/wiki/jq-Language-Description
+[jq-license]: https://github.com/stedolan/jq/blob/master/COPYING
+[license]: https://github.com/Yord/pf/blob/master/LICENSE
+[lodash]: https://lodash.com/
+[node]: https://nodejs.org/
+[npm]: https://docs.npmjs.com/downloading-and-installing-packages-globally
+[npm-package]: https://www.npmjs.com/package/@pfx/pf
+[pandoc]: https://pandoc.org
 [pandoc-filters]: https://github.com/jgm/pandoc/wiki/Pandoc-Filters
 [pandoc-license]: https://github.com/jgm/pandoc/blob/master/COPYRIGHT
-[jq-license]: https://github.com/stedolan/jq/blob/master/COPYING
-[fx-license]: https://github.com/antonmedv/fx/blob/master/LICENSE
-[linux-unit-tests-shield]: https://github.com/Yord/pf/workflows/linux/badge.svg?branch=master
-[macos-unit-tests-shield]: https://github.com/Yord/pf/workflows/macos/badge.svg?branch=master
-[windows-unit-tests-shield]: https://github.com/Yord/pf/workflows/windows/badge.svg?branch=master
 [pf-sandbox]: https://github.com/Yord/pf-sandbox
+[pfx-base]: https://github.com/Yord/pfx-base
+[pfx-dsv]: https://github.com/Yord/pfx-dsv
+[pfx-id]: https://github.com/Yord/pf/tree/master/src/plugins/id
+[pfx-json]: https://github.com/Yord/pfx-json
+[pfx-pfrc]: https://github.com/Yord/pfx-pfrc
+[pfx-sample]: https://github.com/Yord/pfx-sample
+[ramda]: https://ramdajs.com/
+[shield-license]: https://img.shields.io/npm/l/@pfx/pf?color=yellow&labelColor=313A42
+[shield-node]: https://img.shields.io/node/v/@pfx/pf?color=red&labelColor=313A42
+[shield-npm]: https://img.shields.io/npm/v/@pfx/pf.svg?color=orange&labelColor=313A42
+[shield-prs]: https://img.shields.io/badge/PRs-welcome-green.svg?labelColor=313A42
+[shield-unit-tests-linux]: https://github.com/Yord/pf/workflows/linux/badge.svg?branch=master
+[shield-unit-tests-macos]: https://github.com/Yord/pf/workflows/macos/badge.svg?branch=master
+[shield-unit-tests-windows]: https://github.com/Yord/pf/workflows/windows/badge.svg?branch=master
+[teaser]: ./teaser.gif
