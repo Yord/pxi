@@ -94,7 +94,7 @@ function describePlugin (defaultName) {
   return plugin => {
     if (typeof plugin.name === 'undefined') return []
     else return [
-      '\n"' + plugin.name + '"' +
+      '\n\n"' + plugin.name + '"' +
       (plugin.name === defaultName ? ' (default) ' : ' ') +
       plugin.desc
     ]
