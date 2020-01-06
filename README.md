@@ -446,10 +446,10 @@ Turns out, Anakin could use some training!
 [lodash]: https://lodash.com/
 [license]: https://github.com/Yord/pf/blob/master/LICENSE
 [actions]: https://github.com/Yord/pf/actions
-[npm-shield]: https://img.shields.io/npm/v/@pfx/pf.svg?color=orange
-[license-shield]: https://img.shields.io/npm/l/@pfx/pf?color=yellow
-[prs-shield]: https://img.shields.io/badge/PRs-welcome-green.svg
-[node-shield]: https://img.shields.io/node/v/@pfx/pf?color=red
+[npm-shield]: https://img.shields.io/npm/v/@pfx/pf.svg?color=orange&labelColor=313A42
+[license-shield]: https://img.shields.io/npm/l/@pfx/pf?color=yellow&labelColor=313A42
+[prs-shield]: https://img.shields.io/badge/PRs-welcome-green.svg?labelColor=313A42
+[node-shield]: https://img.shields.io/node/v/@pfx/pf?color=red&labelColor=313A42
 [node]: https://nodejs.org/
 [pandoc]: https://pandoc.org
 [jq-lang]: https://github.com/stedolan/jq/wiki/jq-Language-Description
@@ -457,7 +457,7 @@ Turns out, Anakin could use some training!
 [pandoc-license]: https://github.com/jgm/pandoc/blob/master/COPYRIGHT
 [jq-license]: https://github.com/stedolan/jq/blob/master/COPYING
 [fx-license]: https://github.com/antonmedv/fx/blob/master/LICENSE
-[linux-unit-tests-shield]: https://img.shields.io/github/workflow/status/Yord/pfx-json/linux/master?label=linux&logo=github&color=#5A5A5A&logoColor=#5A5A5A
-[macos-unit-tests-shield]: https://img.shields.io/github/workflow/status/Yord/pfx-json/macos/master?label=macos&logo=github&color=#5A5A5A&logoColor=#5A5A5A
-[windows-unit-tests-shield]: https://img.shields.io/github/workflow/status/Yord/pfx-json/windows/master?label=windows&logo=github&color=#5A5A5A&logoColor=#5A5A5A
+[linux-unit-tests-shield]: https://github.com/Yord/pf/workflows/linux/badge.svg?branch=master
+[macos-unit-tests-shield]: https://github.com/Yord/pf/workflows/macos/badge.svg?branch=master
+[windows-unit-tests-shield]: https://github.com/Yord/pf/workflows/windows/badge.svg?branch=master
 [pf-sandbox]: https://github.com/Yord/pf-sandbox
