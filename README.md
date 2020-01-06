@@ -92,15 +92,13 @@ Lexing, parsing, and marshalling JSON is provided by the [`@pfx/json`][pfx-json]
 
 The following plugins are available:
 
-|                               | Lexers    | Parsers      | Applicators                | Marshallers | `pf` |
-|-------------------------------|-----------|--------------|----------------------------|-------------|:----:|
-| [`@pfx/pf`][pfx-id]           | `id`      | `id`         | `id`                       | `id`        |   ✓  |
-| [`@pfx/base`][pfx-base]       | `line`    |              | `map`, `flatMap`, `filter` | `toString`  |   ✓  |
-| [`@pfx/json`][pfx-json]       | `jsonObj` | `json`       |                            | `json`      |   ✓  |
-| [`@pfx/dsv`][pfx-dsv]         |           | `csv`, `dsv` |                            | `csv`       |   ✕  |
-| [`@pfx/xml`][pfx-xml]         | ???       | ???          | ???                        | ???         |   ✕  |
-| [`@pfx/geojson`][pfx-geojson] | ???       | ???          | ???                        | `geojson`   |   ✕  |
-| [`@pfx/sample`][pfx-sample]   | `sample`  | `sample`     | `sample`                   | `sample`    |   ✕  |
+|                               | Lexers    | Parsers                    | Applicators                | Marshallers | `pf` |
+|-------------------------------|-----------|----------------------------|----------------------------|-------------|:----:|
+| [`@pfx/pf`][pfx-id]           | `id`      | `id`                       | `id`                       | `id`        |   ✓  |
+| [`@pfx/base`][pfx-base]       | `line`    |                            | `map`, `flatMap`, `filter` | `toString`  |   ✓  |
+| [`@pfx/json`][pfx-json]       | `jsonObj` | `json`                     |                            | `json`      |   ✓  |
+| [`@pfx/dsv`][pfx-dsv]         |           | `csv`, `tsv`, `ssv`, `dsv` |                            | `csv`       |   ✕  |
+| [`@pfx/sample`][pfx-sample]   | `sample`  | `sample`                   | `sample`                   | `sample`    |   ✕  |
 
 The last column states which plugins come preinstalled in `pf`.
 Refer to the `.pfrc` Module section to see how to enable more plugins.
@@ -440,8 +438,6 @@ Turns out, Anakin could use some training!
 [pfx-base]: https://github.com/Yord/pfx-base
 [pfx-json]: https://github.com/Yord/pfx-json
 [pfx-dsv]: https://github.com/Yord/pfx-dsv
-[pfx-xml]: https://github.com/Yord/pf-sandbox
-[pfx-geojson]: https://github.com/Yord/pf-sandbox
 [pfx-sample]: https://github.com/Yord/pfx-sample
 [pfx-how-to-contribute]: https://github.com/Yord/pf
 [pfx-pfrc]: https://github.com/Yord/pfx-pfrc
