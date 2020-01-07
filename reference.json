@@ -1,7 +1,8 @@
 {
   "plugins": [
     "@pfx/base",
-    "@pfx/json"
+    "@pfx/json",
+    "@pfx/dsv"
   ],
   "defaults": {
     "lexer":      "line",

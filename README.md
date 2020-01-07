@@ -97,7 +97,7 @@ The following plugins are available:
 | [`@pfx/pf`][pfx-id]           | `id`      | `id`                       | `id`                       | `id`        |   ✓  |
 | [`@pfx/base`][pfx-base]       | `line`    |                            | `map`, `flatMap`, `filter` | `toString`  |   ✓  |
 | [`@pfx/json`][pfx-json]       | `jsonObj` | `json`                     |                            | `json`      |   ✓  |
-| [`@pfx/dsv`][pfx-dsv]         |           | `csv`, `tsv`, `ssv`, `dsv` |                            | `csv`       |   ✕  |
+| [`@pfx/dsv`][pfx-dsv]         |           | `csv`, `tsv`, `ssv`, `dsv` |                            | `csv`       |   ✓  |
 | [`@pfx/sample`][pfx-sample]   | `sample`  | `sample`                   | `sample`                   | `sample`    |   ✕  |
 
 The last column states which plugins come preinstalled in `pf`.
