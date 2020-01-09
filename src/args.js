@@ -1,4 +1,4 @@
-module.exports = (argv, {chunker, deserializer, applicator, serializer}, {chunkers, deserializers, applicators, serializers}) => (
+module.exports = (argv, {chunker, deserializer, applier, serializer}, {chunkers, deserializers, appliers, serializers}) => (
   require('yargs/yargs')(argv)
 
   .parserConfiguration({"boolean-negation": false})
@@ -14,7 +14,7 @@ module.exports = (argv, {chunker, deserializer, applicator, serializer}, {chunke
   )
 
   .group(
-    ['chunker', 'deserializer', 'applicator', 'serializer', 'fail-early', 'no-plugins', 'verbose'],  
+    ['chunker', 'deserializer', 'applier', 'serializer', 'fail-early', 'no-plugins', 'verbose'],  
     'OPTIONS:\n'
   )
 
@@ -39,12 +39,12 @@ module.exports = (argv, {chunker, deserializer, applicator, serializer}, {chunke
     describe: '\nDefines how chunks are deserialized into JSON: ' + describePlugins(deserializers, deserializer) + '\n'
   })
 
-  .option('applicator', {
+  .option('applier', {
     type:     'string',
     nargs:    1,
     alias:    ['a'],
-    choices:  applicators.map(plugin => plugin.name),
-    describe: '\nDefines how FUNCTIONS are applied to JSON: ' + describePlugins(applicators, applicator) + '\n'
+    choices:  appliers.map(plugin => plugin.name),
+    describe: '\nDefines how FUNCTIONS are applied to JSON: ' + describePlugins(appliers, applier) + '\n'
   })
 
   .option('serializer', {
@@ -68,7 +68,7 @@ module.exports = (argv, {chunker, deserializer, applicator, serializer}, {chunke
   .option('verbose', {
     type:     'count',
     alias:    ['v'],
-    describe: '\nApply -v several times (-vv) to be more verbose. Level 1 prints lines in deserializer and applicator error messages. Level 2 also prints the chunks or JSON objects that failed to be deserialized or transformed.\n'
+    describe: '\nApply -v several times (-vv) to be more verbose. Level 1 prints lines in deserializer and applier error messages. Level 2 also prints the chunks or JSON objects that failed to be deserialized or transformed.\n'
   })
 
   .help('help')

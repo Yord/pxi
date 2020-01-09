@@ -7,7 +7,7 @@
   "defaults": {
     "chunker":      "line",
     "deserializer": "json",
-    "applicator":   "map",
+    "applier":      "map",
     "serializer":   "json",
     "noPlugins":    false
   }

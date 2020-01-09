@@ -92,7 +92,7 @@ Chunking, deserializing, and serializing JSON is provided by the [`pxi-json`][px
 
 The following plugins are available:
 
-|                              | Chunkers  | Deserializers              | Applicators                | Serializers | `pxi` |
+|                              | Chunkers  | Deserializers              | Appliers                   | Serializers | `pxi` |
 |------------------------------|-----------|----------------------------|----------------------------|-------------|:-----:|
 | [`pxi-base`][pxi-base]       | `line`    |                            | `map`, `flatMap`, `filter` | `string`    |   ✓   |
 | [`pxi-json`][pxi-json]       | `jsonObj` | `json`                     |                            | `json`      |   ✓   |
@@ -166,9 +166,9 @@ const sampleDeserializer = {
   )
 }
 
-const sampleApplicator = {
+const sampleApplier = {
   name: 'sample',
-  desc: 'is a sample applicator.',
+  desc: 'is a sample applier.',
   func: (functions, {verbose}) => (jsons, lines) => (
     // * Turn jsons into other jsons by applying all functions
     // * Collect error reports: {msg: String, line: Number, info: Json}
@@ -203,7 +203,7 @@ The sample extensions are bundled to the sample plugin, as follows:
 const sample = {
   chunkers:      [sampleChunker],
   deserializers: [sampleDeserializer],
-  applicators:   [sampleApplicator],
+  appliers:      [sampleApplier],
   serializers:   [sampleSerializer]
 }
 ```
@@ -301,7 +301,7 @@ $ pxi "getTime" < 2019.jsonl > out.jsonl
 
 ### Changing `pxi` Defaults
 
-You may **globally** change default chunkers, deserializers, applicators, and serializers in `~/.pxi/index.js`, as follows:
+You may **globally** change default chunkers, deserializers, appliers, and serializers in `~/.pxi/index.js`, as follows:
 
 ```js
 module.exports = {
@@ -310,7 +310,7 @@ module.exports = {
   defaults: {
     chunker:      'sample',
     deserializer: 'sample',
-    applicator:   'sample',
+    appliers:     'sample',
     serializer:   'sample',
     noPlugins:    false
   }
@@ -422,7 +422,7 @@ Turns out, Anakin could use some training!
 |-------------------|----------------------------------------------------------------------------|
 | `id` chunker      | Returns each data as a chunk.                                              |
 | `id` deserializer | Returns all chunks unchanged.                                              |
-| `id` applicator   | Does not apply any functions and returns the JSON objects unchanged.       |
+| `id` applier      | Does not apply any functions and returns the JSON objects unchanged.       |
 | `id` serializer   | Applies Object.prototype.toString to the input and joins without newlines. |
 
 ## Comparison to Related Tools
