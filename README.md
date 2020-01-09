@@ -12,7 +12,7 @@
 
 ## Installation
 
-Installation is done using the [global `npm install` command][npm].
+Installation is done using the [global `npm install` command][npm-install].
 
 ```bash
 $ npm install --global pxi
@@ -23,7 +23,7 @@ Try `pxi --help` to see if the installation was successful.
 ## Features
 
 +   🧚 **Small**: Pixie [does one thing and does it well][unix-philosophy].
-+   :rocket: **Fast:** >2x faster than `jq`, >10x faster than `fx` (JSON), and >1.5x faster than `mlr` (CSV).
++   :zap: **Fast:** >2x faster than `jq`, >10x faster than `fx` (JSON), >1.5x faster than `mlr` (CSV), and >3x faster than `csvtojson`
 +   :sparkles: **Magical:** Trivial to write your own ~~spells~~ *plugins*.
 +   :smile_cat: **Playful:** Opt-in to more data formats by installing plugins.
 +   :tada: **Versatile:** Use Ramda, Lodash or any other JavaScript library.
@@ -456,7 +456,7 @@ Please report issues [in the tracker][issues]!
 [license]: https://github.com/Yord/pxi/blob/master/LICENSE
 [lodash]: https://lodash.com/
 [node]: https://nodejs.org/
-[npm]: https://docs.npmjs.com/downloading-and-installing-packages-globally
+[npm-install]: https://docs.npmjs.com/downloading-and-installing-packages-globally
 [npm-package]: https://www.npmjs.com/package/pxi
 [pandoc]: https://pandoc.org
 [pandoc-filters]: https://github.com/jgm/pandoc/wiki/Pandoc-Filters
