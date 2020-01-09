@@ -476,4 +476,4 @@ Please report issues [in the tracker][issues]!
 [shield-unit-tests-linux]: https://github.com/Yord/pxi/workflows/linux/badge.svg?branch=master
 [shield-unit-tests-macos]: https://github.com/Yord/pxi/workflows/macos/badge.svg?branch=master
 [shield-unit-tests-windows]: https://github.com/Yord/pxi/workflows/windows/badge.svg?branch=master
-[teaser]: ./teaser.gif
+[teaser]: https://github.com/Yord/pxi/blob/master/teaser.gif
