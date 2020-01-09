@@ -22,11 +22,11 @@ Try `pxi --help` to see if the installation was successful.
 
 ## Features
 
-+   :rocket: **Blazing fast:** >2x faster than `jq` and >10x faster than `fx` in transforming json.
-+   :sparkles: **Highly extensible:** Trivial to write your own chunker, deserializer, and serializer plugins.
-+   :scream_cat: **Not limited to JSON:** Also supports deserializing and writing other data formats via plugins.
-+   :ram: **Configurable DSL:** Add Ramda, Lodash or any other library for transforming JSON.
-+   :sweat_drops: **Streaming support:** Supports streaming JSON out of the box.
++   🧚 **Small**: Pixie [does one thing and does it well][unix-philosophy].
++   :rocket: **Fast:** >2x faster than `jq`, >10x faster than `fx` (JSON), and >1.5x faster than `mlr` (CSV).
++   :sparkles: **Magical:** Trivial to write your own ~~spells~~ *plugins*.
++   :smile_cat: **Playful:** Opt-in to more data formats by installing plugins.
++   :tada: **Versatile:** Use Ramda, Lodash or any other JavaScript library.
 
 ## Getting Started
 
@@ -477,3 +477,4 @@ Please report issues [in the tracker][issues]!
 [shield-unit-tests-macos]: https://github.com/Yord/pxi/workflows/macos/badge.svg?branch=master
 [shield-unit-tests-windows]: https://github.com/Yord/pxi/workflows/windows/badge.svg?branch=master
 [teaser]: https://github.com/Yord/pxi/blob/master/teaser.gif?raw=true
+[unix-philosophy]: https://en.wikipedia.org/wiki/Unix_philosophy
