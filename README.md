@@ -22,11 +22,11 @@ Try `pxi --help` to see if the installation was successful.
 
 ## Features
 
-+   :rocket: **Blazing fast:** >2x faster than `jq` and >10x faster than `fx` in transforming json.
-+   :sparkles: **Highly extensible:** Trivial to write your own chunker, deserializer, and serializer plugins.
-+   :scream_cat: **Not limited to JSON:** Also supports deserializing and writing other data formats via plugins.
-+   :ram: **Configurable DSL:** Add Ramda, Lodash or any other library for transforming JSON.
-+   :sweat_drops: **Streaming support:** Supports streaming JSON out of the box.
++   🧚 **Small**: Pixie [does one thing and does it well][unix-philosophy].
++   :rocket: **Fast:** >2x faster than `jq`, >10x faster than `fx` (JSON), and >1.5x faster than `mlr` (CSV).
++   :sparkles: **Magical:** Trivial to write your own ~~spells~~ *plugins*.
++   :smile_cat: **Playful:** Opt-in to more data formats by installing plugins.
++   :tada: **Versatile:** Use Ramda, Lodash or any other JavaScript library.
 
 ## Getting Started
 
@@ -43,7 +43,7 @@ Pixie also works on streams of JSON objects:
 
 ```json
 $ curl -s "https://swapi.co/api/films/" |
-  pxi "json => json.results" -l jsonObj -a flatMap -K '["episode_id","title"]' |
+  pxi "json => json.results" -c jsonObj -a flatMap -K '["episode_id","title"]' |
   sort
 
 {"episode_id":1,"title":"The Phantom Menace"}
@@ -365,7 +365,7 @@ Select the name, height, and mass of the first ten Star Wars characters:
 
 ```json
 $ curl -s "https://swapi.co/api/people/" |
-  pxi "json => json.results" -l jsonObj -a flatMap -K '["name","height","mass"]'
+  pxi "json => json.results" -c jsonObj -a flatMap -K '["name","height","mass"]'
 
 {"name":"Luke Skywalker","height":"172","mass":"77"}
 {"name":"C-3PO","height":"167","mass":"75"}
@@ -383,7 +383,7 @@ Compute all character's [BMI][BMI]:
 
 ```json
 $ curl -s "https://swapi.co/api/people/" |
-  pxi "json => json.results" -l jsonObj -a flatMap -K '["name","height","mass"]' |
+  pxi "json => json.results" -c jsonObj -a flatMap -K '["name","height","mass"]' |
   pxi "ch => (ch.bmi = ch.mass / (ch.height / 100) ** 2, ch)" -K '["name","bmi"]'
 
 {"name":"Luke Skywalker","bmi":26.027582477014604}
@@ -402,7 +402,7 @@ Select only obese Star Wars characters:
 
 ```json
 $ curl -s "https://swapi.co/api/people/" |
-  pxi "json => json.results" -l jsonObj -a flatMap -K '["name","height","mass"]' |
+  pxi "json => json.results" -c jsonObj -a flatMap -K '["name","height","mass"]' |
   pxi "ch => (ch.bmi = ch.mass / (ch.height / 100) ** 2, ch)" -K '["name","bmi"]' |
   pxi "ch => ch.bmi >= 30" -a filter -K '["name"]'
 
@@ -477,3 +477,4 @@ Please report issues [in the tracker][issues]!
 [shield-unit-tests-macos]: https://github.com/Yord/pxi/workflows/macos/badge.svg?branch=master
 [shield-unit-tests-windows]: https://github.com/Yord/pxi/workflows/windows/badge.svg?branch=master
 [teaser]: https://github.com/Yord/pxi/blob/master/teaser.gif?raw=true
+[unix-philosophy]: https://en.wikipedia.org/wiki/Unix_philosophy
