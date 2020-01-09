@@ -23,7 +23,7 @@ Try `pxi --help` to see if the installation was successful.
 ## Features
 
 +   :rocket: **Blazing fast:** >2x faster than `jq` and >10x faster than `fx` in transforming json.
-+   :sparkles: **Highly extensible:** Trivial to write your own parser, lexer, and marshaller plugins.
++   :sparkles: **Highly extensible:** Trivial to write your own chunker, parser, and marshaller plugins.
 +   :scream_cat: **Not limited to JSON:** Also supports parsing and writing other data formats via plugins.
 +   :ram: **Configurable DSL:** Add Ramda, Lodash or any other library for transforming JSON.
 +   :sweat_drops: **Streaming support:** Supports streaming JSON out of the box.
@@ -92,7 +92,7 @@ Chunking, deserializing, and serializing JSON is provided by the [`pxi-json`][px
 
 The following plugins are available:
 
-|                              | Lexers    | Parsers                    | Applicators                | Marshallers | `pxi` |
+|                              | Chunkers  | Parsers                    | Applicators                | Marshallers | `pxi` |
 |------------------------------|-----------|----------------------------|----------------------------|-------------|:-----:|
 | [`pxi-base`][pxi-base]       | `line`    |                            | `map`, `flatMap`, `filter` | `toString`  |   ✓   |
 | [`pxi-json`][pxi-json]       | `jsonObj` | `json`                     |                            | `json`      |   ✓   |
@@ -105,7 +105,7 @@ New pixie plugins are developed in the [`pxi-sandbox`][pxi-sandbox] repository.
 
 ### Performance
 
-`pxi-json`'s lexers and parsers are build for speed and beat [`jq`][jq] and [`fx`][fx] in several benchmarks (see medium post (TODO) for details):
+`pxi-json`'s chunkers and parsers are build for speed and beat [`jq`][jq] and [`fx`][fx] in several benchmarks (see medium post (TODO) for details):
 
 |                 | `pxi` (time) | `jq` (time) | `fx` (time) | `jq` (RAM) | `pxi` (RAM) | `fx` (RAM) | all (CPU) |
 |-----------------|-------------:|------------:|------------:|-----------:|------------:|-----------:|----------:|
@@ -139,16 +139,16 @@ You may write pixie plugins in `~/.pxi/index.js`.
 Writing your own extensions is straightforward:
 
 ```js
-const sampleLexer = {
+const sampleChunker = {
   name: 'sample',
-  desc: 'is a sample lexer.',
+  desc: 'is a sample chunker.',
   func: ({verbose}) => (data, prevLines) => (
     // * Turn data into an array of tokens
     // * Count lines for better error reporting throughout pxi
     // * Collect error reports: {msg: String, line: Number, info: String}
     //   If verbose > 0, include line in error reports
     //   If verbose > 1, include info in error reports
-    // * Return errors, tokens, lines, the last line, and all unlexed data
+    // * Return errors, tokens, lines, the last line, and all unchunked data
     {err: [], tokens: [], lines: [], lastLine: 0, rest: ''}
   )
 }
@@ -201,7 +201,7 @@ The sample extensions are bundled to the sample plugin, as follows:
 
 ```js
 const sample = {
-  lexers:      [sampleLexer],
+  chunkers:    [sampleChunker],
   parsers:     [sampleParser],
   applicators: [sampleApplicator],
   marshallers: [sampleMarshaller]
@@ -301,14 +301,14 @@ $ pxi "getTime" < 2019.jsonl > out.jsonl
 
 ### Changing `pxi` Defaults
 
-You may **globally** change default lexers, parsers, applicators, and marshallers in `~/.pxi/index.js`, as follows:
+You may **globally** change default chunkers, parsers, applicators, and marshallers in `~/.pxi/index.js`, as follows:
 
 ```js
 module.exports = {
   plugins:  [],
   context:  {},
   defaults: {
-    lexer:      'sample',
+    chunker:    'sample',
     parser:     'sample',
     applicator: 'sample',
     marshaller: 'sample',
@@ -420,7 +420,7 @@ Turns out, Anakin could use some training!
 
 |                  | Description                                                                |
 |------------------|----------------------------------------------------------------------------|
-| `id` lexer       | Returns each chunk as a token.                                             |
+| `id` chunker     | Returns each data as a chunk.                                              |
 | `id` parser      | Returns all tokens unchanged.                                              |
 | `id` applicator  | Does not apply any functions and returns the JSON objects unchanged.       |
 | `id` marshaller  | Applies Object.prototype.toString to the input and joins without newlines. |

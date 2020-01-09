@@ -3,7 +3,7 @@ const combinePlugin = field => (list, plugin = {}) => (
 )
 
 const combinePlugins = plugins => ({
-  lexers:      plugins.reduce(combinePlugin('lexers'),      []),
+  chunkers:    plugins.reduce(combinePlugin('chunkers'),    []),
   parsers:     plugins.reduce(combinePlugin('parsers'),     []),
   applicators: plugins.reduce(combinePlugin('applicators'), []),
   marshallers: plugins.reduce(combinePlugin('marshallers'), [])
@@ -14,7 +14,7 @@ const combineDefault = field => (def, defaults = {}) => (
 )
 
 const combineDefaults = defaults => ({
-  lexer:      defaults.reduce(combineDefault('lexer'),      undefined),
+  chunker:    defaults.reduce(combineDefault('chunker'),    undefined),
   parser:     defaults.reduce(combineDefault('parser'),     undefined),
   applicator: defaults.reduce(combineDefault('applicator'), undefined),
   marshaller: defaults.reduce(combineDefault('marshaller'), undefined),
@@ -22,7 +22,7 @@ const combineDefaults = defaults => ({
 })
 
 const initFunctions = (argv, plugins, defaults, fallbacks) => {
-  const lexer      = argv.lexer      || argv.l || defaults.lexer
+  const chunker    = argv.chunker    || argv.c || defaults.chunker
   const marshaller = argv.marshaller || argv.m || defaults.marshaller
   const parser     = argv.parser     || argv.p || defaults.parser
   const applicator = argv.applicator || argv.a || defaults.applicator
@@ -30,12 +30,12 @@ const initFunctions = (argv, plugins, defaults, fallbacks) => {
   const functions  = argv._.length > 0 ? argv._ : ['json => json']
   const fs         = functions.map(eval)
   
-  const lex        = selectPlugin(lexer,      plugins.lexers,      fallbacks.lexer     )(argv)
+  const chunk      = selectPlugin(chunker,    plugins.chunkers,    fallbacks.chunker   )(argv)
   const parse      = selectPlugin(parser,     plugins.parsers,     fallbacks.parser    )(argv)
   const apply      = selectPlugin(applicator, plugins.applicators, fallbacks.applicator)(fs, argv)
   const marshal    = selectPlugin(marshaller, plugins.marshallers, fallbacks.marshaller)(argv)
 
-  return {lex, parse, apply, marshal}
+  return {chunk, parse, apply, marshal}
 }
 
 function selectPlugin (name, plugins, fallback) {

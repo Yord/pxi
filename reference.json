@@ -5,7 +5,7 @@
     "pxi-json"
   ],
   "defaults": {
-    "lexer":      "line",
+    "chunker":    "line",
     "parser":     "json",
     "applicator": "map",
     "marshaller": "json",

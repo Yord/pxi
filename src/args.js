@@ -1,4 +1,4 @@
-module.exports = (argv, {lexer, parser, applicator, marshaller}, {lexers, parsers, applicators, marshallers}) => (
+module.exports = (argv, {chunker, parser, applicator, marshaller}, {chunkers, parsers, applicators, marshallers}) => (
   require('yargs/yargs')(argv)
 
   .parserConfiguration({"boolean-negation": false})
@@ -14,7 +14,7 @@ module.exports = (argv, {lexer, parser, applicator, marshaller}, {lexers, parser
   )
 
   .group(
-    ['lexer', 'parser', 'applicator', 'marshaller', 'fail-early', 'no-plugins', 'verbose'],  
+    ['chunker', 'parser', 'applicator', 'marshaller', 'fail-early', 'no-plugins', 'verbose'],  
     'OPTIONS:\n'
   )
 
@@ -23,12 +23,12 @@ module.exports = (argv, {lexer, parser, applicator, marshaller}, {lexers, parser
     'OTHERS:\n'
   )
 
-  .option('lexer', {
+  .option('chunker', {
     type:     'string',
     nargs:    1,
-    alias:    ['l'],
-    choices:  lexers.map(plugin => plugin.name),
-    describe: '\nDefines how the input is split into tokens: ' + describePlugins(lexers, lexer) + '\n'
+    alias:    ['c'],
+    choices:  chunkers.map(plugin => plugin.name),
+    describe: '\nDefines how the input is split into tokens: ' + describePlugins(chunkers, chunker) + '\n'
   })
 
   .option('parser', {

@@ -1,5 +1,5 @@
 const {anything, assert, constant, property} = require('fast-check')
-const {func: lexer} = require('./id')
+const {func: chunker} = require('./id')
 
 test('passes on data as one big token, ignoring lines completely', () => {
   const err       = []
@@ -10,7 +10,7 @@ test('passes on data as one big token, ignoring lines completely', () => {
   assert(
     property(data, prevLines, (data, prevLines) =>
       expect(
-        lexer(argv)(data, prevLines)
+        chunker(argv)(data, prevLines)
       ).toStrictEqual(
         {err, tokens: [data], lines: [], lastLine: prevLines, rest: ''}
       )

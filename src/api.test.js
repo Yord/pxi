@@ -25,7 +25,7 @@ function testCombinePlugins (field, f) {
   )
 }
 
-const validPlugins = ['lexers', 'parsers', 'applicators', 'marshallers']
+const validPlugins = ['chunkers', 'parsers', 'applicators', 'marshallers']
 validPlugins.map(field =>
   test(
     `combinePlugins works on ${field}`,
@@ -56,7 +56,7 @@ function testCombineDefaults (field, f) {
   )
 }
 
-const validDefaults = ['lexer', 'parser', 'applicator', 'marshaller', 'noPlugins']
+const validDefaults = ['chunker', 'parser', 'applicator', 'marshaller', 'noPlugins']
 validDefaults.map(field =>
   test(
     `combineDefaults works on ${field}`,
@@ -109,7 +109,7 @@ function testInitFunctions ([extension, option, alias, def, func], result, {plug
 }
 
 const validInits = [
-  ['lexers',      'lexer',      'l', 'lexer',      'lex'    ],
+  ['chunkers',    'chunker',    'c', 'chunker',    'chunk'    ],
   ['parsers',     'parser',     'p', 'parser',     'parse'  ],
   ['applicators', 'applicator', 'a', 'applicator', 'apply'  ],
   ['marshallers', 'marshaller', 'm', 'marshaller', 'marshal']
