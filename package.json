@@ -38,9 +38,9 @@
     "test": "jest --ci --coverage --logHeapUsage --passWithNoTests"
   },
   "dependencies": {
-    "pxi-json": "0.11.0",
     "pxi-base": "0.10.2",
     "pxi-dsv": "0.8.1",
+    "pxi-json": "0.11.1",
     "yargs": "15.0.2"
   },
   "engines": {
