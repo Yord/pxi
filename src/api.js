@@ -6,7 +6,7 @@ const combinePlugins = plugins => ({
   chunkers:      plugins.reduce(combinePlugin('chunkers'),      []),
   deserializers: plugins.reduce(combinePlugin('deserializers'), []),
   applicators:   plugins.reduce(combinePlugin('applicators'),   []),
-  marshallers:   plugins.reduce(combinePlugin('marshallers'),   [])
+  serializers:   plugins.reduce(combinePlugin('serializers'),   [])
 })
 
 const combineDefault = field => (def, defaults = {}) => (
@@ -17,13 +17,13 @@ const combineDefaults = defaults => ({
   chunker:      defaults.reduce(combineDefault('chunker'),      undefined),
   deserializer: defaults.reduce(combineDefault('deserializer'), undefined),
   applicator:   defaults.reduce(combineDefault('applicator'),   undefined),
-  marshaller:   defaults.reduce(combineDefault('marshaller'),   undefined),
+  serializer:   defaults.reduce(combineDefault('serializer'),   undefined),
   noPlugins:    defaults.reduce(combineDefault('noPlugins'),    undefined)
 })
 
 const initFunctions = (argv, plugins, defaults, fallbacks) => {
   const chunker    =   argv.chunker      || argv.c || defaults.chunker
-  const marshaller =   argv.marshaller   || argv.m || defaults.marshaller
+  const serializer =   argv.serializer   || argv.s || defaults.serializer
   const deserializer = argv.deserializer || argv.d || defaults.deserializer
   const applicator =   argv.applicator   || argv.a || defaults.applicator
   
@@ -33,9 +33,9 @@ const initFunctions = (argv, plugins, defaults, fallbacks) => {
   const chunk       = selectPlugin(chunker,      plugins.chunkers,      fallbacks.chunker     )(argv)
   const deserialize = selectPlugin(deserializer, plugins.deserializers, fallbacks.deserializer)(argv)
   const apply       = selectPlugin(applicator,   plugins.applicators,   fallbacks.applicator  )(fs, argv)
-  const marshal     = selectPlugin(marshaller,   plugins.marshallers,   fallbacks.marshaller  )(argv)
+  const serialize   = selectPlugin(serializer,   plugins.serializers,   fallbacks.serializer  )(argv)
 
-  return {chunk, deserialize, apply, marshal}
+  return {chunk, deserialize, apply, serialize}
 }
 
 function selectPlugin (name, plugins, fallback) {

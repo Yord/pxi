@@ -23,7 +23,7 @@ Try `pxi --help` to see if the installation was successful.
 ## Features
 
 +   :rocket: **Blazing fast:** >2x faster than `jq` and >10x faster than `fx` in transforming json.
-+   :sparkles: **Highly extensible:** Trivial to write your own chunker, deserializer, and marshaller plugins.
++   :sparkles: **Highly extensible:** Trivial to write your own chunker, deserializer, and serializer plugins.
 +   :scream_cat: **Not limited to JSON:** Also supports deserializing and writing other data formats via plugins.
 +   :ram: **Configurable DSL:** Add Ramda, Lodash or any other library for transforming JSON.
 +   :sweat_drops: **Streaming support:** Supports streaming JSON out of the box.
@@ -92,9 +92,9 @@ Chunking, deserializing, and serializing JSON is provided by the [`pxi-json`][px
 
 The following plugins are available:
 
-|                              | Chunkers  | Deserializers              | Applicators                | Marshallers | `pxi` |
+|                              | Chunkers  | Deserializers              | Applicators                | Serializers | `pxi` |
 |------------------------------|-----------|----------------------------|----------------------------|-------------|:-----:|
-| [`pxi-base`][pxi-base]       | `line`    |                            | `map`, `flatMap`, `filter` | `toString`  |   ✓   |
+| [`pxi-base`][pxi-base]       | `line`    |                            | `map`, `flatMap`, `filter` | `string`    |   ✓   |
 | [`pxi-json`][pxi-json]       | `jsonObj` | `json`                     |                            | `json`      |   ✓   |
 | [`pxi-dsv`][pxi-dsv]         |           | `csv`, `tsv`, `ssv`, `dsv` |                            | `csv`       |   ✓   |
 | [`pxi-sample`][pxi-sample]   | `sample`  | `sample`                   | `sample`                   | `sample`    |   ✕   |
@@ -174,20 +174,20 @@ const sampleApplicator = {
     // * Collect error reports: {msg: String, line: Number, info: Json}
     //   If verbose > 0, include line in error reports
     //   If verbose > 1, include info in error reports
-    // * Return errors and marshalled string
+    // * Return errors and serialized string
     {err: [], jsons: []}
   )
 }
 
-const sampleMarshaller = {
+const sampleSerializer = {
   name: 'sample',
-  desc: 'is a sample marshaller.',
+  desc: 'is a sample serializer.',
   func: ({verbose}) => jsons => (
     // * Turn jsons into a string
     // * Collect error reports: {msg: String, line: Number, info: Json}
     //   If verbose > 0, include line in error reports
     //   If verbose > 1, include info in error reports
-    // * Return errors and marshalled string
+    // * Return errors and serialized string
     {err: [], str: ''}
   )
 }
@@ -204,7 +204,7 @@ const sample = {
   chunkers:      [sampleChunker],
   deserializers: [sampleDeserializer],
   applicators:   [sampleApplicator],
-  marshallers:   [sampleMarshaller]
+  serializers:   [sampleSerializer]
 }
 ```
 
@@ -301,7 +301,7 @@ $ pxi "getTime" < 2019.jsonl > out.jsonl
 
 ### Changing `pxi` Defaults
 
-You may **globally** change default chunkers, deserializers, applicators, and marshallers in `~/.pxi/index.js`, as follows:
+You may **globally** change default chunkers, deserializers, applicators, and serializers in `~/.pxi/index.js`, as follows:
 
 ```js
 module.exports = {
@@ -311,7 +311,7 @@ module.exports = {
     chunker:      'sample',
     deserializer: 'sample',
     applicator:   'sample',
-    marshaller:   'sample',
+    serializer:   'sample',
     noPlugins:    false
   }
 }
@@ -423,7 +423,7 @@ Turns out, Anakin could use some training!
 | `id` chunker      | Returns each data as a chunk.                                              |
 | `id` deserializer | Returns all chunks unchanged.                                              |
 | `id` applicator   | Does not apply any functions and returns the JSON objects unchanged.       |
-| `id` marshaller   | Applies Object.prototype.toString to the input and joins without newlines. |
+| `id` serializer   | Applies Object.prototype.toString to the input and joins without newlines. |
 
 ## Comparison to Related Tools
 

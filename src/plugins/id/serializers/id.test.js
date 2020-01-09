@@ -1,5 +1,5 @@
 const {anything, array, assert, constant, property} = require('fast-check')
-const {func: marshaller} = require('./id')
+const {func: serializer} = require('./id')
 
 test('returns input as toString without newlines', () => {
   const err   = []
@@ -11,7 +11,7 @@ test('returns input as toString without newlines', () => {
       const str = jsons.map(json => json.toString()).join('')
 
       expect(
-        marshaller(argv)(jsons)
+        serializer(argv)(jsons)
       ).toStrictEqual(
         {err, str}
       ) 

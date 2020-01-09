@@ -1,4 +1,4 @@
-module.exports = (argv, {chunker, deserializer, applicator, marshaller}, {chunkers, deserializers, applicators, marshallers}) => (
+module.exports = (argv, {chunker, deserializer, applicator, serializer}, {chunkers, deserializers, applicators, serializers}) => (
   require('yargs/yargs')(argv)
 
   .parserConfiguration({"boolean-negation": false})
@@ -14,7 +14,7 @@ module.exports = (argv, {chunker, deserializer, applicator, marshaller}, {chunke
   )
 
   .group(
-    ['chunker', 'deserializer', 'applicator', 'marshaller', 'fail-early', 'no-plugins', 'verbose'],  
+    ['chunker', 'deserializer', 'applicator', 'serializer', 'fail-early', 'no-plugins', 'verbose'],  
     'OPTIONS:\n'
   )
 
@@ -47,12 +47,12 @@ module.exports = (argv, {chunker, deserializer, applicator, marshaller}, {chunke
     describe: '\nDefines how FUNCTIONS are applied to JSON: ' + describePlugins(applicators, applicator) + '\n'
   })
 
-  .option('marshaller', {
+  .option('serializer', {
     type:     'string',
     nargs:    1,
-    alias:    ['to', 'm'],
-    choices:  marshallers.map(plugin => plugin.name),
-    describe: '\nDefines how the transformed JSON is converted to a string: ' + describePlugins(marshallers, marshaller) + '\n'
+    alias:    ['to', 's'],
+    choices:  serializers.map(plugin => plugin.name),
+    describe: '\nDefines how the transformed JSON is converted to a string: ' + describePlugins(serializers, serializer) + '\n'
   })
   
   .option('fail-early', {

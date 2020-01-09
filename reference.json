@@ -8,7 +8,7 @@
     "chunker":      "line",
     "deserializer": "json",
     "applicator":   "map",
-    "marshaller":   "json",
+    "serializer":   "json",
     "noPlugins":    false
   }
 }

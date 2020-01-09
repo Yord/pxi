@@ -25,7 +25,7 @@ function testCombinePlugins (field, f) {
   )
 }
 
-const validPlugins = ['chunkers', 'deserializers', 'applicators', 'marshallers']
+const validPlugins = ['chunkers', 'deserializers', 'applicators', 'serializers']
 validPlugins.map(field =>
   test(
     `combinePlugins works on ${field}`,
@@ -56,7 +56,7 @@ function testCombineDefaults (field, f) {
   )
 }
 
-const validDefaults = ['chunker', 'deserializer', 'applicator', 'marshaller', 'noPlugins']
+const validDefaults = ['chunker', 'deserializer', 'applicator', 'serializer', 'noPlugins']
 validDefaults.map(field =>
   test(
     `combineDefaults works on ${field}`,
@@ -109,10 +109,10 @@ function testInitFunctions ([extension, option, alias, def, func], result, {plug
 }
 
 const validInits = [
-  ['chunkers',      'chunker',      'c', 'chunker',      'chunk'    ],
+  ['chunkers',      'chunker',      'c', 'chunker',      'chunk'      ],
   ['deserializers', 'deserializer', 'd', 'deserializer', 'deserialize'],
-  ['applicators',   'applicator',   'a', 'applicator',   'apply'  ],
-  ['marshallers',   'marshaller',   'm', 'marshaller',   'marshal']
+  ['applicators',   'applicator',   'a', 'applicator',   'apply'      ],
+  ['serializers',   'serializer',   's', 'serializer',   'serialize'  ]
 ]
 const fallback = 'fallback'
 const fallbacks = validInits.map(init => ({[init[3]]: {func: () => () => fallback}}))
