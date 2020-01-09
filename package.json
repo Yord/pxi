@@ -7,8 +7,10 @@
     "pixie",
     "json",
     "csv",
+    "deserializer",
+    "parser",
     "serializer",
-    "parser"
+    "marshaller"
   ],
   "homepage": "https://github.com/Yord/pxi",
   "bugs": {

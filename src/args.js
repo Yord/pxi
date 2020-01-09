@@ -1,4 +1,4 @@
-module.exports = (argv, {chunker, parser, applicator, marshaller}, {chunkers, parsers, applicators, marshallers}) => (
+module.exports = (argv, {chunker, deserializer, applicator, marshaller}, {chunkers, deserializers, applicators, marshallers}) => (
   require('yargs/yargs')(argv)
 
   .parserConfiguration({"boolean-negation": false})
@@ -14,7 +14,7 @@ module.exports = (argv, {chunker, parser, applicator, marshaller}, {chunkers, pa
   )
 
   .group(
-    ['chunker', 'parser', 'applicator', 'marshaller', 'fail-early', 'no-plugins', 'verbose'],  
+    ['chunker', 'deserializer', 'applicator', 'marshaller', 'fail-early', 'no-plugins', 'verbose'],  
     'OPTIONS:\n'
   )
 
@@ -28,15 +28,15 @@ module.exports = (argv, {chunker, parser, applicator, marshaller}, {chunkers, pa
     nargs:    1,
     alias:    ['c'],
     choices:  chunkers.map(plugin => plugin.name),
-    describe: '\nDefines how the input is split into tokens: ' + describePlugins(chunkers, chunker) + '\n'
+    describe: '\nDefines how the input is split into chunks: ' + describePlugins(chunkers, chunker) + '\n'
   })
 
-  .option('parser', {
+  .option('deserializer', {
     type:     'string',
     nargs:    1,
-    alias:    ['from', 'p'],
-    choices:  parsers.map(plugin => plugin.name),
-    describe: '\nDefines how tokens are parsed into JSON: ' + describePlugins(parsers, parser) + '\n'
+    alias:    ['from', 'd'],
+    choices:  deserializers.map(plugin => plugin.name),
+    describe: '\nDefines how chunks are deserialized into JSON: ' + describePlugins(deserializers, deserializer) + '\n'
   })
 
   .option('applicator', {
@@ -68,7 +68,7 @@ module.exports = (argv, {chunker, parser, applicator, marshaller}, {chunkers, pa
   .option('verbose', {
     type:     'count',
     alias:    ['v'],
-    describe: '\nApply -v several times (-vv) to be more verbose. Level 1 prints lines in parser and applicator error messages. Level 2 also prints the tokens or JSON objects that failed to be parsed or transformed.\n'
+    describe: '\nApply -v several times (-vv) to be more verbose. Level 1 prints lines in deserializer and applicator error messages. Level 2 also prints the chunks or JSON objects that failed to be deserialized or transformed.\n'
   })
 
   .help('help')

@@ -1,7 +1,7 @@
 module.exports = {
   name: 'id',
-  desc: 'returns each chunk as a token.',
+  desc: 'returns each chunk as a chunk.',
   func: ({}) => (data, prevLines) => (
-    {err: [], tokens: [data], lines: [], lastLine: prevLines, rest: ''}
+    {err: [], chunks: [data], lines: [], lastLine: prevLines, rest: ''}
   )
 }
