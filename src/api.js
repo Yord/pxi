@@ -3,10 +3,10 @@ const combinePlugin = field => (list, plugin = {}) => (
 )
 
 const combinePlugins = plugins => ({
-  lexers:      plugins.reduce(combinePlugin('lexers'),      []),
-  parsers:     plugins.reduce(combinePlugin('parsers'),     []),
-  applicators: plugins.reduce(combinePlugin('applicators'), []),
-  marshallers: plugins.reduce(combinePlugin('marshallers'), [])
+  chunkers:      plugins.reduce(combinePlugin('chunkers'),      []),
+  deserializers: plugins.reduce(combinePlugin('deserializers'), []),
+  appliers:      plugins.reduce(combinePlugin('appliers'),      []),
+  serializers:   plugins.reduce(combinePlugin('serializers'),   [])
 })
 
 const combineDefault = field => (def, defaults = {}) => (
@@ -14,28 +14,28 @@ const combineDefault = field => (def, defaults = {}) => (
 )
 
 const combineDefaults = defaults => ({
-  lexer:      defaults.reduce(combineDefault('lexer'),      undefined),
-  parser:     defaults.reduce(combineDefault('parser'),     undefined),
-  applicator: defaults.reduce(combineDefault('applicator'), undefined),
-  marshaller: defaults.reduce(combineDefault('marshaller'), undefined),
-  noPlugins:  defaults.reduce(combineDefault('noPlugins'),  undefined)
+  chunker:      defaults.reduce(combineDefault('chunker'),      undefined),
+  deserializer: defaults.reduce(combineDefault('deserializer'), undefined),
+  applier:      defaults.reduce(combineDefault('applier'),      undefined),
+  serializer:   defaults.reduce(combineDefault('serializer'),   undefined),
+  noPlugins:    defaults.reduce(combineDefault('noPlugins'),    undefined)
 })
 
 const initFunctions = (argv, plugins, defaults, fallbacks) => {
-  const lexer      = argv.lexer      || argv.l || defaults.lexer
-  const marshaller = argv.marshaller || argv.m || defaults.marshaller
-  const parser     = argv.parser     || argv.p || defaults.parser
-  const applicator = argv.applicator || argv.a || defaults.applicator
+  const chunker      = argv.chunker      || argv.c || defaults.chunker
+  const serializer   = argv.serializer   || argv.s || defaults.serializer
+  const deserializer = argv.deserializer || argv.d || defaults.deserializer
+  const applier      = argv.applier      || argv.a || defaults.applier
   
   const functions  = argv._.length > 0 ? argv._ : ['json => json']
   const fs         = functions.map(eval)
   
-  const lex        = selectPlugin(lexer,      plugins.lexers,      fallbacks.lexer     )(argv)
-  const parse      = selectPlugin(parser,     plugins.parsers,     fallbacks.parser    )(argv)
-  const apply      = selectPlugin(applicator, plugins.applicators, fallbacks.applicator)(fs, argv)
-  const marshal    = selectPlugin(marshaller, plugins.marshallers, fallbacks.marshaller)(argv)
+  const chunk       = selectPlugin(chunker,      plugins.chunkers,      fallbacks.chunker     )(argv)
+  const deserialize = selectPlugin(deserializer, plugins.deserializers, fallbacks.deserializer)(argv)
+  const apply       = selectPlugin(applier,      plugins.appliers,      fallbacks.applier     )(fs, argv)
+  const serialize   = selectPlugin(serializer,   plugins.serializers,   fallbacks.serializer  )(argv)
 
-  return {lex, parse, apply, marshal}
+  return {chunk, deserialize, apply, serialize}
 }
 
 function selectPlugin (name, plugins, fallback) {

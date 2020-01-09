@@ -1,14 +1,14 @@
 {
   "plugins": [
-    "@pfx/base",
-    "@pfx/json",
-    "@pfx/dsv"
+    "pxi-base",
+    "pxi-dsv",
+    "pxi-json"
   ],
   "defaults": {
-    "lexer":      "line",
-    "parser":     "json",
-    "applicator": "map",
-    "marshaller": "json",
-    "noPlugins":  false
+    "chunker":      "line",
+    "deserializer": "json",
+    "applier":      "map",
+    "serializer":   "json",
+    "noPlugins":    false
   }
 }

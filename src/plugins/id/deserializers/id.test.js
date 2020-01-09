@@ -1,18 +1,18 @@
 const {anything, assert, constant, property} = require('fast-check')
-const {func: parser} = require('./id')
+const {func: deserializer} = require('./id')
 
-test('always passes tokens on', () => {
+test('always passes chunks on', () => {
   const err    = []
   const argv   = anything().chain(verbose => constant({verbose}))
-  const tokens = anything()
+  const chunks = anything()
   const lines  = anything()
 
   assert(
-    property(argv, tokens, lines, (argv, tokens, lines) =>
+    property(argv, chunks, lines, (argv, chunks, lines) =>
       expect(
-        parser(argv)(tokens, lines)
+        deserializer(argv)(chunks, lines)
       ).toStrictEqual(
-        {err, jsons: tokens}
+        {err, jsons: chunks}
       )
     )
   )

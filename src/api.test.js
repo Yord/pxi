@@ -25,7 +25,7 @@ function testCombinePlugins (field, f) {
   )
 }
 
-const validPlugins = ['lexers', 'parsers', 'applicators', 'marshallers']
+const validPlugins = ['chunkers', 'deserializers', 'appliers', 'serializers']
 validPlugins.map(field =>
   test(
     `combinePlugins works on ${field}`,
@@ -56,7 +56,7 @@ function testCombineDefaults (field, f) {
   )
 }
 
-const validDefaults = ['lexer', 'parser', 'applicator', 'marshaller', 'noPlugins']
+const validDefaults = ['chunker', 'deserializer', 'applier', 'serializer', 'noPlugins']
 validDefaults.map(field =>
   test(
     `combineDefaults works on ${field}`,
@@ -109,10 +109,10 @@ function testInitFunctions ([extension, option, alias, def, func], result, {plug
 }
 
 const validInits = [
-  ['lexers',      'lexer',      'l', 'lexer',      'lex'    ],
-  ['parsers',     'parser',     'p', 'parser',     'parse'  ],
-  ['applicators', 'applicator', 'a', 'applicator', 'apply'  ],
-  ['marshallers', 'marshaller', 'm', 'marshaller', 'marshal']
+  ['chunkers',      'chunker',      'c', 'chunker',      'chunk'      ],
+  ['deserializers', 'deserializer', 'd', 'deserializer', 'deserialize'],
+  ['appliers',      'applier',      'a', 'applier',      'apply'      ],
+  ['serializers',   'serializer',   's', 'serializer',   'serialize'  ]
 ]
 const fallback = 'fallback'
 const fallbacks = validInits.map(init => ({[init[3]]: {func: () => () => fallback}}))

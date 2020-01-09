@@ -1,4 +1,4 @@
-module.exports = (argv, {lexer, parser, applicator, marshaller}, {lexers, parsers, applicators, marshallers}) => (
+module.exports = (argv, {chunker, deserializer, applier, serializer}, {chunkers, deserializers, appliers, serializers}) => (
   require('yargs/yargs')(argv)
 
   .parserConfiguration({"boolean-negation": false})
@@ -9,12 +9,12 @@ module.exports = (argv, {lexer, parser, applicator, marshaller}, {lexers, parser
     'FUNCTIONS define how JSON is transformed. If several functions are given, they '  +
     'are applied in order. If no function is given, "json => json" is used, instead. ' +
     'All variables and functions in global scope may be used in the function. If you ' +
-    'would like to use libraries like lodash or ramda, read the .pfrc module section ' +
-    'on the github page: https://github.com/Yord/pf#pfrc-module              [string]'
+    'would like to use libraries like lodash or ramda, read the .pxi module section ' +
+    'on the github page: https://github.com/Yord/pxi#pxi-module              [string]'
   )
 
   .group(
-    ['lexer', 'parser', 'applicator', 'marshaller', 'fail-early', 'no-plugins', 'verbose'],  
+    ['chunker', 'deserializer', 'applier', 'serializer', 'fail-early', 'no-plugins', 'verbose'],  
     'OPTIONS:\n'
   )
 
@@ -23,36 +23,36 @@ module.exports = (argv, {lexer, parser, applicator, marshaller}, {lexers, parser
     'OTHERS:\n'
   )
 
-  .option('lexer', {
+  .option('chunker', {
     type:     'string',
     nargs:    1,
-    alias:    ['l'],
-    choices:  lexers.map(plugin => plugin.name),
-    describe: '\nDefines how the input is split into tokens: ' + describePlugins(lexers, lexer) + '\n'
+    alias:    ['c'],
+    choices:  chunkers.map(plugin => plugin.name),
+    describe: '\nDefines how the input is split into chunks: ' + describePlugins(chunkers, chunker) + '\n'
   })
 
-  .option('parser', {
+  .option('deserializer', {
     type:     'string',
     nargs:    1,
-    alias:    ['from', 'p'],
-    choices:  parsers.map(plugin => plugin.name),
-    describe: '\nDefines how tokens are parsed into JSON: ' + describePlugins(parsers, parser) + '\n'
+    alias:    ['from', 'd'],
+    choices:  deserializers.map(plugin => plugin.name),
+    describe: '\nDefines how chunks are deserialized into JSON: ' + describePlugins(deserializers, deserializer) + '\n'
   })
 
-  .option('applicator', {
+  .option('applier', {
     type:     'string',
     nargs:    1,
     alias:    ['a'],
-    choices:  applicators.map(plugin => plugin.name),
-    describe: '\nDefines how FUNCTIONS are applied to JSON: ' + describePlugins(applicators, applicator) + '\n'
+    choices:  appliers.map(plugin => plugin.name),
+    describe: '\nDefines how FUNCTIONS are applied to JSON: ' + describePlugins(appliers, applier) + '\n'
   })
 
-  .option('marshaller', {
+  .option('serializer', {
     type:     'string',
     nargs:    1,
-    alias:    ['to', 'm'],
-    choices:  marshallers.map(plugin => plugin.name),
-    describe: '\nDefines how the transformed JSON is converted to a string: ' + describePlugins(marshallers, marshaller) + '\n'
+    alias:    ['to', 's'],
+    choices:  serializers.map(plugin => plugin.name),
+    describe: '\nDefines how the transformed JSON is converted to a string: ' + describePlugins(serializers, serializer) + '\n'
   })
   
   .option('fail-early', {
@@ -62,13 +62,13 @@ module.exports = (argv, {lexer, parser, applicator, marshaller}, {lexers, parser
 
   .option('no-plugins', {
     type:     'boolean',
-    describe: '\nDisables all plugins except those added in the .pfrc module. Useful for plugin development. BEWARE: You may need to set new defaults in the .pfrc module!\n'
+    describe: '\nDisables all plugins except those added in the .pxi module. Useful for plugin development. BEWARE: You may need to set new defaults in the .pxi module!\n'
   })
 
   .option('verbose', {
     type:     'count',
     alias:    ['v'],
-    describe: '\nApply -v several times (-vv) to be more verbose. Level 1 prints lines in parser and applicator error messages. Level 2 also prints the tokens or JSON objects that failed to be parsed or transformed.\n'
+    describe: '\nApply -v several times (-vv) to be more verbose. Level 1 prints lines in deserializer and applier error messages. Level 2 also prints the chunks or JSON objects that failed to be deserialized or transformed.\n'
   })
 
   .help('help')

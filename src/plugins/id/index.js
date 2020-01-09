@@ -1,11 +1,11 @@
 module.exports = {
-  lexers:      [require('./lexers/id')],
-  parsers:     [require('./parsers/id')],
-  applicators: [require('./applicators/id')],
-  marshallers: [require('./marshallers/id')],
+  chunkers:      [require('./chunkers/id')],
+  deserializers: [require('./deserializers/id')],
+  appliers:      [require('./appliers/id')],
+  serializers:   [require('./serializers/id')],
 
-  lexer:       require('./lexers/id'),
-  parser:      require('./parsers/id'),
-  applicator:  require('./applicators/id'),
-  marshaller:  require('./marshallers/id')
+  chunker:      require('./chunkers/id'),
+  deserializer: require('./deserializers/id'),
+  applier:      require('./appliers/id'),
+  serializer:   require('./serializers/id')
 }

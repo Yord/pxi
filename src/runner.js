@@ -1,7 +1,7 @@
 module.exports = failEarly => {
   const handle = handler(failEarly)
 
-  return ({lex, parse, apply, marshal}) => {
+  return ({chunk, deserialize, apply, serialize}) => {
     process.stdin.setEncoding('utf8')
 
     let buffer      = ''
@@ -11,11 +11,11 @@ module.exports = failEarly => {
     process.stderr.on('error', () => process.exit(1))
 
     process.stdin
-    .on('data', chunk => {
-      const {tokens, lines, lastLine, rest} = handle(lex(buffer + chunk, linesOffset))
-      const {jsons}                         = handle(parse(tokens, lines))
+    .on('data', data => {
+      const {chunks, lines, lastLine, rest} = handle(chunk(buffer + data, linesOffset))
+      const {jsons}                         = handle(deserialize(chunks, lines))
       const {jsons: jsons2}                 = handle(apply(jsons, lines))
-      const {str}                           = handle(marshal(jsons2))
+      const {str}                           = handle(serialize(jsons2))
       
       process.stdout.write(str)
 
