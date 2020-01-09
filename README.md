@@ -43,7 +43,7 @@ Pixie also works on streams of JSON objects:
 
 ```json
 $ curl -s "https://swapi.co/api/films/" |
-  pxi "json => json.results" -l jsonObj -a flatMap -K '["episode_id","title"]' |
+  pxi "json => json.results" -c jsonObj -a flatMap -K '["episode_id","title"]' |
   sort
 
 {"episode_id":1,"title":"The Phantom Menace"}
@@ -365,7 +365,7 @@ Select the name, height, and mass of the first ten Star Wars characters:
 
 ```json
 $ curl -s "https://swapi.co/api/people/" |
-  pxi "json => json.results" -l jsonObj -a flatMap -K '["name","height","mass"]'
+  pxi "json => json.results" -c jsonObj -a flatMap -K '["name","height","mass"]'
 
 {"name":"Luke Skywalker","height":"172","mass":"77"}
 {"name":"C-3PO","height":"167","mass":"75"}
@@ -383,7 +383,7 @@ Compute all character's [BMI][BMI]:
 
 ```json
 $ curl -s "https://swapi.co/api/people/" |
-  pxi "json => json.results" -l jsonObj -a flatMap -K '["name","height","mass"]' |
+  pxi "json => json.results" -c jsonObj -a flatMap -K '["name","height","mass"]' |
   pxi "ch => (ch.bmi = ch.mass / (ch.height / 100) ** 2, ch)" -K '["name","bmi"]'
 
 {"name":"Luke Skywalker","bmi":26.027582477014604}
@@ -402,7 +402,7 @@ Select only obese Star Wars characters:
 
 ```json
 $ curl -s "https://swapi.co/api/people/" |
-  pxi "json => json.results" -l jsonObj -a flatMap -K '["name","height","mass"]' |
+  pxi "json => json.results" -c jsonObj -a flatMap -K '["name","height","mass"]' |
   pxi "ch => (ch.bmi = ch.mass / (ch.height / 100) ** 2, ch)" -K '["name","bmi"]' |
   pxi "ch => ch.bmi >= 30" -a filter -K '["name"]'
 
