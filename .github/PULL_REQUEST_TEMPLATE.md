@@ -1,6 +1,6 @@
 ---
 name: "Bug fix or new feature"
-about: Fixing a problem with pf
+about: Fixing a problem with pxi
 ---
 
 ## PR Type

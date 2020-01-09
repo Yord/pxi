@@ -1,8 +1,8 @@
 {
   "plugins": [
-    "@pfx/base",
-    "@pfx/json",
-    "@pfx/dsv"
+    "pxi-base",
+    "pxi-dsv",
+    "pxi-json"
   ],
   "defaults": {
     "lexer":      "line",

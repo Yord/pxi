@@ -9,8 +9,8 @@ module.exports = (argv, {lexer, parser, applicator, marshaller}, {lexers, parser
     'FUNCTIONS define how JSON is transformed. If several functions are given, they '  +
     'are applied in order. If no function is given, "json => json" is used, instead. ' +
     'All variables and functions in global scope may be used in the function. If you ' +
-    'would like to use libraries like lodash or ramda, read the .pfrc module section ' +
-    'on the github page: https://github.com/Yord/pf#pfrc-module              [string]'
+    'would like to use libraries like lodash or ramda, read the .pxi module section ' +
+    'on the github page: https://github.com/Yord/pxi#pxi-module              [string]'
   )
 
   .group(
@@ -62,7 +62,7 @@ module.exports = (argv, {lexer, parser, applicator, marshaller}, {lexers, parser
 
   .option('no-plugins', {
     type:     'boolean',
-    describe: '\nDisables all plugins except those added in the .pfrc module. Useful for plugin development. BEWARE: You may need to set new defaults in the .pfrc module!\n'
+    describe: '\nDisables all plugins except those added in the .pxi module. Useful for plugin development. BEWARE: You may need to set new defaults in the .pxi module!\n'
   })
 
   .option('verbose', {
