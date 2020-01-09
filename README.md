@@ -12,7 +12,7 @@
 
 ## Installation
 
-Installation is done using the [global `npm install` command][npm].
+Installation is done using the [global `npm install` command][npm-install].
 
 ```bash
 $ npm install --global pxi
@@ -456,7 +456,7 @@ Please report issues [in the tracker][issues]!
 [license]: https://github.com/Yord/pxi/blob/master/LICENSE
 [lodash]: https://lodash.com/
 [node]: https://nodejs.org/
-[npm]: https://docs.npmjs.com/downloading-and-installing-packages-globally
+[npm-install]: https://docs.npmjs.com/downloading-and-installing-packages-globally
 [npm-package]: https://www.npmjs.com/package/pxi
 [pandoc]: https://pandoc.org
 [pandoc-filters]: https://github.com/jgm/pandoc/wiki/Pandoc-Filters
