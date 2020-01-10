@@ -69,9 +69,9 @@ For a quick start, read the following medium posts:
 
 Pixie's philosophy is to provide a small, extensible frame
 for processing large files and streams with JavaScript functions.
-Different data formats are supported through a plugin infrastructure.
-Pixie ships with plugins for JSON, CSV, SSV, and TSV by default, but
-users can customize their pixie installation by picking and choosing from all available plugins.
+Different data formats are supported through plugins.
+JSON, CSV, SSV, and TSV are supported by default, but users can customize their pixie
+installation by picking and choosing from more available (including third-party) plugins.
 
 Pixie works its magic by chunking, deserializing, applying functions, and serializing data.
 Expressed in code, it works like this:
