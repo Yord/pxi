@@ -15,7 +15,7 @@
 Installation is done using the [global `npm install` command][npm-install].
 
 ```bash
-$ npm install --global pxi
+$ npm i -g pxi
 ```
 
 Try `pxi --help` to see if the installation was successful.
