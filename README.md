@@ -92,12 +92,12 @@ Chunking, deserializing, and serializing JSON is provided by the [`pxi-json`][px
 
 The following plugins are available:
 
-|                              | Chunkers  | Deserializers              | Appliers                   | Serializers | `pxi` |
-|------------------------------|-----------|----------------------------|----------------------------|-------------|:-----:|
-| [`pxi-base`][pxi-base]       | `line`    |                            | `map`, `flatMap`, `filter` | `string`    |   ✓   |
-| [`pxi-json`][pxi-json]       | `jsonObj` | `json`                     |                            | `json`      |   ✓   |
-| [`pxi-dsv`][pxi-dsv]         |           | `csv`, `tsv`, `ssv`, `dsv` |                            | `csv`       |   ✓   |
-| [`pxi-sample`][pxi-sample]   | `sample`  | `sample`                   | `sample`                   | `sample`    |   ✕   |
+|                            | Chunkers  | Deserializers              | Appliers                   | Serializers                | `pxi` |
+|----------------------------|-----------|----------------------------|----------------------------|----------------------------|:-----:|
+| [`pxi-base`][pxi-base]     | `line`    |                            | `map`, `flatMap`, `filter` | `string`                   |   ✓   |
+| [`pxi-json`][pxi-json]     | `jsonObj` | `json`                     |                            | `json`                     |   ✓   |
+| [`pxi-dsv`][pxi-dsv]       |           | `csv`, `tsv`, `ssv`, `dsv` |                            | `csv`, `tsv`, `ssv`, `dsv` |   ✓   |
+| [`pxi-sample`][pxi-sample] | `sample`  | `sample`                   | `sample`                   | `sample`                   |   ✕   |
 
 The last column states which plugins come preinstalled in `pxi`.
 Refer to the `.pxi` Module section to see how to enable more plugins and how to develop plugins.
