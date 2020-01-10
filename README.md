@@ -1,6 +1,6 @@
 ![pxi teaser][teaser]
 
-🧚`pxi` (pixie) is a small, fast, and magical command-line data processor similar to `jq`, `mlr`, and `pandoc`.
+🧚`pxi` (pixie) is a small, fast, and magical command-line data processor similar to `awk`, `jq`, and `mlr`.
 
 [![node version][shield-node]][node]
 [![npm version][shield-npm]][npm-package]
@@ -23,7 +23,7 @@ Try `pxi --help` to see if the installation was successful.
 ## Features
 
 +   🧚 **Small**: Pixie [does one thing and does it well][unix-philosophy].
-+   :zap: **Fast:** >2x faster than `jq`, >10x faster than `fx` (JSON), >1.5x faster than `mlr` (CSV), and >3x faster than `csvtojson`
++   :zap: **Fast:** as fast as `gawk`, 3x faster than `jq` and `mlr`, and 20x faster than `fx`
 +   :sparkles: **Magical:** Trivial to write your own ~~spells~~ *plugins*.
 +   :smile_cat: **Playful:** Opt-in to more data formats by installing plugins.
 +   :tada: **Versatile:** Use Ramda, Lodash or any other JavaScript library.
@@ -69,9 +69,9 @@ For a quick start, read the following medium posts:
 
 Pixie's philosophy is to provide a small, extensible frame
 for processing large files and streams with JavaScript functions.
-Different data formats are supported through a plugin infrastructure.
-Pixie ships with plugins for JSON, CSV, SSV, and TSV by default, but
-users can customize their pixie installation by picking and choosing from all available plugins.
+Different data formats are supported through plugins.
+JSON, CSV, SSV, and TSV are supported by default, but users can customize their pixie
+installation by picking and choosing from more available (including third-party) plugins.
 
 Pixie works its magic by chunking, deserializing, applying functions, and serializing data.
 Expressed in code, it works like this:
@@ -92,12 +92,12 @@ Chunking, deserializing, and serializing JSON is provided by the [`pxi-json`][px
 
 The following plugins are available:
 
-|                              | Chunkers  | Deserializers              | Appliers                   | Serializers | `pxi` |
-|------------------------------|-----------|----------------------------|----------------------------|-------------|:-----:|
-| [`pxi-base`][pxi-base]       | `line`    |                            | `map`, `flatMap`, `filter` | `string`    |   ✓   |
-| [`pxi-json`][pxi-json]       | `jsonObj` | `json`                     |                            | `json`      |   ✓   |
-| [`pxi-dsv`][pxi-dsv]         |           | `csv`, `tsv`, `ssv`, `dsv` |                            | `csv`       |   ✓   |
-| [`pxi-sample`][pxi-sample]   | `sample`  | `sample`                   | `sample`                   | `sample`    |   ✕   |
+|                            | Chunkers  | Deserializers              | Appliers                   | Serializers                | `pxi` |
+|----------------------------|-----------|----------------------------|----------------------------|----------------------------|:-----:|
+| [`pxi-base`][pxi-base]     | `line`    |                            | `map`, `flatMap`, `filter` | `string`                   |   ✓   |
+| [`pxi-json`][pxi-json]     | `jsonObj` | `json`                     |                            | `json`                     |   ✓   |
+| [`pxi-dsv`][pxi-dsv]       |           | `csv`, `tsv`, `ssv`, `dsv` |                            | `csv`, `tsv`, `ssv`, `dsv` |   ✓   |
+| [`pxi-sample`][pxi-sample] | `sample`  | `sample`                   | `sample`                   | `sample`                   |   ✕   |
 
 The last column states which plugins come preinstalled in `pxi`.
 Refer to the `.pxi` Module section to see how to enable more plugins and how to develop plugins.
@@ -105,17 +105,22 @@ New pixie plugins are developed in the [`pxi-sandbox`][pxi-sandbox] repository.
 
 ### Performance
 
-`pxi-json`'s chunkers and deserializers are build for speed and beat [`jq`][jq] and [`fx`][fx] in several benchmarks (see medium post (TODO) for details):
+`pxi` is fast and beats several similar tools in [performance benchmarks][pxi-benchmarks]
+(see medium post (TODO) for details):
 
-|                 | `pxi` (time) | `jq` (time) | `fx` (time) | `jq` (RAM) | `pxi` (RAM) | `fx` (RAM) | all (CPU) |
-|-----------------|-------------:|------------:|------------:|-----------:|------------:|-----------:|----------:|
-| **Benchmark A** |      **18s** |         46s |        290s |    **1MB** |        46MB |       54MB |  **100%** |
-| **Benchmark B** |      **42s** |        164s |        463s |    **1MB** |        48MB |       73MB |  **100%** |
-| **Benchmark C** |      **14s** |         44s |         96s |    **1MB** |        48MB |       51MB |  **100%** |
+| [Benchmark][pxi-benchmarks] | `pxi` | `gawk` | `jq` | `mlr` | `fx` |
+|-----------------------------|------:|-------:|-----:|------:|-----:|
+| **JSON 1**                  |   10s |    15s |  47s |       | 290s |
+| **JSON 2**                  |   15s |    21s |  70s |   98s | 385s |
+| **JSON to CSV 1**           |   14s |        |  91s |   53s |      |
+| **CSV 1**                   |   11s |     4s |  28s |   32s |      |
+| **CSV to JSON 1**           |   22s |        |      |  160s |      |
 
-`pxi` beats `jq` and `fx` in processing speed in all three benchmarks.
-Since `jq` is written in C, it easily beats `pxi` and `fx` in RAM usage.
-All three run single-threaded and use 100% of one CPU core.
+Times are given in CPU time, wall-clock times may deviate by ± 1s.
+The benchmarks were run on a 13" MacBook Pro (2019) with a 2,8 GHz Quad-Core i7 and 16GB memory.
+Since `pxi` and `fx` are written in JavaScript, they need more RAM (approx. 70 MB)
+than the other tools that are written in C (approx. 1MB).
+Please run the [benchmarks][pxi-benchmarks] on your own machine to verify.
 
 ## `.pxi` Module
 
@@ -461,13 +466,14 @@ Please report issues [in the tracker][issues]!
 [pandoc]: https://pandoc.org
 [pandoc-filters]: https://github.com/jgm/pandoc/wiki/Pandoc-Filters
 [pandoc-license]: https://github.com/jgm/pandoc/blob/master/COPYRIGHT
-[pxi-sandbox]: https://github.com/Yord/pxi-sandbox
 [pxi-base]: https://github.com/Yord/pxi-base
+[pxi-benchmarks]: https://github.com/Yord/pxi-benchmarks
 [pxi-dsv]: https://github.com/Yord/pxi-dsv
 [pxi-id]: https://github.com/Yord/pxi/tree/master/src/plugins/id
 [pxi-json]: https://github.com/Yord/pxi-json
 [pxi-pxi]: https://github.com/Yord/pxi-pxi
 [pxi-sample]: https://github.com/Yord/pxi-sample
+[pxi-sandbox]: https://github.com/Yord/pxi-sandbox
 [ramda]: https://ramdajs.com/
 [shield-license]: https://img.shields.io/npm/l/pxi?color=yellow&labelColor=313A42
 [shield-node]: https://img.shields.io/node/v/pxi?color=red&labelColor=313A42
