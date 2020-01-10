@@ -1,6 +1,6 @@
 ![pxi teaser][teaser]
 
-🧚`pxi` (pixie) is a small, fast, and magical command-line data processor similar to `jq`, `mlr`, and `pandoc`.
+🧚`pxi` (pixie) is a small, fast, and magical command-line data processor similar to `awk`, `jq`, and `mlr`.
 
 [![node version][shield-node]][node]
 [![npm version][shield-npm]][npm-package]
