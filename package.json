@@ -1,7 +1,7 @@
 {
   "name": "pxi",
   "version": "0.32.6",
-  "description": "Small, fast and magical command-line data processor",
+  "description": "Small, fast, and magical command-line data processor",
   "keywords": [
     "pxi",
     "pixie",
