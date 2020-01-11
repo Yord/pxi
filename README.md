@@ -241,7 +241,7 @@ The following plugins are available:
 
 |                            | Chunkers  | Deserializers              | Appliers                   | Serializers                | `pxi` |
 |----------------------------|-----------|----------------------------|----------------------------|----------------------------|:-----:|
-| [`pxi-base`][pxi-base]     | `line`    |                            | `map`, `flatMap`, `filter` | `string`                   |   ✓   |
+| [`pxi-dust`][pxi-dust]     | `line`    |                            | `map`, `flatMap`, `filter` | `string`                   |   ✓   |
 | [`pxi-json`][pxi-json]     | `jsonObj` | `json`                     |                            | `json`                     |   ✓   |
 | [`pxi-dsv`][pxi-dsv]       |           | `csv`, `tsv`, `ssv`, `dsv` |                            | `csv`, `tsv`, `ssv`, `dsv` |   ✓   |
 | [`pxi-sample`][pxi-sample] | `sample`  | `sample`                   | `sample`                   | `sample`                   |   ✕   |
@@ -1041,7 +1041,7 @@ Please report issues [in the tracker][issues]!
 [pandoc-filters]: https://github.com/jgm/pandoc/wiki/Pandoc-Filters
 [pandoc-license]: https://github.com/jgm/pandoc/blob/master/COPYRIGHT
 [pxi]: https://github.com/Yord/pxi
-[pxi-base]: https://github.com/Yord/pxi-base
+[pxi-dust]: https://github.com/Yord/pxi-dust
 [pxi-benchmarks]: https://github.com/Yord/pxi-benchmarks
 [pxi-dsv]: https://github.com/Yord/pxi-dsv
 [pxi-id]: https://github.com/Yord/pxi/tree/master/src/plugins/id
