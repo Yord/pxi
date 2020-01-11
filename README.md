@@ -997,14 +997,14 @@ module.exports = {
 
 ## Comparison to Related Tools
 
-|                       | `pxi`                                                         | [`jq`][jq]                                     | [`fx`][fx]                                      | [`pandoc`][pandoc]                         |
-|-----------------------|---------------------------------------------------------------|------------------------------------------------|-------------------------------------------------|--------------------------------------------|
-| **Self-description**  | *Fast and extensible command-line data processor*             | *Command-line JSON processor*                  | *Command-line tool and terminal JSON viewer*    | *Universal markup converter*               |
-| **Focus**             | Transforming data with user provided functions                | Transforming JSON with user provided functions | Transforming JSON with user provided functions  | Converting one markup format into another  |
-| **License**           | [MIT][license]                                                | [MIT][jq-license]                              | [MIT][fx-license]                               | [GPL-2.0-only][pandoc-license]             |
-| **Performance**       | (performance is given relative to `pxi`)                      | `jq` is [>2x slower](#performance) than `pxi`  | `fx` is [>10x slower](#performance) than `pxi`  | ???                                        |
-| **Extensibility**     | Third party plugins, any JavaScript library, custom functions | ???                                            | Any JavaScript library, custom functions        | ???                                        |
-| **Processing DSL**    | Vanilla JavaScript and all JavaScript libraries               | [jq language][jq-lang]                         | Vanilla JavaScript and all JavaScript libraries | [Any programming language][pandoc-filters] |
+|                       | [`pxi`][pxi]                                                                        | [`jq`][jq]                                     | [`mlr`][mlr]                                                                                            | [`fx`][fx]                                      | [`pandoc`][pandoc]                         |
+|-----------------------|-------------------------------------------------------------------------------------|------------------------------------------------|---------------------------------------------------------------------------------------------------------|-------------------------------------------------|--------------------------------------------|
+| **Self-description**  | *Small, fast, and magical command-line data processor similar to awk, jq, and mlr.* | *Command-line JSON processor*                  | *Miller is like awk, sed, cut, join, and sort for name-indexed data such as CSV, TSV, and tabular JSON* | *Command-line tool and terminal JSON viewer*    | *Universal markup converter*               |
+| **Focus**             | Transforming data with user provided functions and converting between formats       | Transforming JSON with user provided functions | Transforming CSV with user provided functions and converting between formats                            | Transforming JSON with user provided functions  | Converting one markup format into another  |
+| **License**           | [MIT][license]                                                                      | [MIT][jq-license]                              | [BSD-3-Clause][mlr-license]                                                                             | [MIT][fx-license]                               | [GPL-2.0-only][pandoc-license]             |
+| **Performance**       | (performance is given relative to `pxi`)                                            | `jq` is [>3x slower](#performance) than `pxi`  | `mlr` is [>3x slower](#performance) than `pxi`                                                          | `fx` is [>20x slower](#performance) than `pxi`  | ???                                        |
+| **Extensibility**     | Third party plugins, any JavaScript library, custom functions                       | ???                                            | ???                                                                                                     | Any JavaScript library, custom functions        | ???                                        |
+| **Processing DSL**    | Vanilla JavaScript and all JavaScript libraries                                     | [jq language][jq-lang]                         | [Predefined verbs and custom put/filter DSL][mlr-verbs]                                                 | Vanilla JavaScript and all JavaScript libraries | [Any programming language][pandoc-filters] |
 
 ## Reporting Issues
 
@@ -1024,12 +1024,16 @@ Please report issues [in the tracker][issues]!
 [jq-license]: https://github.com/stedolan/jq/blob/master/COPYING
 [license]: https://github.com/Yord/pxi/blob/master/LICENSE
 [lodash]: https://lodash.com/
+[mlr]: https://github.com/johnkerl/miller
+[mlr-license]: https://github.com/johnkerl/miller/blob/master/LICENSE.txt
+[mlr-verbs]: http://johnkerl.org/miller/doc/reference-verbs.html
 [node]: https://nodejs.org/
 [npm-install]: https://docs.npmjs.com/downloading-and-installing-packages-globally
 [npm-package]: https://www.npmjs.com/package/pxi
 [pandoc]: https://pandoc.org
 [pandoc-filters]: https://github.com/jgm/pandoc/wiki/Pandoc-Filters
 [pandoc-license]: https://github.com/jgm/pandoc/blob/master/COPYRIGHT
+[pxi]: https://github.com/Yord/pxi
 [pxi-base]: https://github.com/Yord/pxi-base
 [pxi-benchmarks]: https://github.com/Yord/pxi-benchmarks
 [pxi-dsv]: https://github.com/Yord/pxi-dsv
