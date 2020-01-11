@@ -12,7 +12,7 @@
 
 ## Installation
 
-Installation is done using the [global `npm install` command][npm-install].
+Installation is done using [`npm`][npm-install].
 
 ```bash
 $ npm i -g pxi
@@ -33,7 +33,7 @@ Try `pxi --help` to see if the installation was successful.
 <details open>
 <summary>
 Pixie reads in big structured text files, transforms them with JavaScript functions, and writes them back to disk.
-The usage examples in this section are based on the following big JSONL file.
+The usage examples in this section are based on the following large JSONL file.
 Inspect the examples by clicking on them!
 
 <p>
@@ -89,6 +89,8 @@ Convert between JSON, CSV, SSV, and TSV:
 <p>
 
 ```bash
+$ pxi --deserializer json --serializer csv < 2019.jsonl > 2019.csv
+$ pxi -d json -s csv < 2019.jsonl > 2019.csv
 $ pxi --from json --to csv < 2019.jsonl > 2019.csv
 ```
 
@@ -96,7 +98,9 @@ $ pxi --from json --to csv < 2019.jsonl > 2019.csv
 </summary>
 
 Users may extend pixie with (third-party) plugins for many more data formats.
-See the [`.pxi` module section][pxi-module] for details!
+See the [`.pxi` module section][pxi-module] on how to do that and the [plugins](#plugins) section for a list.
+Pixie deserializes data into JSON, applies functions, and serializes JSON to another format.
+It offers the telling aliases `--from` and `--to` alternative to `--deserializer` and `--serializer`.
 
 ```json
 time,year,month,day,hours,minutes,seconds
@@ -115,14 +119,14 @@ Use Ramda, Lodash or any other JavaScript library:
 <p>
 
 ```bash
-$ pxi "pipe(evolve({time: parseInt}), obj => _.omit(obj, ['seconds']))" --from csv < 2019.csv
+$ pxi "o(obj => _.omit(obj, ['seconds']), evolve({time: parseInt}))" --from csv < 2019.csv
 ```
 
 </p>
 </summary>
 
 Pixie may use any JavaScript library, including Ramda and Lodash.
-For details read the [`.pxi` module section][pxi-module]!
+Read the [`.pxi` module section][pxi-module] to learn more.
 
 ```json
 {"time":1546300800,"year":"2019","month":"1","day":"1","hours":"0","minutes":"0"}
@@ -151,8 +155,7 @@ $ curl -s "https://swapi.co/api/films/" |
 
 Pixie follows the [unix philosophy][unix-philosophy]:
 It does one thing (processing structured data), and does it well.
-It is written to work together with other programs.
-And it handles text streams because that is a universal interface.
+It is written to work together with other programs and it handles text streams because that is a universal interface.
 
 ```json
 {"episode_id":1,"title":"The Phantom Menace"}
@@ -245,7 +248,7 @@ The following plugins are available:
 
 The last column states which plugins come preinstalled in `pxi`.
 Refer to the `.pxi` Module section to see how to enable more plugins and how to develop plugins.
-New pixie plugins are developed in the [`pxi-sandbox`][pxi-sandbox] repository.
+New experimental pixie plugins are developed i.a. in the [`pxi-sandbox`][pxi-sandbox] repository.
 
 ### Performance
 
@@ -264,7 +267,8 @@ Times are given in CPU time, wall-clock times may deviate by ± 1s.
 The benchmarks were run on a 13" MacBook Pro (2019) with a 2,8 GHz Quad-Core i7 and 16GB memory.
 Since `pxi` and `fx` are written in JavaScript, they need more RAM (approx. 70 MB)
 than the other tools that are written in C (approx. 1MB each).
-Feel free to run the [benchmarks][pxi-benchmarks] on your own machine to verify the results.
+Feel free to run the [benchmarks][pxi-benchmarks] on your own machine
+and please open an issue to report the results back to us!
 
 ## Usage
 
@@ -487,7 +491,7 @@ $ pxi 'evolve({year: parseInt, month: parseInt, day: parseInt})' -d csv < 2019.c
 </summary>
 
 Pixie may use any JavaScript library, including Ramda and Lodash.
-For details read the [`.pxi` module section][pxi-module]!
+The [`.pxi` module section][pxi-module] tells you how to install them.
 
 ```json
 {"time":"1546300800","year":2019,"month":1,"day":1,"hours":"0","minutes":"0","seconds":"0"}
@@ -575,7 +579,7 @@ The returned JSON is in just one line and needs to be tamed.
 
 <details>
 <summary>
-Pixie is used to make sense of the returned data:
+Use pixie to organize the response:
 
 <p>
 
@@ -587,8 +591,9 @@ $ curl -s "https://swapi.co/api/people/" |
 </p>
 </summary>
 
-Until now, data was organized in lines and the `line` chunker was used to break it down.
-In this request, all data is in just one line (without a line ending) and we need a different chunker.
+Up until this point in the examples, data was organized in lines
+and the default `line` chunker was used to break it down.
+In this response, however, all data is in just one line (without a line ending) and we need a different chunker.
 `jsonObj` identifies JSON objects in data and returns one object at a time.
 Since the whole response is one big object, it is returned.
 Next, the function is applied, which selects the results attribute.
@@ -627,8 +632,9 @@ $ curl -s "https://swapi.co/api/people/" |
 </summary>
 
 We use pixie to compute each character's BMI.
-Therefore, we use the default chunker `line` and the default applier `map` and apply the BMI function to each line.
-Before serializing to JSON, we only keep the name and bmi fields.
+The default chunker `line` and the default applier `map` are suitable to apply a BMI-computing function to each line.
+Before serializing to the default format JSON, we only keep the name and bmi fields.
+The `map` applier supports mutating function inputs, which might be a problem for other appliers, so be careful.
 
 ```json
 {"name":"Luke Skywalker","bmi":26.027582477014604}
@@ -661,7 +667,7 @@ $ curl -s "https://swapi.co/api/people/" |
 </p>
 </summary>
 
-Finally, we use apply a `filter` function to identify obese characters and keep only their names.
+Finally, we use the `filter` applier to identify obese characters and keep only their names.
 
 ```json
 {"name":"R2-D2"}
@@ -712,7 +718,7 @@ $ ls -ahl / | pxi '([,,,,size,,,,file]) => ({size, file})' --from ssv
 </p>
 </summary>
 
-Destructuring of arrays looks weird at first, but it is pretty handy.
+Array destructuring is especially useful when working with space-separated values.
 
 ```json
 {"size":"704B","file":"."}
@@ -745,8 +751,8 @@ $ echo '{"a":1,"b":[1,2,3]}\n{"a":2,"b":{"c":2}}' |
 </p>
 </summary>
 
-Pixie can be told to allow lists and objects in CSV files that are encoded as JSON.
-Note that pixie takes care of quoting and escaping those values for you.
+Pixie can be told to allow JSON encoded lists and objects in CSV files.
+Note, how pixie takes care of quoting and escaping those values for you.
 
 ```json
 a,b
@@ -772,6 +778,7 @@ $ echo '{"a":1,"b":[1,2,3]}\n{"a":2,"b":{"c":2}}' |
 </summary>
 
 JSON values are treated as strings and are not automatically parsed.
+This is intentional, as pixie tries to keep as much out of your way as possible.
 They can be transformed back into JSON by applying JSON.parse in a function.
 
 ```json
@@ -986,7 +993,7 @@ module.exports = {
 
 ## `id` Plugin
 
-`pxi` includes the `id` plugin that comes with the following extensions:
+`pxi` includes the [`id`][pxi-id] plugin that comes with the following extensions:
 
 |                   | Description                                                                |
 |-------------------|----------------------------------------------------------------------------|
