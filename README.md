@@ -230,7 +230,7 @@ function pxi (data) {                // Data is passed to pxi from stdin.
 }
 ```
 
-Chunking, deserializing, and serializing JSON is provided by the [`pxi-json`][pxi-json] plugin.
+For example, chunking, deserializing, and serializing JSON is provided by the [`pxi-json`][pxi-json] plugin.
 
 ### Plugins
 
@@ -263,8 +263,8 @@ New pixie plugins are developed in the [`pxi-sandbox`][pxi-sandbox] repository.
 Times are given in CPU time, wall-clock times may deviate by ± 1s.
 The benchmarks were run on a 13" MacBook Pro (2019) with a 2,8 GHz Quad-Core i7 and 16GB memory.
 Since `pxi` and `fx` are written in JavaScript, they need more RAM (approx. 70 MB)
-than the other tools that are written in C (approx. 1MB).
-Please run the [benchmarks][pxi-benchmarks] on your own machine to verify.
+than the other tools that are written in C (approx. 1MB each).
+Feel free to run the [benchmarks][pxi-benchmarks] on your own machine to verify the results.
 
 ## Usage
 
@@ -764,7 +764,7 @@ Decode JSON values in CSV:
 
 ```bash
 $ echo '{"a":1,"b":[1,2,3]}\n{"a":2,"b":{"c":2}}' |
-  pxi --to csv --no-fixed-length --allow-list-values
+  pxi --to csv --no-fixed-length --allow-list-values |
   pxi --from csv 'evolve({b: JSON.parse})'
 ```
 
