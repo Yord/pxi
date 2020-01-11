@@ -23,10 +23,11 @@ Try `pxi --help` to see if the installation was successful.
 ## Features
 
 +   🧚 **Small**: [Pixie does one thing and does it well][unix-philosophy].
-+   :zap: **Fast:** `pxi` is as fast as `gawk`, 3x faster than `jq` and `mlr`, and 20x faster than `fx`
++   :zap: **Fast:** `pxi` is as fast as `gawk`, 3x faster than `jq` and `mlr`, and 20x faster than `fx`.
 +   :sparkles: **Magical:** It is trivial to write your own ~~spells~~ *plugins*.
 +   :smile_cat: **Playful:** Opt-in to more data formats by installing plugins.
-+   :tada: **Versatile:** Use Ramda, Lodash or any other JavaScript library.
++   :tada: **Versatile:** Use Ramda, Lodash and any other JavaScript library to process data on the command-line.
++   :heart: **Love:** Pixie is made with love and encourages a positive and welcoming environment.
 
 ## Getting Started
 
