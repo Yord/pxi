@@ -1,6 +1,6 @@
 {
   "name": "pxi",
-  "version": "0.34.2",
+  "version": "0.34.3",
   "description": "Small, fast, and magical command-line data processor",
   "keywords": [
     "pxi",
@@ -38,8 +38,8 @@
     "test": "jest --ci --coverage --logHeapUsage --passWithNoTests"
   },
   "dependencies": {
-    "pxi-base": "0.11.0",
     "pxi-dsv": "0.9.0",
+    "pxi-dust": "0.12.0",
     "pxi-json": "0.11.2",
     "yargs": "15.0.2"
   },

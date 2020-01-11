@@ -12,7 +12,7 @@
 
 ## Installation
 
-Installation is done using the [global `npm install` command][npm-install].
+Installation is done using [`npm`][npm-install].
 
 ```bash
 $ npm i -g pxi
@@ -33,7 +33,7 @@ Try `pxi --help` to see if the installation was successful.
 <details open>
 <summary>
 Pixie reads in big structured text files, transforms them with JavaScript functions, and writes them back to disk.
-The usage examples in this section are based on the following big JSONL file.
+The usage examples in this section are based on the following large JSONL file.
 Inspect the examples by clicking on them!
 
 <p>
@@ -89,6 +89,8 @@ Convert between JSON, CSV, SSV, and TSV:
 <p>
 
 ```bash
+$ pxi --deserializer json --serializer csv < 2019.jsonl > 2019.csv
+$ pxi -d json -s csv < 2019.jsonl > 2019.csv
 $ pxi --from json --to csv < 2019.jsonl > 2019.csv
 ```
 
@@ -96,7 +98,9 @@ $ pxi --from json --to csv < 2019.jsonl > 2019.csv
 </summary>
 
 Users may extend pixie with (third-party) plugins for many more data formats.
-See the [`.pxi` module section][pxi-module] for details!
+See the [`.pxi` module section][pxi-module] on how to do that and the [plugins](#plugins) section for a list.
+Pixie deserializes data into JSON, applies functions, and serializes JSON to another format.
+It offers the telling aliases `--from` and `--to` alternative to `--deserializer` and `--serializer`.
 
 ```json
 time,year,month,day,hours,minutes,seconds
@@ -115,14 +119,14 @@ Use Ramda, Lodash or any other JavaScript library:
 <p>
 
 ```bash
-$ pxi "pipe(evolve({time: parseInt}), obj => _.omit(obj, ['seconds']))" --from csv < 2019.csv
+$ pxi "o(obj => _.omit(obj, ['seconds']), evolve({time: parseInt}))" --from csv < 2019.csv
 ```
 
 </p>
 </summary>
 
 Pixie may use any JavaScript library, including Ramda and Lodash.
-For details read the [`.pxi` module section][pxi-module]!
+Read the [`.pxi` module section][pxi-module] to learn more.
 
 ```json
 {"time":1546300800,"year":"2019","month":"1","day":"1","hours":"0","minutes":"0"}
@@ -151,8 +155,7 @@ $ curl -s "https://swapi.co/api/films/" |
 
 Pixie follows the [unix philosophy][unix-philosophy]:
 It does one thing (processing structured data), and does it well.
-It is written to work together with other programs.
-And it handles text streams because that is a universal interface.
+It is written to work together with other programs and it handles text streams because that is a universal interface.
 
 ```json
 {"episode_id":1,"title":"The Phantom Menace"}
@@ -238,14 +241,14 @@ The following plugins are available:
 
 |                            | Chunkers  | Deserializers              | Appliers                   | Serializers                | `pxi` |
 |----------------------------|-----------|----------------------------|----------------------------|----------------------------|:-----:|
-| [`pxi-base`][pxi-base]     | `line`    |                            | `map`, `flatMap`, `filter` | `string`                   |   ✓   |
+| [`pxi-dust`][pxi-dust]     | `line`    |                            | `map`, `flatMap`, `filter` | `string`                   |   ✓   |
 | [`pxi-json`][pxi-json]     | `jsonObj` | `json`                     |                            | `json`                     |   ✓   |
 | [`pxi-dsv`][pxi-dsv]       |           | `csv`, `tsv`, `ssv`, `dsv` |                            | `csv`, `tsv`, `ssv`, `dsv` |   ✓   |
 | [`pxi-sample`][pxi-sample] | `sample`  | `sample`                   | `sample`                   | `sample`                   |   ✕   |
 
 The last column states which plugins come preinstalled in `pxi`.
 Refer to the `.pxi` Module section to see how to enable more plugins and how to develop plugins.
-New pixie plugins are developed in the [`pxi-sandbox`][pxi-sandbox] repository.
+New experimental pixie plugins are developed i.a. in the [`pxi-sandbox`][pxi-sandbox] repository.
 
 ### Performance
 
@@ -264,7 +267,8 @@ Times are given in CPU time, wall-clock times may deviate by ± 1s.
 The benchmarks were run on a 13" MacBook Pro (2019) with a 2,8 GHz Quad-Core i7 and 16GB memory.
 Since `pxi` and `fx` are written in JavaScript, they need more RAM (approx. 70 MB)
 than the other tools that are written in C (approx. 1MB each).
-Feel free to run the [benchmarks][pxi-benchmarks] on your own machine to verify the results.
+Feel free to run the [benchmarks][pxi-benchmarks] on your own machine
+and please open an issue to report the results back to us!
 
 ## Usage
 
@@ -487,7 +491,7 @@ $ pxi 'evolve({year: parseInt, month: parseInt, day: parseInt})' -d csv < 2019.c
 </summary>
 
 Pixie may use any JavaScript library, including Ramda and Lodash.
-For details read the [`.pxi` module section][pxi-module]!
+The [`.pxi` module section][pxi-module] tells you how to install them.
 
 ```json
 {"time":"1546300800","year":2019,"month":1,"day":1,"hours":"0","minutes":"0","seconds":"0"}
@@ -575,7 +579,7 @@ The returned JSON is in just one line and needs to be tamed.
 
 <details>
 <summary>
-Pixie is used to make sense of the returned data:
+Use pixie to organize the response:
 
 <p>
 
@@ -587,8 +591,9 @@ $ curl -s "https://swapi.co/api/people/" |
 </p>
 </summary>
 
-Until now, data was organized in lines and the `line` chunker was used to break it down.
-In this request, all data is in just one line (without a line ending) and we need a different chunker.
+Up until this point in the examples, data was organized in lines
+and the default `line` chunker was used to break it down.
+In this response, however, all data is in just one line (without a line ending) and we need a different chunker.
 `jsonObj` identifies JSON objects in data and returns one object at a time.
 Since the whole response is one big object, it is returned.
 Next, the function is applied, which selects the results attribute.
@@ -627,8 +632,9 @@ $ curl -s "https://swapi.co/api/people/" |
 </summary>
 
 We use pixie to compute each character's BMI.
-Therefore, we use the default chunker `line` and the default applier `map` and apply the BMI function to each line.
-Before serializing to JSON, we only keep the name and bmi fields.
+The default chunker `line` and the default applier `map` are suitable to apply a BMI-computing function to each line.
+Before serializing to the default format JSON, we only keep the name and bmi fields.
+The `map` applier supports mutating function inputs, which might be a problem for other appliers, so be careful.
 
 ```json
 {"name":"Luke Skywalker","bmi":26.027582477014604}
@@ -661,7 +667,7 @@ $ curl -s "https://swapi.co/api/people/" |
 </p>
 </summary>
 
-Finally, we use apply a `filter` function to identify obese characters and keep only their names.
+Finally, we use the `filter` applier to identify obese characters and keep only their names.
 
 ```json
 {"name":"R2-D2"}
@@ -712,7 +718,7 @@ $ ls -ahl / | pxi '([,,,,size,,,,file]) => ({size, file})' --from ssv
 </p>
 </summary>
 
-Destructuring of arrays looks weird at first, but it is pretty handy.
+Array destructuring is especially useful when working with space-separated values.
 
 ```json
 {"size":"704B","file":"."}
@@ -745,8 +751,8 @@ $ echo '{"a":1,"b":[1,2,3]}\n{"a":2,"b":{"c":2}}' |
 </p>
 </summary>
 
-Pixie can be told to allow lists and objects in CSV files that are encoded as JSON.
-Note that pixie takes care of quoting and escaping those values for you.
+Pixie can be told to allow JSON encoded lists and objects in CSV files.
+Note, how pixie takes care of quoting and escaping those values for you.
 
 ```json
 a,b
@@ -772,6 +778,7 @@ $ echo '{"a":1,"b":[1,2,3]}\n{"a":2,"b":{"c":2}}' |
 </summary>
 
 JSON values are treated as strings and are not automatically parsed.
+This is intentional, as pixie tries to keep as much out of your way as possible.
 They can be transformed back into JSON by applying JSON.parse in a function.
 
 ```json
@@ -986,7 +993,7 @@ module.exports = {
 
 ## `id` Plugin
 
-`pxi` includes the `id` plugin that comes with the following extensions:
+`pxi` includes the [`id`][pxi-id] plugin that comes with the following extensions:
 
 |                   | Description                                                                |
 |-------------------|----------------------------------------------------------------------------|
@@ -997,14 +1004,14 @@ module.exports = {
 
 ## Comparison to Related Tools
 
-|                       | `pxi`                                                         | [`jq`][jq]                                     | [`fx`][fx]                                      | [`pandoc`][pandoc]                         |
-|-----------------------|---------------------------------------------------------------|------------------------------------------------|-------------------------------------------------|--------------------------------------------|
-| **Self-description**  | *Fast and extensible command-line data processor*             | *Command-line JSON processor*                  | *Command-line tool and terminal JSON viewer*    | *Universal markup converter*               |
-| **Focus**             | Transforming data with user provided functions                | Transforming JSON with user provided functions | Transforming JSON with user provided functions  | Converting one markup format into another  |
-| **License**           | [MIT][license]                                                | [MIT][jq-license]                              | [MIT][fx-license]                               | [GPL-2.0-only][pandoc-license]             |
-| **Performance**       | (performance is given relative to `pxi`)                      | `jq` is [>2x slower](#performance) than `pxi`  | `fx` is [>10x slower](#performance) than `pxi`  | ???                                        |
-| **Extensibility**     | Third party plugins, any JavaScript library, custom functions | ???                                            | Any JavaScript library, custom functions        | ???                                        |
-| **Processing DSL**    | Vanilla JavaScript and all JavaScript libraries               | [jq language][jq-lang]                         | Vanilla JavaScript and all JavaScript libraries | [Any programming language][pandoc-filters] |
+|                       | [`pxi`][pxi]                                                                        | [`jq`][jq]                                     | [`mlr`][mlr]                                                                                            | [`fx`][fx]                                      | [`pandoc`][pandoc]                         |
+|-----------------------|-------------------------------------------------------------------------------------|------------------------------------------------|---------------------------------------------------------------------------------------------------------|-------------------------------------------------|--------------------------------------------|
+| **Self-description**  | *Small, fast, and magical command-line data processor similar to awk, jq, and mlr.* | *Command-line JSON processor*                  | *Miller is like awk, sed, cut, join, and sort for name-indexed data such as CSV, TSV, and tabular JSON* | *Command-line tool and terminal JSON viewer*    | *Universal markup converter*               |
+| **Focus**             | Transforming data with user provided functions and converting between formats       | Transforming JSON with user provided functions | Transforming CSV with user provided functions and converting between formats                            | Transforming JSON with user provided functions  | Converting one markup format into another  |
+| **License**           | [MIT][license]                                                                      | [MIT][jq-license]                              | [BSD-3-Clause][mlr-license]                                                                             | [MIT][fx-license]                               | [GPL-2.0-only][pandoc-license]             |
+| **Performance**       | (performance is given relative to `pxi`)                                            | `jq` is [>3x slower](#performance) than `pxi`  | `mlr` is [>3x slower](#performance) than `pxi`                                                          | `fx` is [>20x slower](#performance) than `pxi`  | ???                                        |
+| **Extensibility**     | Third party plugins, any JavaScript library, custom functions                       | ???                                            | ???                                                                                                     | Any JavaScript library, custom functions        | ???                                        |
+| **Processing DSL**    | Vanilla JavaScript and all JavaScript libraries                                     | [jq language][jq-lang]                         | [Predefined verbs and custom put/filter DSL][mlr-verbs]                                                 | Vanilla JavaScript and all JavaScript libraries | [Any programming language][pandoc-filters] |
 
 ## Reporting Issues
 
@@ -1024,13 +1031,17 @@ Please report issues [in the tracker][issues]!
 [jq-license]: https://github.com/stedolan/jq/blob/master/COPYING
 [license]: https://github.com/Yord/pxi/blob/master/LICENSE
 [lodash]: https://lodash.com/
+[mlr]: https://github.com/johnkerl/miller
+[mlr-license]: https://github.com/johnkerl/miller/blob/master/LICENSE.txt
+[mlr-verbs]: http://johnkerl.org/miller/doc/reference-verbs.html
 [node]: https://nodejs.org/
 [npm-install]: https://docs.npmjs.com/downloading-and-installing-packages-globally
 [npm-package]: https://www.npmjs.com/package/pxi
 [pandoc]: https://pandoc.org
 [pandoc-filters]: https://github.com/jgm/pandoc/wiki/Pandoc-Filters
 [pandoc-license]: https://github.com/jgm/pandoc/blob/master/COPYRIGHT
-[pxi-base]: https://github.com/Yord/pxi-base
+[pxi]: https://github.com/Yord/pxi
+[pxi-dust]: https://github.com/Yord/pxi-dust
 [pxi-benchmarks]: https://github.com/Yord/pxi-benchmarks
 [pxi-dsv]: https://github.com/Yord/pxi-dsv
 [pxi-id]: https://github.com/Yord/pxi/tree/master/src/plugins/id
