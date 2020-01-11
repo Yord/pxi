@@ -1,6 +1,6 @@
 {
   "plugins": [
-    "pxi-base",
+    "pxi-dust",
     "pxi-dsv",
     "pxi-json"
   ],
