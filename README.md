@@ -22,30 +22,139 @@ Try `pxi --help` to see if the installation was successful.
 
 ## Features
 
-+   🧚 **Small**: Pixie [does one thing and does it well][unix-philosophy].
-+   :zap: **Fast:** as fast as `gawk`, 3x faster than `jq` and `mlr`, and 20x faster than `fx`
-+   :sparkles: **Magical:** Trivial to write your own ~~spells~~ *plugins*.
++   🧚 **Small**: [Pixie does one thing and does it well][unix-philosophy].
++   :zap: **Fast:** `pxi` is as fast as `gawk`, 3x faster than `jq` and `mlr`, and 20x faster than `fx`
++   :sparkles: **Magical:** It is trivial to write your own ~~spells~~ *plugins*.
 +   :smile_cat: **Playful:** Opt-in to more data formats by installing plugins.
 +   :tada: **Versatile:** Use Ramda, Lodash or any other JavaScript library.
 
 ## Getting Started
 
-Using pixie to select all Unix timestamps from a large file containing all seconds of 2019 (602 MB, 31536000 lines) in JSON format takes ~18 seconds (macOS 10.15, 2.8 GHz i7 processor):
+<details open>
+<summary>
+Pixie reads in big structured text files, transforms them with JavaScript functions, and writes them back to disk.
+The usage examples in this section are based on the following big JSONL file.
+Inspect the examples by clicking on them!
+
+<p>
 
 ```bash
-$ pxi "json => json.time" < 2019.jsonl > out.jsonl
+$ head -5 2019.jsonl # 2.6GB, 31,536,000 lines
 ```
 
-`jq` takes 2.5x longer (~46 seconds) and `fx` takes 16x longer (~290 seconds).
-See the [performance](#performance) section for details.
-
-Pixie also works on streams of JSON objects:
+</p>
+</summary>
 
 ```json
-$ curl -s "https://swapi.co/api/films/" |
-  pxi "json => json.results" -c jsonObj -a flatMap -K '["episode_id","title"]' |
-  sort
+{"time":1546300800,"year":2019,"month":1,"day":1,"hours":0,"minutes":0,"seconds":0}
+{"time":1546300801,"year":2019,"month":1,"day":1,"hours":0,"minutes":0,"seconds":1}
+{"time":1546300802,"year":2019,"month":1,"day":1,"hours":0,"minutes":0,"seconds":2}
+{"time":1546300803,"year":2019,"month":1,"day":1,"hours":0,"minutes":0,"seconds":3}
+{"time":1546300804,"year":2019,"month":1,"day":1,"hours":0,"minutes":0,"seconds":4}
+```
 
+</details>
+
+<details>
+<summary>
+Execute any JavaScript function:
+
+<p>
+
+```bash
+$ pxi "json => json.time" < 2019.jsonl
+$ pxi "({time}) => time" < 2019.jsonl
+```
+
+</p>
+</summary>
+
+You may use JavaScript arrow functions, destructuring, spreading,
+and any other feature of your current NodeJS version.
+
+```json
+1546300800000
+1546300801000
+1546300802000
+1546300803000
+1546300804000
+```
+
+</details>
+
+<details>
+<summary>
+Convert between JSON, CSV, SSV, and TSV:
+
+<p>
+
+```bash
+$ pxi --from json --to csv < 2019.jsonl > 2019.csv
+```
+
+</p>
+</summary>
+
+Users may extend pixie with (third-party) plugins for many more data formats.
+See the [`.pxi` module section][pxi-module] for details!
+
+```json
+time,year,month,day,hours,minutes,seconds
+1546300800,2019,1,1,0,0,0
+1546300801,2019,1,1,0,0,1
+1546300802,2019,1,1,0,0,2
+1546300803,2019,1,1,0,0,3
+```
+
+</details>
+
+<details>
+<summary>
+Use Ramda, Lodash or any other JavaScript library:
+
+<p>
+
+```bash
+$ pxi "pipe(evolve({time: parseInt}), obj => _.omit(obj, ['seconds']))" --from csv < 2019.csv
+```
+
+</p>
+</summary>
+
+Pixie may use any JavaScript library, including Ramda and Lodash.
+For details read the [`.pxi` module section][pxi-module]!
+
+```json
+{"time":1546300800,"year":"2019","month":"1","day":"1","hours":"0","minutes":"0"}
+{"time":1546300801,"year":"2019","month":"1","day":"1","hours":"0","minutes":"0"}
+{"time":1546300802,"year":"2019","month":"1","day":"1","hours":"0","minutes":"0"}
+{"time":1546300803,"year":"2019","month":"1","day":"1","hours":"0","minutes":"0"}
+{"time":1546300804,"year":"2019","month":"1","day":"1","hours":"0","minutes":"0"}
+```
+
+</details>
+
+<details>
+<summary>
+Process data streams from REST APIs and other sources and pipe pixie's output to other commands:
+
+<p>
+
+```bash
+$ curl -s "https://swapi.co/api/films/" |
+  pxi 'json => json.results' --chunker jsonObj --applier flatMap --keep '["episode_id", "title"]' |
+  sort
+```
+
+</p>
+</summary>
+
+Pixie follows the [unix philosophy][unix-philosophy]:
+It does one thing (processing structured data), and does it well.
+It is written to work together with other programs.
+And it handles text streams because that is a universal interface.
+
+```json
 {"episode_id":1,"title":"The Phantom Menace"}
 {"episode_id":2,"title":"Attack of the Clones"}
 {"episode_id":3,"title":"Revenge of the Sith"}
@@ -55,7 +164,42 @@ $ curl -s "https://swapi.co/api/films/" |
 {"episode_id":7,"title":"The Force Awakens"}
 ```
 
-See the [usage](#usage) and [performance](#performance) sections below for more examples.
+</details>
+
+<details>
+<summary>
+Use pixie's ssv deserializer to work with command line output:
+
+<p>
+
+```bash
+$ ls -ahl / | pxi '([,,,,size,,,,file]) => ({size, file})' --from ssv
+```
+
+</p>
+</summary>
+
+Pixie's space-separated values deserializer makes it very easy to work with the output of other commands.
+Array destructuring is especially helpful in this area.
+
+```json
+{"size":"704B","file":"."}
+{"size":"704B","file":".."}
+{"size":"1.2K","file":"bin"}
+{"size":"4.4K","file":"dev"}
+{"size":"11B","file":"etc"}
+{"size":"25B","file":"home"}
+{"size":"64B","file":"opt"}
+{"size":"192B","file":"private"}
+{"size":"2.0K","file":"sbin"}
+{"size":"11B","file":"tmp"}
+{"size":"352B","file":"usr"}
+{"size":"11B","file":"var"}
+```
+
+</details>
+
+See the [usage](#usage) section below for more examples.
 
 ### Introductory Blogposts
 
@@ -121,6 +265,521 @@ The benchmarks were run on a 13" MacBook Pro (2019) with a 2,8 GHz Quad-Core i7 
 Since `pxi` and `fx` are written in JavaScript, they need more RAM (approx. 70 MB)
 than the other tools that are written in C (approx. 1MB).
 Please run the [benchmarks][pxi-benchmarks] on your own machine to verify.
+
+## Usage
+
+<details open>
+<summary>
+The examples in this section are based on the following big JSONL file.
+Inspect the examples by clicking on them!
+
+<p>
+
+```bash
+$ head -5 2019.jsonl # 2.6GB, 31,536,000 lines
+```
+
+</p>
+</summary>
+
+```json
+{"time":1546300800,"year":2019,"month":1,"day":1,"hours":0,"minutes":0,"seconds":0}
+{"time":1546300801,"year":2019,"month":1,"day":1,"hours":0,"minutes":0,"seconds":1}
+{"time":1546300802,"year":2019,"month":1,"day":1,"hours":0,"minutes":0,"seconds":2}
+{"time":1546300803,"year":2019,"month":1,"day":1,"hours":0,"minutes":0,"seconds":3}
+{"time":1546300804,"year":2019,"month":1,"day":1,"hours":0,"minutes":0,"seconds":4}
+```
+
+</details>
+
+<details>
+<summary>
+Select the time:
+
+<p>
+
+```bash
+$ pxi "json => json.time" < 2019.jsonl
+```
+
+</p>
+</summary>
+
+Go ahead and use JavaScript's arrow functions.
+
+```json
+1546300800000
+1546300801000
+1546300802000
+1546300803000
+1546300804000
+```
+
+</details>
+
+<details>
+<summary>
+Select month and day:
+
+<p>
+
+```bash
+$ pxi '({month, day}) => ({month, day})' < 2019.jsonl
+```
+
+</p>
+</summary>
+
+Use destructuring and spread syntax.
+
+```json
+1546300800000
+1546300801000
+1546300802000
+1546300803000
+1546300804000
+```
+
+</details>
+
+<details>
+<summary>
+Convert JSON to CSV:
+
+<p>
+
+```bash
+$ pxi --from json --to csv < 2019.jsonl > 2019.csv
+```
+
+</p>
+</summary>
+
+Pixie has deserializers (`--from`) and serializers (`--to`) for various data formats, including JSON and CSV.
+JSON is the default deserializer and serializer, so no need to type `--from json` and `--to json`.
+
+```json
+time,year,month,day,hours,minutes,seconds
+1546300800,2019,1,1,0,0,0
+1546300801,2019,1,1,0,0,1
+1546300802,2019,1,1,0,0,2
+1546300803,2019,1,1,0,0,3
+```
+
+</details>
+
+<details>
+<summary>
+Convert JSON to CSV, but keep only time and month:
+
+<p>
+
+```bash
+$ pxi '({time, month}) => [time, month]' --to csv < 2019.jsonl
+```
+
+</p>
+</summary>
+
+Serializers can be freely combined with functions.
+
+```json
+1546300800,1
+1546300801,1
+1546300802,1
+1546300803,1
+1546300804,1
+```
+
+</details>
+
+<details>
+<summary>
+Rename time to timestamp and convert CSV to TSV:
+
+<p>
+
+```bash
+$ pxi '({time, ...rest}) => ({timestamp: time, ...rest})' --from csv --to tsv < 2019.csv
+```
+
+</p>
+</summary>
+
+Read in CSV format.
+Use destructuring to select all attributes other than time.
+Rename time to timestamp and keep all other attributes unchanged.
+Write in TSV format.
+
+```json
+timestamp       year    month   day	    hours   minutes seconds
+1546300800      2019    1       1       0       0       0
+1546300801      2019    1       1       0       0       1
+1546300802      2019    1       1       0       0       2
+1546300803      2019    1       1       0       0       3
+```
+
+</details>
+
+<details>
+<summary>
+Convert CSV to JSON:
+
+<p>
+
+```bash
+$ pxi --deserializer csv --serializer json < 2019.csv
+```
+
+</p>
+</summary>
+
+`--from` and `--to` are aliases for `--deserializer` and `--serializer` that are used to convert between formats.
+
+```json
+{"time":"1546300800","year":"2019","month":"1","day":"1","hours":"0","minutes":"0","seconds":"0"}
+{"time":"1546300801","year":"2019","month":"1","day":"1","hours":"0","minutes":"0","seconds":"1"}
+{"time":"1546300802","year":"2019","month":"1","day":"1","hours":"0","minutes":"0","seconds":"2"}
+{"time":"1546300803","year":"2019","month":"1","day":"1","hours":"0","minutes":"0","seconds":"3"}
+{"time":"1546300804","year":"2019","month":"1","day":"1","hours":"0","minutes":"0","seconds":"4"}
+```
+
+</details>
+
+<details>
+<summary>
+Convert CSV to JSON and cast time to integer:
+
+<p>
+
+```bash
+$ pxi '({time, ...rest}) => ({time: parseInt(time), ...rest})' -d csv < 2019.csv
+```
+
+</p>
+</summary>
+
+Deserializing from CSV does not automatically cast strings to other types.
+This is intentional, since some use cases may need casting, and others don't.
+If you need a key to be an integer, you need to explicitly transform it.
+
+```json
+{"time":1546300800,"year":"2019","month":"1","day":"1","hours":"0","minutes":"0","seconds":"0"}
+{"time":1546300801,"year":"2019","month":"1","day":"1","hours":"0","minutes":"0","seconds":"1"}
+{"time":1546300802,"year":"2019","month":"1","day":"1","hours":"0","minutes":"0","seconds":"2"}
+{"time":1546300803,"year":"2019","month":"1","day":"1","hours":"0","minutes":"0","seconds":"3"}
+{"time":1546300804,"year":"2019","month":"1","day":"1","hours":"0","minutes":"0","seconds":"4"}
+```
+
+</details>
+
+<details>
+<summary>
+Use Ramda (or Lodash):
+
+<p>
+
+```bash
+$ pxi 'evolve({year: parseInt, month: parseInt, day: parseInt})' -d csv < 2019.csv
+```
+
+</p>
+</summary>
+
+Pixie may use any JavaScript library, including Ramda and Lodash.
+For details read the [`.pxi` module section][pxi-module]!
+
+```json
+{"time":"1546300800","year":2019,"month":1,"day":1,"hours":"0","minutes":"0","seconds":"0"}
+{"time":"1546300801","year":2019,"month":1,"day":1,"hours":"0","minutes":"0","seconds":"1"}
+{"time":"1546300802","year":2019,"month":1,"day":1,"hours":"0","minutes":"0","seconds":"2"}
+{"time":"1546300803","year":2019,"month":1,"day":1,"hours":"0","minutes":"0","seconds":"3"}
+{"time":"1546300804","year":2019,"month":1,"day":1,"hours":"0","minutes":"0","seconds":"4"}
+```
+
+</details>
+
+<details>
+<summary>
+Select only May the 4th:
+
+<p>
+
+```bash
+$ pxi '({month, day}) => month == 5 && day == 4' --applier filter < 2019.jsonl
+```
+
+</p>
+</summary>
+
+Appliers determine how functions are applied.
+The default applier is `map`, which applies the function to each element.
+Here, we use the `filter` applier that keeps only elements for which the function yields true.
+
+```json
+{"time":1556928000,"year":2019,"month":5,"day":4,"hours":0,"minutes":0,"seconds":0}
+{"time":1556928001,"year":2019,"month":5,"day":4,"hours":0,"minutes":0,"seconds":1}
+{"time":1556928002,"year":2019,"month":5,"day":4,"hours":0,"minutes":0,"seconds":2}
+{"time":1556928003,"year":2019,"month":5,"day":4,"hours":0,"minutes":0,"seconds":3}
+{"time":1556928004,"year":2019,"month":5,"day":4,"hours":0,"minutes":0,"seconds":4}
+```
+
+</details>
+
+<details>
+<summary>
+Use more than one function:
+
+<p>
+
+```bash
+$ pxi '({month}) => month == 5' '({day}) => day == 4' -a filter < 2019.jsonl
+```
+
+</p>
+</summary>
+
+Functions are applied in the given order on an element to element basis.
+In this case, each element is first checked for the month, then for the day.
+
+```json
+{"time":1556928000,"year":2019,"month":5,"day":4,"hours":0,"minutes":0,"seconds":0}
+{"time":1556928001,"year":2019,"month":5,"day":4,"hours":0,"minutes":0,"seconds":1}
+{"time":1556928002,"year":2019,"month":5,"day":4,"hours":0,"minutes":0,"seconds":2}
+{"time":1556928003,"year":2019,"month":5,"day":4,"hours":0,"minutes":0,"seconds":3}
+{"time":1556928004,"year":2019,"month":5,"day":4,"hours":0,"minutes":0,"seconds":4}
+```
+
+</details>
+
+<details>
+<summary>
+Suppose you have to access a web API:
+
+<p>
+
+```bash
+$ curl -s "https://swapi.co/api/people/"
+```
+
+</p>
+</summary>
+
+The returned JSON is in just one line and needs to be tamed.
+
+```json
+{"count":87,"next":"...","results":[{"name":"Luke Skywalker","height":"172","mass":"77" [...]
+```
+
+</details>
+
+<details>
+<summary>
+Pixie is used to make sense of the returned data:
+
+<p>
+
+```bash
+$ curl -s "https://swapi.co/api/people/" |
+  pxi "json => json.results" --chunker jsonObj --applier flatMap --keep '["name","height","mass"]'
+```
+
+</p>
+</summary>
+
+Until now, data was organized in lines and the `line` chunker was used to break it down.
+In this request, all data is in just one line (without a line ending) and we need a different chunker.
+`jsonObj` identifies JSON objects in data and returns one object at a time.
+Since the whole response is one big object, it is returned.
+Next, the function is applied, which selects the results attribute.
+If it were applied with `map`, it would return the results array as the only element.
+But since we use the `flatMap` applier, each array item is returned as one element.
+Finally, the `--keep` attribute specifies, which keys to keep from the returned objects:
+
+```json
+{"name":"Luke Skywalker","height":"172","mass":"77"}
+{"name":"C-3PO","height":"167","mass":"75"}
+{"name":"R2-D2","height":"96","mass":"32"}
+{"name":"Darth Vader","height":"202","mass":"136"}
+{"name":"Leia Organa","height":"150","mass":"49"}
+{"name":"Owen Lars","height":"178","mass":"120"}
+{"name":"Beru Whitesun lars","height":"165","mass":"75"}
+{"name":"R5-D4","height":"97","mass":"32"}
+{"name":"Biggs Darklighter","height":"183","mass":"84"}
+{"name":"Obi-Wan Kenobi","height":"182","mass":"77"}
+```
+
+</details>
+
+<details>
+<summary>
+Compute all Star Wars character's <a href="https://en.wikipedia.org/wiki/Body_mass_index">BMI</a>:
+
+<p>
+
+```bash
+$ curl -s "https://swapi.co/api/people/" |
+  pxi "json => json.results" -c jsonObj -a flatMap -K '["name","height","mass"]' |
+  pxi "ch => (ch.bmi = ch.mass / (ch.height / 100) ** 2, ch)" -K '["name","bmi"]'
+```
+
+</p>
+</summary>
+
+We use pixie to compute each character's BMI.
+Therefore, we use the default chunker `line` and the default applier `map` and apply the BMI function to each line.
+Before serializing to JSON, we only keep the name and bmi fields.
+
+```json
+{"name":"Luke Skywalker","bmi":26.027582477014604}
+{"name":"C-3PO","bmi":26.89232313815483}
+{"name":"R2-D2","bmi":34.72222222222222}
+{"name":"Darth Vader","bmi":33.33006567983531}
+{"name":"Leia Organa","bmi":21.77777777777778}
+{"name":"Owen Lars","bmi":37.87400580734756}
+{"name":"Beru Whitesun lars","bmi":27.548209366391188}
+{"name":"R5-D4","bmi":34.009990434690195}
+{"name":"Biggs Darklighter","bmi":25.082863029651524}
+{"name":"Obi-Wan Kenobi","bmi":23.24598478444632}
+```
+
+</details>
+
+<details>
+<summary>
+Identify all obese Star Wars characters:
+
+<p>
+
+```bash
+$ curl -s "https://swapi.co/api/people/" |
+  pxi "json => json.results" -c jsonObj -a flatMap -K '["name","height","mass"]' |
+  pxi "ch => (ch.bmi = ch.mass / (ch.height / 100) ** 2, ch)" -K '["name","bmi"]' |
+  pxi "ch => ch.bmi >= 30" -a filter -K '["name"]'
+```
+
+</p>
+</summary>
+
+Finally, we use apply a `filter` function to identify obese characters and keep only their names.
+
+```json
+{"name":"R2-D2"}
+{"name":"Darth Vader"}
+{"name":"Owen Lars"}
+{"name":"R5-D4"}
+```
+
+As it turns out, Anakin could use some training.
+
+</details>
+
+<details>
+<summary>
+Select PID and CMD from <code>ps</code>:
+
+<p>
+
+```bash
+$ ps | pxi '([pid, tty, time, cmd]) => ({pid, cmd})' --from ssv
+```
+
+</p>
+</summary>
+
+Pixie supports space-separated values, which is perfect for processing command line output.
+
+```json
+{"pid":"42978","cmd":"-zsh"}
+{"pid":"42988","cmd":"-zsh"}
+{"pid":"43006","cmd":"-zsh"}
+{"pid":"43030","cmd":"-zsh"}
+{"pid":"43067","cmd":"-zsh"}
+```
+
+</details>
+
+<details>
+<summary>
+Select file size and filename from <code>ls</code>:
+
+<p>
+
+```bash
+$ ls -ahl / | pxi '([,,,,size,,,,file]) => ({size, file})' --from ssv
+```
+
+</p>
+</summary>
+
+Destructuring of arrays looks weird at first, but it is pretty handy.
+
+```json
+{"size":"704B","file":"."}
+{"size":"704B","file":".."}
+{"size":"1.2K","file":"bin"}
+{"size":"4.4K","file":"dev"}
+{"size":"11B","file":"etc"}
+{"size":"25B","file":"home"}
+{"size":"64B","file":"opt"}
+{"size":"192B","file":"private"}
+{"size":"2.0K","file":"sbin"}
+{"size":"11B","file":"tmp"}
+{"size":"352B","file":"usr"}
+{"size":"11B","file":"var"}
+```
+
+</details>
+
+<details>
+<summary>
+Allow JSON objects and lists in CSV:
+
+<p>
+
+```bash
+$ echo '{"a":1,"b":[1,2,3]}\n{"a":2,"b":{"c":2}}' |
+  pxi --to csv --no-fixed-length --allow-list-values
+```
+
+</p>
+</summary>
+
+Pixie can be told to allow lists and objects in CSV files that are encoded as JSON.
+Note that pixie takes care of quoting and escaping those values for you.
+
+```json
+a,b
+1,"[1,2,3]"
+2,"{""c"":2}"
+```
+
+</details>
+
+<details>
+<summary>
+Decode JSON values in CSV:
+
+<p>
+
+```bash
+$ echo '{"a":1,"b":[1,2,3]}\n{"a":2,"b":{"c":2}}' |
+  pxi --to csv --no-fixed-length --allow-list-values
+  pxi --from csv 'evolve({b: JSON.parse})'
+```
+
+</p>
+</summary>
+
+JSON values are treated as strings and are not automatically parsed.
+They can be transformed back into JSON by applying JSON.parse in a function.
+
+```json
+{"a":"1","b":[1,2,3]}
+{"a":"2","b":{"c":2}}
+```
+
+</details>
 
 ## `.pxi` Module
 
@@ -325,100 +984,6 @@ module.exports = {
 > :see_no_evil: Defaults are assigned **globally** and changing them may **break existing `pxi` scripts**!
 > Use this feature responsibly.
 
-## Usage
-
-Selecting all Unix timestamps from a file containing all seconds of 2019 (602 MB, 31536000 lines)
-in JSON format (e.g. `{"time":1546300800}`) takes ~18 seconds (macOS 10.15, 2.8 GHz i7 processor):
-
-```bash
-$ pxi "json => json.time" < 2019.jsonl > out.jsonl
-
-1546300800
-1546300801
-...
-1577836798
-1577836799
-```
-
-Transforming Unix timestamps to an ISO string from the same file (602MB) takes ~42 seconds:
-
-```bash
-$ pxi "json => (json.iso = new Date(json.time * 1000).toISOString(), json)" < 2019.jsonl > out.jsonl
-
-{"time":1546300800,"iso":"2019-01-01T00:00:00.000Z"}
-{"time":1546300801,"iso":"2019-01-01T00:00:01.000Z"}
-...
-{"time":1577836798,"iso":"2019-12-31T23:59:58.000Z"}
-{"time":1577836799,"iso":"2019-12-31T23:59:59.000Z"}
-```
-
-Selecting all entries from May the 4th from the same file (602MB) takes 14 seconds:
-
-```bash
-$ pxi "({time}) => time >= 1556928000 && time <= 1557014399" -a filter < 2019.jsonl > out.jsonl
-
-{"time":1556928000}
-{"time":1556928001}
-...
-{"time":1557014398}
-{"time":1557014399}
-```
-
-### Example: Way to go Anakin!
-
-Select the name, height, and mass of the first ten Star Wars characters:
-
-```json
-$ curl -s "https://swapi.co/api/people/" |
-  pxi "json => json.results" -c jsonObj -a flatMap -K '["name","height","mass"]'
-
-{"name":"Luke Skywalker","height":"172","mass":"77"}
-{"name":"C-3PO","height":"167","mass":"75"}
-{"name":"R2-D2","height":"96","mass":"32"}
-{"name":"Darth Vader","height":"202","mass":"136"}
-{"name":"Leia Organa","height":"150","mass":"49"}
-{"name":"Owen Lars","height":"178","mass":"120"}
-{"name":"Beru Whitesun lars","height":"165","mass":"75"}
-{"name":"R5-D4","height":"97","mass":"32"}
-{"name":"Biggs Darklighter","height":"183","mass":"84"}
-{"name":"Obi-Wan Kenobi","height":"182","mass":"77"}
-```
-
-Compute all character's [BMI][BMI]:
-
-```json
-$ curl -s "https://swapi.co/api/people/" |
-  pxi "json => json.results" -c jsonObj -a flatMap -K '["name","height","mass"]' |
-  pxi "ch => (ch.bmi = ch.mass / (ch.height / 100) ** 2, ch)" -K '["name","bmi"]'
-
-{"name":"Luke Skywalker","bmi":26.027582477014604}
-{"name":"C-3PO","bmi":26.89232313815483}
-{"name":"R2-D2","bmi":34.72222222222222}
-{"name":"Darth Vader","bmi":33.33006567983531}
-{"name":"Leia Organa","bmi":21.77777777777778}
-{"name":"Owen Lars","bmi":37.87400580734756}
-{"name":"Beru Whitesun lars","bmi":27.548209366391188}
-{"name":"R5-D4","bmi":34.009990434690195}
-{"name":"Biggs Darklighter","bmi":25.082863029651524}
-{"name":"Obi-Wan Kenobi","bmi":23.24598478444632}
-```
-
-Select only obese Star Wars characters:
-
-```json
-$ curl -s "https://swapi.co/api/people/" |
-  pxi "json => json.results" -c jsonObj -a flatMap -K '["name","height","mass"]' |
-  pxi "ch => (ch.bmi = ch.mass / (ch.height / 100) ** 2, ch)" -K '["name","bmi"]' |
-  pxi "ch => ch.bmi >= 30" -a filter -K '["name"]'
-
-{"name":"R2-D2"}
-{"name":"Darth Vader"}
-{"name":"Owen Lars"}
-{"name":"R5-D4"}
-```
-
-Turns out, Anakin could use some training!
-
 ## `id` Plugin
 
 `pxi` includes the `id` plugin that comes with the following extensions:
@@ -450,7 +1015,6 @@ Please report issues [in the tracker][issues]!
 `pxi` is [MIT licensed][license].
 
 [actions]: https://github.com/Yord/pxi/actions
-[BMI]: https://en.wikipedia.org/wiki/Body_mass_index
 [contribute]: https://github.com/Yord/pxi
 [fx]: https://github.com/antonmedv/fx
 [fx-license]: https://github.com/antonmedv/fx/blob/master/LICENSE
@@ -471,6 +1035,7 @@ Please report issues [in the tracker][issues]!
 [pxi-dsv]: https://github.com/Yord/pxi-dsv
 [pxi-id]: https://github.com/Yord/pxi/tree/master/src/plugins/id
 [pxi-json]: https://github.com/Yord/pxi-json
+[pxi-module]: https://github.com/Yord/pxi#pxi-module
 [pxi-pxi]: https://github.com/Yord/pxi-pxi
 [pxi-sample]: https://github.com/Yord/pxi-sample
 [pxi-sandbox]: https://github.com/Yord/pxi-sandbox
