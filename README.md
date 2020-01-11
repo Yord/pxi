@@ -256,13 +256,14 @@ New experimental pixie plugins are developed i.a. in the [`pxi-sandbox`][pxi-san
 `pxi` is fast and beats several similar tools in [performance benchmarks][pxi-benchmarks]
 (see medium post (TODO) for details):
 
-| [Benchmark][pxi-benchmarks] | `pxi` | `gawk` | `jq` | `mlr` | `fx` |
-|-----------------------------|------:|-------:|-----:|------:|-----:|
-| **JSON 1**                  |   10s |    15s |  47s |       | 290s |
-| **JSON 2**                  |   15s |    21s |  70s |   98s | 385s |
-| **JSON to CSV 1**           |   14s |        |  91s |   53s |      |
-| **CSV 1**                   |   11s |     4s |  28s |   32s |      |
-| **CSV to JSON 1**           |   22s |        |      |  160s |      |
+| [Benchmark][pxi-benchmarks] | Description                                   | `pxi` | `gawk` | `jq` | `mlr` | `fx` |
+|-----------------------------|-----------------------------------------------|------:|-------:|-----:|------:|-----:|
+| **JSON 1**                  | Select an attribute on small JSON objects     |   ??s |    ??s |  ??s |     – |  ??s |
+| **JSON 2**                  | Select an attribute on large JSON objects     |   ??s |    ??s |  ??s |     – |  ??s |
+| **JSON 3**                  | Pick a single attribute on large JSON objects |   ??s |    ??s |  ??s |   err |  ??s |
+| **JSON to CSV 1**           | Convert JSON to CSV format                    |   ??s |      – |  ??s |   err |    – |
+| **CSV 1**                   | Select a column from a large csv file         |   ??s |    ??s |  ??s |   ??s |    – |
+| **CSV to JSON 1**           | Convert CSV to JSON format                    |   ??s |      – |      |   ??s |    – |
 
 Times are given in CPU time, wall-clock times may deviate by ± 1s.
 The benchmarks were run on a 13" MacBook Pro (2019) with a 2,8 GHz Quad-Core i7 and 16GB memory.
@@ -1005,14 +1006,16 @@ module.exports = {
 
 ## Comparison to Related Tools
 
-|                       | [`pxi`][pxi]                                                                        | [`jq`][jq]                                     | [`mlr`][mlr]                                                                                            | [`fx`][fx]                                      | [`pandoc`][pandoc]                         |
-|-----------------------|-------------------------------------------------------------------------------------|------------------------------------------------|---------------------------------------------------------------------------------------------------------|-------------------------------------------------|--------------------------------------------|
-| **Self-description**  | *Small, fast, and magical command-line data processor similar to awk, jq, and mlr.* | *Command-line JSON processor*                  | *Miller is like awk, sed, cut, join, and sort for name-indexed data such as CSV, TSV, and tabular JSON* | *Command-line tool and terminal JSON viewer*    | *Universal markup converter*               |
-| **Focus**             | Transforming data with user provided functions and converting between formats       | Transforming JSON with user provided functions | Transforming CSV with user provided functions and converting between formats                            | Transforming JSON with user provided functions  | Converting one markup format into another  |
-| **License**           | [MIT][license]                                                                      | [MIT][jq-license]                              | [BSD-3-Clause][mlr-license]                                                                             | [MIT][fx-license]                               | [GPL-2.0-only][pandoc-license]             |
-| **Performance**       | (performance is given relative to `pxi`)                                            | `jq` is [>3x slower](#performance) than `pxi`  | `mlr` is [>3x slower](#performance) than `pxi`                                                          | `fx` is [>20x slower](#performance) than `pxi`  | ???                                        |
-| **Extensibility**     | Third party plugins, any JavaScript library, custom functions                       | ???                                            | ???                                                                                                     | Any JavaScript library, custom functions        | ???                                        |
-| **Processing DSL**    | Vanilla JavaScript and all JavaScript libraries                                     | [jq language][jq-lang]                         | [Predefined verbs and custom put/filter DSL][mlr-verbs]                                                 | Vanilla JavaScript and all JavaScript libraries | [Any programming language][pandoc-filters] |
+|                         | [`pxi`][pxi]                                                                        | [`jq`][jq]                                                   | [`mlr`][mlr]                                                                                            | [`fx`][fx]                                                                            | [`gawk`][gawk]                                                                                                                                                   |
+|-------------------------|-------------------------------------------------------------------------------------|--------------------------------------------------------------|---------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| **Self-description**    | *Small, fast, and magical command-line data processor similar to awk, jq, and mlr.* | *Command-line JSON processor*                                | *Miller is like awk, sed, cut, join, and sort for name-indexed data such as CSV, TSV, and tabular JSON* | *Command-line tool and terminal JSON viewer*                                          | *The awk utility interprets a special-purpose programming language that makes it possible to handle simple data-reformatting jobs with just a few lines of code* |
+| **Focus**               | Transforming data with user provided functions and converting between formats       | Transforming JSON with user provided functions               | Transforming CSV with user provided functions and converting between formats                            | Transforming JSON with user provided functions                                        | Language for simple data reformatting tasks                                                                                                                      |
+| **License**             | [MIT][license]                                                                      | [MIT][jq-license]                                            | [BSD-3-Clause][mlr-license]                                                                             | [MIT][fx-license]                                                                     | [GPL-3.0-only][gawk-license]                                                                                                                                     |
+| **Performance**         | (performance is given relative to `pxi`)                                            | `jq` is [>3x slower](#performance) than `pxi`                | `mlr` is [>3x slower](#performance) than `pxi`                                                          | `fx` is [>20x slower](#performance) than `pxi`                                        | [`pxi` is as performant as `gawk`](#performance) when processing JSON and CSV                                                                                    |
+| **Processing Language** | JavaScript and all [JavaScript libraries][npm]                                      | [jq language][jq-lang]                                       | [Predefined verbs and custom put/filter DSL][mlr-verbs]                                                 | JavaScript and all [JavaScript libraries][npm]                                        | [awk language][gawk-lang]                                                                                                                                        |
+| **Extensibility**       | (Third-party) [Plugins](#plugins), any [JavaScript library][npm], custom functions  | (Third-party) [Modules][jq-modules] written in [jq][jq-lang] | Running arbitrary [shell commands][mlr-shell]                                                           | Any [JavaScript library][npm], custom functions                                       | [`gawk` dynamic extensions][gawk-extensions]                                                                                                                     |
+| **Similarities**        |                                                                                     | `pxi` and `jq` both heavily rely on JSON                     | `pxi` and `mlr` both convert back and forth between CSV and JSON                                        | `pxi` and `fx` both apply JavaScript functions to JSON streams                        | `pxi` and `gawk` both transform data                                                                                                                             |
+| **Differences**         |                                                                                     | `pxi` and `jq` use different processing languages            | While `pxi` uses a programming language for data processing, `mlr` uses a custom put/filter DSL         | `pxi` supports data formats other than JSON, and `fx` provides a terminal JSON viewer | While `pxi` functions transform a JSON into another JSON, `gawk` does not have a strict format other than transforming strings into other strings                |
 
 ## Reporting Issues
 
@@ -1026,21 +1029,25 @@ Please report issues [in the tracker][issues]!
 [contribute]: https://github.com/Yord/pxi
 [fx]: https://github.com/antonmedv/fx
 [fx-license]: https://github.com/antonmedv/fx/blob/master/LICENSE
+[gawk]: https://www.gnu.org/software/gawk/
+[gawk-extensions]: https://www.gnu.org/software/gawk/manual/gawk.html#Dynamic-Extensions
+[gawk-lang]: https://www.gnu.org/software/gawk/manual/gawk.html
+[gawk-license]: https://www.gnu.org/software/gawk/manual/gawk.html#GNU-General-Public-License
 [issues]: https://github.com/Yord/pxi/issues
 [jq]: https://github.com/stedolan/jq
 [jq-lang]: https://github.com/stedolan/jq/wiki/jq-Language-Description
 [jq-license]: https://github.com/stedolan/jq/blob/master/COPYING
+[jq-modules]: https://stedolan.github.io/jq/manual/#Modules
 [license]: https://github.com/Yord/pxi/blob/master/LICENSE
 [lodash]: https://lodash.com/
 [mlr]: https://github.com/johnkerl/miller
 [mlr-license]: https://github.com/johnkerl/miller/blob/master/LICENSE.txt
+[mlr-shell]: http://johnkerl.org/miller/doc/data-sharing.html#Running_shell_commands
 [mlr-verbs]: http://johnkerl.org/miller/doc/reference-verbs.html
 [node]: https://nodejs.org/
+[npm]: https://www.npmjs.com
 [npm-install]: https://docs.npmjs.com/downloading-and-installing-packages-globally
 [npm-package]: https://www.npmjs.com/package/pxi
-[pandoc]: https://pandoc.org
-[pandoc-filters]: https://github.com/jgm/pandoc/wiki/Pandoc-Filters
-[pandoc-license]: https://github.com/jgm/pandoc/blob/master/COPYRIGHT
 [pxi]: https://github.com/Yord/pxi
 [pxi-dust]: https://github.com/Yord/pxi-dust
 [pxi-benchmarks]: https://github.com/Yord/pxi-benchmarks
