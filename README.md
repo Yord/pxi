@@ -27,7 +27,7 @@ Try `pxi --help` to see if the installation was successful.
 +   :sparkles: **Magical:** It is trivial to write your own ~~spells~~ *plugins*.
 +   :smile_cat: **Playful:** Opt-in to more data formats by installing plugins.
 +   :tada: **Versatile:** Use Ramda, Lodash and any other JavaScript library to process data on the command-line.
-+   :heart: **Love:** Pixie is made with love and encourages a positive and welcoming environment.
++   :heart: **Loving:** Pixie is made with love and encourages a positive and welcoming environment.
 
 ## Getting Started
 
