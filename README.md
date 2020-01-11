@@ -253,24 +253,33 @@ New experimental pixie plugins are developed i.a. in the [`pxi-sandbox`][pxi-san
 
 ### Performance
 
-`pxi` is fast and beats several similar tools in [performance benchmarks][pxi-benchmarks]
-(see medium post (TODO) for details):
+`pxi` is fast and beats several similar tools in [performance benchmarks][pxi-benchmarks]:
 
 | [Benchmark][pxi-benchmarks] | Description                                   | `pxi` | `gawk` | `jq` | `mlr` | `fx` |
 |-----------------------------|-----------------------------------------------|------:|-------:|-----:|------:|-----:|
-| **JSON 1**                  | Select an attribute on small JSON objects     |   ??s |    ??s |  ??s |     – |  ??s |
-| **JSON 2**                  | Select an attribute on large JSON objects     |   ??s |    ??s |  ??s |     – |  ??s |
-| **JSON 3**                  | Pick a single attribute on large JSON objects |   ??s |    ??s |  ??s |   err |  ??s |
-| **JSON to CSV 1**           | Convert JSON to CSV format                    |   ??s |      – |  ??s |   err |    – |
-| **CSV 1**                   | Select a column from a large csv file         |   ??s |    ??s |  ??s |   ??s |    – |
-| **CSV to JSON 1**           | Convert CSV to JSON format                    |   ??s |      – |      |   ??s |    – |
+| **JSON 1**                  | Select an attribute on small JSON objects     |   11s |    15s |  46s |     – | 284s |
+| **JSON 2**                  | Select an attribute on large JSON objects     |   20s |    20s |  97s |     – | 301s |
+| **JSON 3**                  | Pick a single attribute on small JSON objects |   15s |    21s |  68s |   91s | 368s |
+| **JSON 4**                  | Pick a single attribute on large JSON objects |   26s |    27s | 130s | 257s† | 420s |
+| **JSON to CSV 1**           | Convert a small JSON to CSV format            |   15s |      – |  77s |   60s |    – |
+| **JSON to CSV 2**           | Convert a large JSON to CSV format            |   38s |      – | 264s | 237s† |    – |
+| **CSV 1**                   | Select a column from a small csv file         |   11s |     8s |  37s |   23s |    – |
+| **CSV 2**                   | Select a column from a large csv file         |   19s |     9s |  66s |   72s |    – |
+| **CSV to JSON 1**           | Convert a small CSV to JSON format            |   15s |      – |    – |  120s |    – |
+| **CSV to JSON 2**           | Convert a large CSV to JSON format            |   42s |      – |    – |  352s |    – |
 
-Times are given in CPU time, wall-clock times may deviate by ± 1s.
+† `mlr` appears to load the whole file instead of processing it in chunks if reading JSON.
+This is why it fails on large input files.
+So in these benchmarks, the first 20,000,000 lines are processed first, followed by the remaining 11,536,000 lines.
+The times of both runs are summed up.
+
+Times are given in CPU time (seconds), wall-clock times may deviate by ± 1s.
 The benchmarks were run on a 13" MacBook Pro (2019) with a 2,8 GHz Quad-Core i7 and 16GB memory.
 Since `pxi` and `fx` are written in JavaScript, they need more RAM (approx. 70 MB)
-than the other tools that are written in C (approx. 1MB each).
+than `gawk` and `jq` that are written in C (approx. 1MB).
+`mlr` needs the most RAM (up to 11GB), since it appears to load the whole file before processing it in some cases.
 Feel free to run the [benchmarks][pxi-benchmarks] on your own machine
-and please open an issue to report the results back to us!
+and if you do, please [open an issue][issues] to report your results!
 
 ## Usage
 
