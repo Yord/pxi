@@ -1057,12 +1057,19 @@ module.exports = {
 
 Please report issues [in the tracker][issues]!
 
+## Contributing
+
+We are open to, and grateful for, any contributions made by the community.
+By contributing to pixie, you agree to abide by the [code of conduct][code].
+Please read the [contributing guide][contribute].
+
 ## License
 
 `pxi` is [MIT licensed][license].
 
 [actions]: https://github.com/Yord/pxi/actions
-[contribute]: https://github.com/Yord/pxi
+[code]: https://github.com/Yord/pxi/blob/master/CODE_OF_CONDUCT.md
+[contribute]: https://github.com/Yord/pxi/blob/master/CONTRIBUTING.md
 [fx]: https://github.com/antonmedv/fx
 [fx-license]: https://github.com/antonmedv/fx/blob/master/LICENSE
 [gawk]: https://www.gnu.org/software/gawk/
