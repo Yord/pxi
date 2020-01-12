@@ -1,28 +1,22 @@
 module.exports = failEarly => {
   const handle = handler(failEarly)
 
-  return ({chunk, deserialize, apply, serialize}) => {
+  return pxi => {
     process.stdin.setEncoding('utf8')
-
-    let buffer      = ''
-    let linesOffset = 0
 
     process.stdout.on('error', () => process.exit(1))
     process.stderr.on('error', () => process.exit(1))
 
     process.stdin
     .on('data', data => {
-      const {chunks, lines, lastLine, rest} = handle(chunk(buffer + data, linesOffset))
-      const {jsons}                         = handle(deserialize(chunks, lines))
-      const {jsons: jsons2}                 = handle(apply(jsons, lines))
-      const {str}                           = handle(serialize(jsons2))
-      
+      const {str} = handle(pxi(data, false))
       process.stdout.write(str)
-
-      buffer      = rest
-      linesOffset = lastLine
     })
-    .on('end',   () => process.exit(0))
+    .on('end',   () => {
+      const {str} = handle(pxi('', true))
+      process.stdout.write(str)
+      process.exit(0)
+    })
     .on('error', () => process.exit(1))
   }
 }
