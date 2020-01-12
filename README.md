@@ -987,13 +987,13 @@ $ pxi "prop('time')" < 2019.jsonl
 $ pxi "json => _.get(json, 'time')" < 2019.jsonl
 ```
 
-> :hear_no_evil: Using Ramda and Lodash may have a **negative impact on performance**! Use this feature responsibly.
+> :hear_no_evil: Using Ramda and Lodash in your functions may have a **negative impact on performance**!
+> Use this feature responsibly.
 
 ### Including Custom JavaScript Functions
 
 Just as you may extend pixie with third-party libraries like Ramda and Lodash,
 you may add your own functions.
-
 This is as simple as adding them to the context in `~/.pxi/index.js`:
 
 ```js
