@@ -6,7 +6,7 @@ const _api         = require('./src/api')
 const _reference   = require('./reference.json')
 _reference.plugins = _reference.plugins.map(require)
 
-const _PXI         = require('./src/pxi') || {}
+const _PXI         = require('./src/dotPxi') || {}
 const _defaults    = _api.combineDefaults([_PXI.defaults, _reference.defaults])
 
 const _globalArgv  = require('./src/globalArgs')(process.argv.slice(2), _defaults)
