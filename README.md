@@ -22,7 +22,7 @@ Try `pxi --help` to see if the installation was successful.
 
 ## Features
 
-+   🧚 **Small**: [Pixie does one thing and does it well][unix-philosophy].
++   🧚 **Small**: Pixie [does one thing and does it well][unix-philosophy] (processing data with JavaScript).
 +   :zap: **Fast:** `pxi` is as fast as `gawk`, 3x faster than `jq` and `mlr`, and 15x faster than `fx`.
 +   :sparkles: **Magical:** It is trivial to write your own ~~spells~~ *plugins*.
 +   :smile_cat: **Playful:** Opt-in to more data formats by installing plugins.
@@ -147,7 +147,7 @@ Process data streams from REST APIs and other sources and pipe pixie's output to
 
 ```bash
 $ curl -s "https://swapi.co/api/films/" |
-  pxi 'json => json.results' --chunker jsonObj --applier flatMap --keep '["episode_id", "title"]' |
+  pxi 'json => json.results' --applier flatMap --keep '["episode_id", "title"]' |
   sort
 ```
 
@@ -612,7 +612,7 @@ $ curl -s "https://swapi.co/api/people/"
 </p>
 </summary>
 
-The returned JSON is in just one line and needs to be tamed.
+The returned JSON is one big mess and needs to be tamed.
 
 ```json
 {"count":87,"next":"...","results":[{"name":"Luke Skywalker","height":"172","mass":"77" [...]
@@ -628,21 +628,16 @@ Use pixie to organize the response:
 
 ```bash
 $ curl -s "https://swapi.co/api/people/" |
-  pxi "json => json.results" --chunker jsonObj --applier flatMap --keep '["name","height","mass"]'
+  pxi "json => json.results" --applier flatMap --keep '["name","height","mass"]'
 ```
 
 </p>
 </summary>
 
-Up until this point in the examples, data was organized in lines
-and the default `line` chunker was used to break it down.
-In this response, however, all data is in just one line (without a line ending) and we need a different chunker.
-`jsonObj` identifies JSON objects in data and returns one object at a time.
-Since the whole response is one big object, it is returned.
-Next, the function is applied, which selects the results attribute.
-If it were applied with `map`, it would return the results array as the only element.
-But since we use the `flatMap` applier, each array item is returned as one element.
-Finally, the `--keep` attribute specifies, which keys to keep from the returned objects:
+The function selects the results array.
+If it were applied with `map`, it would return the whole array as an element.
+But since we use the `flatMap` applier, each array item is returned as an element, instead.
+The `--keep` attribute specifies, which keys to keep from the returned objects:
 
 ```json
 {"name":"Luke Skywalker","height":"172","mass":"77"}
@@ -667,7 +662,7 @@ Compute all Star Wars character's <a href="https://en.wikipedia.org/wiki/Body_ma
 
 ```bash
 $ curl -s "https://swapi.co/api/people/" |
-  pxi "json => json.results" -c jsonObj -a flatMap -K '["name","height","mass"]' |
+  pxi "json => json.results" -a flatMap -K '["name","height","mass"]' |
   pxi "ch => (ch.bmi = ch.mass / (ch.height / 100) ** 2, ch)" -K '["name","bmi"]'
 ```
 
@@ -702,7 +697,7 @@ Identify all obese Star Wars characters:
 
 ```bash
 $ curl -s "https://swapi.co/api/people/" |
-  pxi "json => json.results" -c jsonObj -a flatMap -K '["name","height","mass"]' |
+  pxi "json => json.results" -a flatMap -K '["name","height","mass"]' |
   pxi "ch => (ch.bmi = ch.mass / (ch.height / 100) ** 2, ch)" -K '["name","bmi"]' |
   pxi "ch => ch.bmi >= 30" -a filter -K '["name"]'
 ```
@@ -856,7 +851,7 @@ Writing your own extensions is straightforward:
 const sampleChunker = {
   name: 'sample',
   desc: 'is a sample chunker.',
-  func: ({verbose}) => (data, prevLines) => (
+  func: ({verbose}) => (data, prevLines, noMoreData) => (
     // * Turn data into an array of chunks
     // * Count lines for better error reporting throughout pxi
     // * Collect error reports: {msg: String, line: Number, info: String}
@@ -925,13 +920,13 @@ const sample = {
 ### Extending Pixie with Plugins
 
 Plugins can come from two sources:
-They are either written by users, as shown in the previous section, or they are installed in `~/.pxi/` as follows:
+They are either written by the user, as shown in the previous section, or they are installed in `~/.pxi/` as follows:
 
 ```bash
 $ npm install pxi-sample
 ```
 
-If a plugin was installed from `npm`, it has to be imported into `~/.pxi/index.js`:
+If a plugin was installed, it has to be imported into `~/.pxi/index.js`:
 
 ```js
 const sample = require('pxi-sample')
@@ -983,17 +978,17 @@ module.exports = {
 You may now use all Ramda functions without prefix, and all Lodash functions with prefix `_`:
 
 ```bash
-$ pxi "prop('time')" < 2019.jsonl > out.jsonl
-$ pxi "json => _.get(json, 'time')" < 2019.jsonl > out.jsonl
+$ pxi "prop('time')" < 2019.jsonl
+$ pxi "json => _.get(json, 'time')" < 2019.jsonl
 ```
 
-> :hear_no_evil: Using Ramda and Lodash may have a **negative impact on performance**! Use this feature responsibly.
+> :hear_no_evil: Using Ramda and Lodash in your functions may have a **negative impact on performance**!
+> Use this feature responsibly.
 
 ### Including Custom JavaScript Functions
 
 Just as you may extend pixie with third-party libraries like Ramda and Lodash,
 you may add your own functions.
-
 This is as simple as adding them to the context in `~/.pxi/index.js`:
 
 ```js
@@ -1006,11 +1001,11 @@ module.exports = {
 }
 ```
 
-After adding it to the context, you call your function as follows:
+After adding it to the context, you may use your function:
 
 ```bash
-$ pxi "json => getTime(json)" < 2019.jsonl > out.jsonl
-$ pxi "getTime" < 2019.jsonl > out.jsonl
+$ pxi "json => getTime(json)" < 2019.jsonl
+$ pxi "getTime" < 2019.jsonl
 ```
 
 ### Changing `pxi` Defaults
