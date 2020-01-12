@@ -925,13 +925,13 @@ const sample = {
 ### Extending Pixie with Plugins
 
 Plugins can come from two sources:
-They are either written by users, as shown in the previous section, or they are installed in `~/.pxi/` as follows:
+They are either written by the user, as shown in the previous section, or they are installed in `~/.pxi/` as follows:
 
 ```bash
 $ npm install pxi-sample
 ```
 
-If a plugin was installed from `npm`, it has to be imported into `~/.pxi/index.js`:
+If a plugin was installed, it has to be imported into `~/.pxi/index.js`:
 
 ```js
 const sample = require('pxi-sample')
