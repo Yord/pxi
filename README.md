@@ -253,7 +253,11 @@ New experimental pixie plugins are developed i.a. in the [`pxi-sandbox`][pxi-san
 
 ### Performance
 
-`pxi` is fast and beats several similar tools in [performance benchmarks][pxi-benchmarks]:
+`pxi` is very fast and beats several similar tools in [performance benchmarks][pxi-benchmarks].
+Times are given in CPU time (seconds), wall-clock times may deviate by ± 1s.
+The benchmarks were run on a 13" MacBook Pro (2019) with a 2,8 GHz Quad-Core i7 and 16GB memory.
+Feel free to run the [benchmarks][pxi-benchmarks] on your own machine
+and if you do, please [open an issue][issues] to report your results!
 
 | [Benchmark][pxi-benchmarks] | Description                                   | `pxi` | `gawk` | `jq` | `mlr` | `fx` |
 |-----------------------------|-----------------------------------------------|------:|-------:|-----:|------:|-----:|
