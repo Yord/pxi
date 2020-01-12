@@ -2,6 +2,7 @@
 
 const _runner      = require('./src/runner')
 const _api         = require('./src/api')
+const _pxi         = require('./src/pxi')
 
 const _reference   = require('./reference.json')
 _reference.plugins = _reference.plugins.map(require)
@@ -17,6 +18,7 @@ const _plugins     = _api.combinePlugins([_id].concat(_PXI.plugins || []).concat
 const _argv        = require('./src/args')(process.argv.slice(2), _defaults, _plugins)
 const _fs          = _api.initFunctions(_argv, _plugins, _defaults, _id)
 
+const _processor   = _pxi(_fs)
 const _run         = _runner(_argv.failEarly)
 
-_run(_fs)
+_run(_processor)
