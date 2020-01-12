@@ -207,11 +207,9 @@ See the [usage](#usage) section below for more examples.
 
 ### Introductory Blogposts
 
-For a quick start, read the following medium posts:
+For a quick start, read the following blog posts:
 
-+   Getting started with `pxi` (TODO)
-+   Building `pxi` from scratch (TODO)
-+   Comparing `pxi`'s performance to `jq` and `fx` (TODO)
++   [How I Tamed a Pixie][post-how-tamed-pixie]
 
 ## 🧚 Pixie
 
@@ -1091,6 +1089,7 @@ Please read the [contributing guide][contribute].
 [npm]: https://www.npmjs.com
 [npm-install]: https://docs.npmjs.com/downloading-and-installing-packages-globally
 [npm-package]: https://www.npmjs.com/package/pxi
+[post-how-tamed-pixie]: https://medium.com/@philipp.y.wille/how-i-tamed-a-pixie-fae29c21381b
 [pxi]: https://github.com/Yord/pxi
 [pxi-dust]: https://github.com/Yord/pxi-dust
 [pxi-benchmarks]: https://github.com/Yord/pxi-benchmarks
