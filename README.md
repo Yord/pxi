@@ -851,7 +851,7 @@ Writing your own extensions is straightforward:
 const sampleChunker = {
   name: 'sample',
   desc: 'is a sample chunker.',
-  func: ({verbose}) => (data, prevLines) => (
+  func: ({verbose}) => (data, prevLines, noMoreData) => (
     // * Turn data into an array of chunks
     // * Count lines for better error reporting throughout pxi
     // * Collect error reports: {msg: String, line: Number, info: String}
