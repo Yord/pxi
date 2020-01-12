@@ -1006,7 +1006,7 @@ module.exports = {
 }
 ```
 
-After adding it to the context, you call your function as follows:
+After adding it to the context, you may use your function:
 
 ```bash
 $ pxi "json => getTime(json)" < 2019.jsonl
