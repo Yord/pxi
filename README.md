@@ -147,7 +147,7 @@ Process data streams from REST APIs and other sources and pipe pixie's output to
 
 ```bash
 $ curl -s "https://swapi.co/api/films/" |
-  pxi 'json => json.results' --chunker jsonObj --applier flatMap --keep '["episode_id", "title"]' |
+  pxi 'json => json.results' --applier flatMap --keep '["episode_id", "title"]' |
   sort
 ```
 
@@ -612,7 +612,7 @@ $ curl -s "https://swapi.co/api/people/"
 </p>
 </summary>
 
-The returned JSON is in just one line and needs to be tamed.
+The returned JSON is one big mess and needs to be tamed.
 
 ```json
 {"count":87,"next":"...","results":[{"name":"Luke Skywalker","height":"172","mass":"77" [...]
@@ -628,21 +628,16 @@ Use pixie to organize the response:
 
 ```bash
 $ curl -s "https://swapi.co/api/people/" |
-  pxi "json => json.results" --chunker jsonObj --applier flatMap --keep '["name","height","mass"]'
+  pxi "json => json.results" --applier flatMap --keep '["name","height","mass"]'
 ```
 
 </p>
 </summary>
 
-Up until this point in the examples, data was organized in lines
-and the default `line` chunker was used to break it down.
-In this response, however, all data is in just one line (without a line ending) and we need a different chunker.
-`jsonObj` identifies JSON objects in data and returns one object at a time.
-Since the whole response is one big object, it is returned.
-Next, the function is applied, which selects the results attribute.
-If it were applied with `map`, it would return the results array as the only element.
-But since we use the `flatMap` applier, each array item is returned as one element.
-Finally, the `--keep` attribute specifies, which keys to keep from the returned objects:
+The function selects the results array.
+If it were applied with `map`, it would return the whole array as an element.
+But since we use the `flatMap` applier, each array item is returned as an element, instead.
+The `--keep` attribute specifies, which keys to keep from the returned objects:
 
 ```json
 {"name":"Luke Skywalker","height":"172","mass":"77"}
@@ -667,7 +662,7 @@ Compute all Star Wars character's <a href="https://en.wikipedia.org/wiki/Body_ma
 
 ```bash
 $ curl -s "https://swapi.co/api/people/" |
-  pxi "json => json.results" -c jsonObj -a flatMap -K '["name","height","mass"]' |
+  pxi "json => json.results" -a flatMap -K '["name","height","mass"]' |
   pxi "ch => (ch.bmi = ch.mass / (ch.height / 100) ** 2, ch)" -K '["name","bmi"]'
 ```
 
@@ -702,7 +697,7 @@ Identify all obese Star Wars characters:
 
 ```bash
 $ curl -s "https://swapi.co/api/people/" |
-  pxi "json => json.results" -c jsonObj -a flatMap -K '["name","height","mass"]' |
+  pxi "json => json.results" -a flatMap -K '["name","height","mass"]' |
   pxi "ch => (ch.bmi = ch.mass / (ch.height / 100) ** 2, ch)" -K '["name","bmi"]' |
   pxi "ch => ch.bmi >= 30" -a filter -K '["name"]'
 ```
