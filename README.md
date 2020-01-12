@@ -23,7 +23,7 @@ Try `pxi --help` to see if the installation was successful.
 ## Features
 
 +   🧚 **Small**: [Pixie does one thing and does it well][unix-philosophy].
-+   :zap: **Fast:** `pxi` is as fast as `gawk`, 3x faster than `jq` and `mlr`, and 20x faster than `fx`.
++   :zap: **Fast:** `pxi` is as fast as `gawk`, 3x faster than `jq` and `mlr`, and 15x faster than `fx`.
 +   :sparkles: **Magical:** It is trivial to write your own ~~spells~~ *plugins*.
 +   :smile_cat: **Playful:** Opt-in to more data formats by installing plugins.
 +   :tada: **Versatile:** Use Ramda, Lodash and any other JavaScript library to process data on the command-line.
@@ -253,7 +253,11 @@ New experimental pixie plugins are developed i.a. in the [`pxi-sandbox`][pxi-san
 
 ### Performance
 
-`pxi` is fast and beats several similar tools in [performance benchmarks][pxi-benchmarks]:
+`pxi` is very fast and beats several similar tools in [performance benchmarks][pxi-benchmarks].
+Times are given in CPU time (seconds), wall-clock times may deviate by ± 1s.
+The benchmarks were run on a 13" MacBook Pro (2019) with a 2,8 GHz Quad-Core i7 and 16GB memory.
+Feel free to run the [benchmarks][pxi-benchmarks] on your own machine
+and if you do, please [open an issue][issues] to report your results!
 
 | [Benchmark][pxi-benchmarks] | Description                                   | `pxi` | `gawk` | `jq` | `mlr` | `fx` |
 |-----------------------------|-----------------------------------------------|------:|-------:|-----:|------:|-----:|
@@ -273,13 +277,41 @@ This is why it fails on large input files.
 So in these benchmarks, the first 20,000,000 lines are processed first, followed by the remaining 11,536,000 lines.
 The times of both runs are summed up.
 
-Times are given in CPU time (seconds), wall-clock times may deviate by ± 1s.
-The benchmarks were run on a 13" MacBook Pro (2019) with a 2,8 GHz Quad-Core i7 and 16GB memory.
-Since `pxi` and `fx` are written in JavaScript, they need more RAM (approx. 70 MB)
-than `gawk` and `jq` that are written in C (approx. 1MB).
-`mlr` needs the most RAM (up to 11GB), since it appears to load the whole file before processing it in some cases.
-Feel free to run the [benchmarks][pxi-benchmarks] on your own machine
-and if you do, please [open an issue][issues] to report your results!
+<details>
+<summary>
+<code>pxi</code> and <code>gawk</code> notably beat
+<code>jq</code>, <code>mlr</code>, and <code>fx</code> in every benchmark.
+However, due to its different data processing approach, <code>pxi</code> is more versatile than <code>gawk</code>
+and is e.g. able to transform data formats into another.
+For a more detailed interpretation, open this box.
+</summary>
+<p>
+
+`pxi` and `gawk` differ greatly in their approaches to transforming data:
+While `gawk` manipulates strings, `pxi` parses data according to a format, builds an internal JSON representation,
+manipulates this JSON, and serializes it to a different format.
+Surprisingly, they perform equally well in the benchmarks,
+with `pxi` being a little faster in JSON and `gawk` in CSV.
+However, the more attributes JSON objects have and the more columns CSV files have,
+the faster `gawk` gets compared to `pxi`, because it does not need to build an internal data representation.
+On the other hand, while `pxi` is able to perform complex format transformations,
+`gawk` is unable to do it because of its different approach.
+
+`jq` and `mlr` share `pxi`'s data transformation approach, but focus on different formats:
+While `jq` specializes in transforming JSON, `mlr`'s focus is CSV.
+Although `pxi` does not prefer one format over the other,
+it beats both tools in processing speed on their preferred formats.
+
+`fx` and `pxi` are very similar in that both are written in JavaScript and use JavaScript as their processing language.
+However, although `fx` specializes in just the JSON format, `pxi` is at least 15x faster in all benchmarks.
+
+All tools differ in their memory needs.
+Since `pxi` and `fx` are written in an interpreted language, they need approx. 70 MB due to their runtime.
+Since `gawk` and `jq` are compiled binaries, they only need approx. 1MB.
+`mlr` needs the most memory (up to 11GB), since it appears to load the whole file before processing it in some cases.
+
+</p>
+</details>
 
 ## Usage
 
