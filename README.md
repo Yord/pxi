@@ -983,8 +983,8 @@ module.exports = {
 You may now use all Ramda functions without prefix, and all Lodash functions with prefix `_`:
 
 ```bash
-$ pxi "prop('time')" < 2019.jsonl > out.jsonl
-$ pxi "json => _.get(json, 'time')" < 2019.jsonl > out.jsonl
+$ pxi "prop('time')" < 2019.jsonl
+$ pxi "json => _.get(json, 'time')" < 2019.jsonl
 ```
 
 > :hear_no_evil: Using Ramda and Lodash may have a **negative impact on performance**! Use this feature responsibly.
@@ -1009,8 +1009,8 @@ module.exports = {
 After adding it to the context, you call your function as follows:
 
 ```bash
-$ pxi "json => getTime(json)" < 2019.jsonl > out.jsonl
-$ pxi "getTime" < 2019.jsonl > out.jsonl
+$ pxi "json => getTime(json)" < 2019.jsonl
+$ pxi "getTime" < 2019.jsonl
 ```
 
 ### Changing `pxi` Defaults
