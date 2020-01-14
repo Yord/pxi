@@ -74,11 +74,11 @@ You may use JavaScript arrow functions, destructuring, spreading,
 and any other feature of your current NodeJS version.
 
 ```json
-1546300800000
-1546300801000
-1546300802000
-1546300803000
-1546300804000
+1546300800
+1546300801
+1546300802
+1546300803
+1546300804
 ```
 
 </details>
@@ -90,9 +90,9 @@ Convert between JSON, CSV, SSV, and TSV:
 <p>
 
 ```bash
+$ pxi --from json --to csv < 2019.jsonl > 2019.csv
 $ pxi --deserializer json --serializer csv < 2019.jsonl > 2019.csv
 $ pxi -d json -s csv < 2019.jsonl > 2019.csv
-$ pxi --from json --to csv < 2019.jsonl > 2019.csv
 ```
 
 </p>
@@ -353,11 +353,11 @@ $ pxi "json => json.time" < 2019.jsonl
 Go ahead and use JavaScript's arrow functions.
 
 ```json
-1546300800000
-1546300801000
-1546300802000
-1546300803000
-1546300804000
+1546300800
+1546300801
+1546300802
+1546300803
+1546300804
 ```
 
 </details>
@@ -378,11 +378,11 @@ $ pxi '({month, day}) => ({month, day})' < 2019.jsonl
 Use destructuring and spread syntax.
 
 ```json
-1546300800000
-1546300801000
-1546300802000
-1546300803000
-1546300804000
+{"month":1,"day":1}
+{"month":1,"day":1}
+{"month":1,"day":1}
+{"month":1,"day":1}
+{"month":1,"day":1}
 ```
 
 </details>
@@ -409,6 +409,7 @@ time,year,month,day,hours,minutes,seconds
 1546300801,2019,1,1,0,0,1
 1546300802,2019,1,1,0,0,2
 1546300803,2019,1,1,0,0,3
+1546300804,2019,1,1,0,0,4
 ```
 
 </details>
@@ -462,6 +463,7 @@ timestamp       year    month   day	    hours   minutes seconds
 1546300801      2019    1       1       0       0       1
 1546300802      2019    1       1       0       0       2
 1546300803      2019    1       1       0       0       3
+1546300804      2019    1       1       0       0       4
 ```
 
 </details>
