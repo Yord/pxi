@@ -42,7 +42,7 @@ module.exports = (argv, {chunker, deserializer, applier, serializer}, {chunkers,
   .option('applier', {
     type:     'string',
     nargs:    1,
-    alias:    ['a'],
+    alias:    ['with', 'a'],
     choices:  appliers.map(plugin => plugin.name),
     describe: '\nDefines how FUNCTIONS are applied to JSON: ' + describePlugins(appliers, applier) + '\n'
   })
