@@ -147,7 +147,7 @@ Process data streams from REST APIs and other sources and pipe pixie's output to
 
 ```bash
 $ curl -s "https://swapi.co/api/films/" |
-  pxi 'json => json.results' --applier flatMap --keep '["episode_id", "title"]' |
+  pxi 'json => json.results' --with flatMap --keep '["episode_id", "title"]' |
   sort
 ```
 
@@ -628,12 +628,13 @@ Use pixie to organize the response:
 
 ```bash
 $ curl -s "https://swapi.co/api/people/" |
-  pxi "json => json.results" --applier flatMap --keep '["name","height","mass"]'
+  pxi "json => json.results" --with flatMap --keep '["name","height","mass"]'
 ```
 
 </p>
 </summary>
 
+Here, the `--with` alias for `--applier` is used.
 The function selects the results array.
 If it were applied with `map`, it would return the whole array as an element.
 But since we use the `flatMap` applier, each array item is returned as an element, instead.
