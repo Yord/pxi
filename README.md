@@ -458,7 +458,7 @@ Rename time to timestamp and keep all other attributes unchanged.
 Write in TSV format.
 
 ```json
-timestamp       year    month   day	    hours   minutes seconds
+timestamp       year    month   day     hours   minutes seconds
 1546300800      2019    1       1       0       0       0
 1546300801      2019    1       1       0       0       1
 1546300802      2019    1       1       0       0       2
