@@ -74,26 +74,28 @@ test('combineDefaults works on no other field', () => {
   )
 })
 
-function testInitFunctions ([extension, option, alias, def, func], result, {pluginsEmpty, nameNotFound, funcNotFound} = {}, fallback) {
+function testInitFunctions ([extension, option, aliases, def, func], result, {pluginsEmpty, nameNotFound, funcNotFound} = {}, fallback) {
   const apdr = unicodeString(1, 20).chain(name =>
-    oneof(...['option', 'alias', 'def'].map(constant)).map(oad => ({
-      argv:      {
-        _:           [],
-        [option]:    oad === 'option' ? name : undefined,
-        [alias]:     oad === 'alias'  ? name : undefined
-      },
-      defaults:  {
-        [def]:       oad === 'def'    ? name : undefined
-      },
-      plugins:   {
-        [extension]: pluginsEmpty ? [] :
-                     nameNotFound   ? [{      func: () => () => result}] :
-                     funcNotFound     ? [{name}]
-                                      : [{name, func: () => () => result}]
-      },
-      fallbacks: Object.assign({}, ...fallbacks),
-      result
-    }))
+    oneof(...aliases.map(constant)).chain(alias =>
+      oneof(...['option', 'alias', 'def'].map(constant)).map(oad => ({
+        argv:      {
+          _:           [],
+          [option]:    oad === 'option' ? name : undefined,
+          [alias]:     oad === 'alias'  ? name : undefined
+        },
+        defaults:  {
+          [def]:       oad === 'def'    ? name : undefined
+        },
+        plugins:   {
+          [extension]: pluginsEmpty ? [] :
+                       nameNotFound   ? [{      func: () => () => result}] :
+                       funcNotFound     ? [{name}]
+                                        : [{name, func: () => () => result}]
+        },
+        fallbacks: Object.assign({}, ...fallbacks),
+        result
+      }))
+    )
   )
 
   assert(
@@ -109,10 +111,10 @@ function testInitFunctions ([extension, option, alias, def, func], result, {plug
 }
 
 const validInits = [
-  ['chunkers',      'chunker',      'c', 'chunker',      'chunk'      ],
-  ['deserializers', 'deserializer', 'd', 'deserializer', 'deserialize'],
-  ['appliers',      'applier',      'a', 'applier',      'apply'      ],
-  ['serializers',   'serializer',   's', 'serializer',   'serialize'  ]
+  ['chunkers',      'chunker',      ['c', 'by'],   'chunker',      'chunk'      ],
+  ['deserializers', 'deserializer', ['d', 'from'], 'deserializer', 'deserialize'],
+  ['appliers',      'applier',      ['a', 'with'], 'applier',      'apply'      ],
+  ['serializers',   'serializer',   ['s', 'to'],   'serializer',   'serialize'  ]
 ]
 const fallback = 'fallback'
 const fallbacks = validInits.map(init => ({[init[3]]: {func: () => () => fallback}}))
@@ -124,7 +126,7 @@ validInits.map(init =>
 )
 
 test('initFunctions does not work on foo', () => {
-  testInitFunctions(['foo', 'foo', 'foo', 'foo', 'foo'], 'does not work')
+  testInitFunctions(['foo', 'foo', ['foo'], 'foo', 'foo'], 'does not work')
 })
 
 validInits.map(init =>

@@ -26,7 +26,7 @@ module.exports = (argv, {chunker, deserializer, applier, serializer}, {chunkers,
   .option('chunker', {
     type:     'string',
     nargs:    1,
-    alias:    ['c'],
+    alias:    ['by', 'c'],
     choices:  chunkers.map(plugin => plugin.name),
     describe: '\nDefines how the input is split into chunks: ' + describePlugins(chunkers, chunker) + '\n'
   })
