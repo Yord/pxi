@@ -22,10 +22,10 @@ const combineDefaults = defaults => ({
 })
 
 const initFunctions = (argv, plugins, defaults, fallbacks) => {
-  const chunker      = argv.chunker      || argv.c || defaults.chunker
-  const serializer   = argv.serializer   || argv.s || defaults.serializer
-  const deserializer = argv.deserializer || argv.d || defaults.deserializer
-  const applier      = argv.applier      || argv.a || defaults.applier
+  const chunker      = argv.chunker      || argv.c || argv.by   || defaults.chunker
+  const serializer   = argv.serializer   || argv.s || argv.to   || defaults.serializer
+  const deserializer = argv.deserializer || argv.d || argv.from || defaults.deserializer
+  const applier      = argv.applier      || argv.a || argv.with || defaults.applier
   
   const functions  = argv._.length > 0 ? argv._ : ['json => json']
   const fs         = functions.map(eval)
