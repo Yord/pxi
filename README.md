@@ -601,6 +601,70 @@ In this case, each element is first checked for the month, then for the day.
 
 <details>
 <summary>
+Keep only certain keys and pretty-print JSON:
+
+<p>
+
+```bash
+$ pxi --keep '["time"]' --spaces 2 < 2019.jsonl > pretty.jsonl
+```
+
+</p>
+</summary>
+
+The `--keep` attribute takes a stringified JSON array and narrows each element to only the keys in it.
+Using `--spaces` with any value other than `0` formats the serialized JSON using the provided number as spaces.
+
+
+```json
+{
+  "time": 1546300800
+}
+{
+  "time": 1546300801
+}
+{
+  "time": 1546300802
+}
+{
+  "time": 1546300803
+}
+{
+  "time": 1546300804
+}
+```
+
+</details>
+
+<details>
+<summary>
+Deserialize JSON that is not given line by line:
+
+<p>
+
+```bash
+$ pxi --by jsonObj < pretty.jsonl
+```
+
+</p>
+</summary>
+
+The `--chunker` or `--by` attribute defines how data is turned into chunks that are deserialized.
+The default chunker is `line` which treats each line as a chunk.
+In cases where JSON is not given line by line, e.g. if it is pretty-printed, the `jsonObj` chunker helps.
+
+```json
+{"time":1546300800}
+{"time":1546300801}
+{"time":1546300802}
+{"time":1546300803}
+{"time":1546300804}
+```
+
+</details>
+
+<details>
+<summary>
 Suppose you have to access a web API:
 
 <p>
