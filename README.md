@@ -209,6 +209,7 @@ See the [usage](#usage) section below for more examples.
 
 For a quick start, read the following blog posts:
 
++   [Exploring Large Data Files with pxi][post-exploring-large-data-files-with-pxi]
 +   [How I Tamed a Pixie][post-how-tamed-pixie]
 
 ## 🧚 Pixie
@@ -1157,6 +1158,7 @@ Please read the [contributing guide][contribute].
 [npm-install]: https://docs.npmjs.com/downloading-and-installing-packages-globally
 [npm-package]: https://www.npmjs.com/package/pxi
 [post-how-tamed-pixie]: https://medium.com/@philipp.y.wille/how-i-tamed-a-pixie-fae29c21381b
+[post-exploring-large-data-files-with-pxi]: https://medium.com/@philipp.y.wille/processing-large-data-files-with-pixie-329b92d29a0b
 [pxi]: https://github.com/Yord/pxi
 [pxi-dust]: https://github.com/Yord/pxi-dust
 [pxi-benchmarks]: https://github.com/Yord/pxi-benchmarks
