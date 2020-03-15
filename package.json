@@ -48,7 +48,7 @@
   },
   "private": false,
   "devDependencies": {
-    "fast-check": "1.21.0",
     "jest": "24.9.0"
+    "fast-check": "1.23.0",
   }
 }
